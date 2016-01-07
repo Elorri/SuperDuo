@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="it.jaschke.alexandria.AddBook">
-
+    android:layout_height="match_parent" tools:context=".AddBookFragment">
+<!--TODO:2.0 replace any fill_parent by match_parent-->
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -11,7 +11,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:id="@+id/eancontainer"
+            android:id="@+id/isbn_search_container"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:minEms="@integer/ean_width"
-                android:id="@+id/ean"
+                android:id="@+id/isbnEditText"
                 android:saveEnabled="true"
                 android:maxLength="@integer/ean_size"
                 android:maxLines="1"
@@ -46,9 +46,9 @@
             android:textStyle="bold"
             android:layout_marginTop="25dp"
             android:paddingRight="20dp"
-            android:layout_below="@+id/eancontainer"
-            android:layout_alignLeft="@+id/eancontainer"
-            android:layout_alignStart="@+id/eancontainer"/>
+            android:layout_below="@+id/isbn_search_container"
+            android:layout_alignLeft="@+id/isbn_search_container"
+            android:layout_alignStart="@+id/isbn_search_container"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
             android:layout_below="@+id/bookTitle"
             android:maxLines="3"
             android:ellipsize="end"
-            android:layout_alignLeft="@+id/eancontainer"
+            android:layout_alignLeft="@+id/isbn_search_container"
             />
 
         <TextView
@@ -69,8 +69,8 @@
             android:textSize="@dimen/small_fontsize"
             android:layout_marginTop="20dp"
             android:layout_below="@+id/bookSubTitle"
-            android:layout_alignRight="@+id/eancontainer"
-            android:layout_alignEnd="@+id/eancontainer"
+            android:layout_alignRight="@+id/isbn_search_container"
+            android:layout_alignEnd="@+id/isbn_search_container"
             />
 
         <ImageView
@@ -79,8 +79,8 @@
             android:id="@+id/bookCover"
             android:contentDescription="@string/book_cover"
             android:layout_alignTop="@+id/authors"
-            android:layout_alignLeft="@+id/eancontainer"
-            android:layout_alignStart="@+id/eancontainer"/>
+            android:layout_alignLeft="@+id/isbn_search_container"
+            android:layout_alignStart="@+id/isbn_search_container"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,8 +89,8 @@
             android:textSize="@dimen/small_fontsize"
             android:layout_below="@+id/bookCover"
             android:layout_marginTop="20dp"
-            android:layout_alignLeft="@+id/eancontainer"
-            android:layout_alignStart="@+id/eancontainer"/>
+            android:layout_alignLeft="@+id/isbn_search_container"
+            android:layout_alignStart="@+id/isbn_search_container"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -99,6 +99,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
+
 
             <Button
                 android:layout_width="wrap_content"
@@ -111,6 +112,7 @@
                 android:visibility="invisible"
                 />
 
+            <!--TODO android:drawableLeft="@drawable/ic_action_accept"-->
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"

@@ -1,17 +1,16 @@
 package it.jaschke.alexandria;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -129,8 +128,11 @@ public class NavigationDrawerFragment extends Fragment {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
+        //TODO 2.1 : remove the shadow ?
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+
         // set up the drawer's list view with items and click listener
 
         ActionBar actionBar = getActionBar();
@@ -145,14 +147,14 @@ public class NavigationDrawerFragment extends Fragment {
                 R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        ) {
+        )
+        {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 if (!isAdded()) {
                     return;
                 }
-
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
@@ -162,7 +164,6 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
@@ -171,7 +172,6 @@ public class NavigationDrawerFragment extends Fragment {
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
@@ -189,7 +189,6 @@ public class NavigationDrawerFragment extends Fragment {
                 mDrawerToggle.syncState();
             }
         });
-
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 

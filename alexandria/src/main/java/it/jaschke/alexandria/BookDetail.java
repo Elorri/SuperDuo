@@ -25,7 +25,7 @@ import it.jaschke.alexandria.services.DownloadImage;
 
 public class BookDetail extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String EAN_KEY = "EAN";
+    public static final String EAN_KEY = "ISBN";
     private final int LOADER_ID = 10;
     private View rootView;
     private String ean;
@@ -56,7 +56,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
             @Override
             public void onClick(View view) {
                 Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean);
+                bookIntent.putExtra(BookService.ISBN, ean);
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
                 getActivity().getSupportFragmentManager().popBackStack();

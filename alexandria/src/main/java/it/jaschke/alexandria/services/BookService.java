@@ -36,7 +36,7 @@ public class BookService extends IntentService {
     public static final String FETCH_BOOK = "it.jaschke.alexandria.services.action.FETCH_BOOK";
     public static final String DELETE_BOOK = "it.jaschke.alexandria.services.action.DELETE_BOOK";
 
-    public static final String EAN = "it.jaschke.alexandria.services.extra.EAN";
+    public static final String ISBN = "it.jaschke.alexandria.services.extra.ISBN";
 
     public BookService() {
         super("Alexandria");
@@ -47,10 +47,10 @@ public class BookService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (FETCH_BOOK.equals(action)) {
-                final String ean = intent.getStringExtra(EAN);
+                final String ean = intent.getStringExtra(ISBN);
                 fetchBook(ean);
             } else if (DELETE_BOOK.equals(action)) {
-                final String ean = intent.getStringExtra(EAN);
+                final String ean = intent.getStringExtra(ISBN);
                 deleteBook(ean);
             }
         }

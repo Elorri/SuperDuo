@@ -47,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             setContentView(R.layout.activity_main);
         }
 
+        //TODO : 2.0 MESSAGE_EVENT is suspicious
         messageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter(MESSAGE_EVENT);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver,filter);
@@ -71,10 +72,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 nextFragment = new ListOfBooks();
                 break;
             case 1:
-                nextFragment = new AddBook();
+                nextFragment = new AddBookFragment();
                 break;
             case 2:
-                nextFragment = new About();
+                nextFragment = new AboutFragment();
                 break;
 
         }
@@ -147,7 +148,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .replace(id, fragment)
                 .addToBackStack("Book Detail")
                 .commit();
-
     }
 
     private class MessageReceiver extends BroadcastReceiver {

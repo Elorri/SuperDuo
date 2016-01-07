@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="it.jaschke.alexandria.AddBook">
+    android:layout_height="match_parent" tools:context=".AddBookFragment">
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:minEms="@integer/ean_width"
-            android:id="@+id/ean"
+            android:id="@+id/isbnEditText"
             android:saveEnabled="true"
             android:textIsSelectable="false"
             android:maxLength="@integer/ean_size"
@@ -33,9 +33,9 @@
             android:id="@+id/scan_button"
             android:layout_marginLeft="23dp"
             android:layout_marginStart="23dp"
-            android:layout_alignBottom="@+id/ean"
-            android:layout_toRightOf="@+id/ean"
-            android:layout_toEndOf="@+id/ean"/>
+            android:layout_alignBottom="@+id/isbnEditText"
+            android:layout_toRightOf="@+id/isbnEditText"
+            android:layout_toEndOf="@+id/isbnEditText"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,8 +45,8 @@
             android:textIsSelectable="true"
             android:textStyle="bold"
             android:layout_below="@+id/scan_button"
-            android:layout_alignLeft="@+id/ean"
-            android:layout_alignStart="@+id/ean"
+            android:layout_alignLeft="@+id/isbnEditText"
+            android:layout_alignStart="@+id/isbnEditText"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"/>
