@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.camera;
+package it.jaschke.alexandria.controller.camera;
 
 /*
  * Barebones implementation of displaying camera preview.
@@ -21,7 +21,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Camera.PreviewCallback previewCallback;
     private Camera.AutoFocusCallback autoFocusCallback;
 
-    public CameraPreview(Context context, Camera camera,
+    public CameraPreview(Context context,
+                         Camera camera,
                          Camera.PreviewCallback previewCb,
                          Camera.AutoFocusCallback autoFocusCb) {
         super(context);

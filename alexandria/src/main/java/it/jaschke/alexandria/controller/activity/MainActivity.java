@@ -1,4 +1,4 @@
-package it.jaschke.alexandria;
+package it.jaschke.alexandria.controller.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,10 +17,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import it.jaschke.alexandria.api.Callback;
+import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.controller.fragment.AboutFragment;
+import it.jaschke.alexandria.controller.fragment.AddBookFragment;
+import it.jaschke.alexandria.controller.fragment.BookFragment;
+import it.jaschke.alexandria.controller.fragment.BooksFragment;
+import it.jaschke.alexandria.controller.fragment.NavigationDrawerFragment;
 
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, Callback {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        BooksFragment.Callback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -34,8 +40,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     public static boolean IS_TABLET = false;
     private BroadcastReceiver messageReceiver;
 
-    public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
-    public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
+    public static final String NO_BOOK_AT_GOOGLE_MESSAGE = "NO_BOOK_AT_GOOGLE_MESSAGE";
+    public static final String NO_BOOKS_AT_GOOGLE_MESSAGE_KEY = "NO_BOOKS_AT_GOOGLE_MESSAGE_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +53,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             setContentView(R.layout.activity_main);
         }
 
-        //TODO : 2.0 MESSAGE_EVENT is suspicious
-        messageReceiver = new MessageReceiver();
-        IntentFilter filter = new IntentFilter(MESSAGE_EVENT);
-        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver,filter);
-
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         title = getTitle();
-
         // Set up the drawer.
         navigationDrawerFragment.setUp(R.id.navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout));
+
+
+        //TODO : 2.0 NO_BOOK_AT_GOOGLE_MESSAGE is suspicious, the app will be always listening
+        // can't we achieve the same with a Callback
+        messageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter(NO_BOOK_AT_GOOGLE_MESSAGE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, filter);
     }
 
     @Override
@@ -69,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         switch (position){
             default:
             case 0:
-                nextFragment = new ListOfBooks();
+                nextFragment = new BooksFragment();
                 break;
             case 1:
                 nextFragment = new AddBookFragment();
@@ -133,11 +140,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
-    public void onItemSelected(String ean) {
+    public void onItemSelected(String isbn) {
         Bundle args = new Bundle();
-        args.putString(BookDetail.EAN_KEY, ean);
+        args.putString(BookFragment.ISBN_KEY, isbn);
 
-        BookDetail fragment = new BookDetail();
+        BookFragment fragment = new BookFragment();
         fragment.setArguments(args);
 
         int id = R.id.container;
@@ -146,15 +153,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         }
         getSupportFragmentManager().beginTransaction()
                 .replace(id, fragment)
-                .addToBackStack("Book Detail")
+                .addToBackStack(getResources().getString(R.string.book_detail))
                 .commit();
     }
 
     private class MessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getStringExtra(MESSAGE_KEY)!=null){
-                Toast.makeText(MainActivity.this, intent.getStringExtra(MESSAGE_KEY), Toast.LENGTH_LONG).show();
+            if(intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY)!=null){
+                Toast.makeText(MainActivity.this, intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY), Toast.LENGTH_LONG).show();
             }
         }
     }

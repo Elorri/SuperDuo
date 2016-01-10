@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.api;
+package it.jaschke.alexandria.controller.adapter;
 
 
 import android.content.Context;
@@ -11,13 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.data.AlexandriaContract;
-import it.jaschke.alexandria.services.DownloadImage;
+import it.jaschke.alexandria.model.data.AlexandriaContract;
+import it.jaschke.alexandria.model.services.DownloadImage;
 
 /**
  * Created by saj on 11/01/15.
  */
-public class BookListAdapter extends CursorAdapter {
+public class BooksAdapter extends CursorAdapter {
 
 
     public static class ViewHolder {
@@ -32,7 +32,7 @@ public class BookListAdapter extends CursorAdapter {
         }
     }
 
-    public BookListAdapter(Context context, Cursor c, int flags) {
+    public BooksAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 

@@ -8,8 +8,8 @@ import android.test.AndroidTestCase;
 import java.util.Map;
 import java.util.Set;
 
-import it.jaschke.alexandria.data.AlexandriaContract;
-import it.jaschke.alexandria.data.DbHelper;
+import it.jaschke.alexandria.model.data.AlexandriaContract;
+import it.jaschke.alexandria.model.data.DbHelper;
 
 /**
  * Created by saj on 23/12/14.

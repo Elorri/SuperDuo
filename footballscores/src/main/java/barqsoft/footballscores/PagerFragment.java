@@ -18,53 +18,79 @@ import java.util.Date;
 /**
  * Created by yehya khaled on 2/27/2015.
  */
-public class PagerFragment extends Fragment
-{
+public class PagerFragment extends Fragment {
     public static final int NUM_PAGES = 5;
-    public ViewPager mPagerHandler;
-    private myPageAdapter mPagerAdapter;
-    private MainScreenFragment[] viewFragments = new MainScreenFragment[5];
+    private TabFragment[] tabs = new TabFragment[5];
+    public ViewPager mViewPager;
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
-        View rootView = inflater.inflate(R.layout.pager_fragment, container, false);
-        mPagerHandler = (ViewPager) rootView.findViewById(R.id.pager);
-        mPagerAdapter = new myPageAdapter(getChildFragmentManager());
-        for (int i = 0;i < NUM_PAGES;i++)
-        {
-            Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
-            SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
-            viewFragments[i] = new MainScreenFragment();
-            viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.pager_fragment, container, false);
+
+        for (int i = 0; i < NUM_PAGES; i++) {
+            //TODO : 2.3 should be converted in julianday dig into the below
+//            Time dayTime = new Time();
+//            dayTime.setToNow();
+//            // we start at the day returned by local time. Otherwise this is a mess.
+//            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);  //gmtoff should be called utcoff it's the numbers of offset to reach //universal time = utc time
+//            // now we work exclusively in UTC
+//            dayTime = new Time();
+//            // Cheating to convert this to UTC time, which is what we want anyhow
+//            long dateTime = dayTime.setJulianDay(julianStartDay + i); // i is the number of days 0 for today, 1 for tomorrow
+//            long todayInMillisUTC = dayTime.setJulianDay(julianStartDay + 0); // today in millis
+//            long tomorrowInMillisUTC = dayTime.setJulianDay(julianStartDay + 1); // tomorrow in millis
+//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, dateTime);
+
+
+//            //This works too
+//            Time t = new Time();
+//            t.setToNow();
+//            int julianDay = Time.getJulianDay(dateInMillis, t.gmtoff);
+//            int currentJulianDay = Time.getJulianDay(System.currentTimeMillis(), t.gmtoff);
+
+            //TODO : 2.3 format with locale
+            Date date = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            tabs[i] = new TabFragment();
+            //TODO :2.0 check by rotation screen or use getArguments or ask on forums
+            tabs[i].setFragmentDate(dateFormat.format(date));
         }
-        mPagerHandler.setAdapter(mPagerAdapter);
-        mPagerHandler.setCurrentItem(MainActivity.current_fragment);
-        return rootView;
+
+        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        PageAdapter pageAdapter = new PageAdapter(getChildFragmentManager());
+        mViewPager.setAdapter(pageAdapter);
+        //TODO : 2.0 use preferences
+        mViewPager.setCurrentItem(MainActivity.currentItem);
+        return view;
     }
-    private class myPageAdapter extends FragmentStatePagerAdapter
-    {
+
+    private class PageAdapter extends FragmentStatePagerAdapter {
+
+        public PageAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+
         @Override
-        public Fragment getItem(int i)
-        {
-            return viewFragments[i];
+        public Fragment getItem(int i) {
+            return tabs[i];
         }
 
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return NUM_PAGES;
         }
 
-        public myPageAdapter(FragmentManager fm)
-        {
-            super(fm);
-        }
+
+
         // Returns the page title for the top indicator
         @Override
-        public CharSequence getPageTitle(int position)
-        {
-            return getDayName(getActivity(),System.currentTimeMillis()+((position-2)*86400000));
+        public CharSequence getPageTitle(int position) {
+            //TODO : 2.3 use your localisation function
+            return getDayName(getActivity(), System.currentTimeMillis() + ((position - 2) * 86400000));
         }
+
         public String getDayName(Context context, long dateInMillis) {
             // If the date is today, return the localized version of "Today" instead of the actual
             // day name.
@@ -75,15 +101,11 @@ public class PagerFragment extends Fragment
             int currentJulianDay = Time.getJulianDay(System.currentTimeMillis(), t.gmtoff);
             if (julianDay == currentJulianDay) {
                 return context.getString(R.string.today);
-            } else if ( julianDay == currentJulianDay +1 ) {
+            } else if (julianDay == currentJulianDay + 1) {
                 return context.getString(R.string.tomorrow);
-            }
-            else if ( julianDay == currentJulianDay -1)
-            {
+            } else if (julianDay == currentJulianDay - 1) {
                 return context.getString(R.string.yesterday);
-            }
-            else
-            {
+            } else {
                 Time time = new Time();
                 time.setToNow();
                 // Otherwise, the format is just the day of the week (e.g "Wednesday".

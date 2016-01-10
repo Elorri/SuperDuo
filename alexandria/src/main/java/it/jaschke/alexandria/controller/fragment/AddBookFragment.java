@@ -1,4 +1,4 @@
-package it.jaschke.alexandria;
+package it.jaschke.alexandria.controller.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +20,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import it.jaschke.alexandria.data.AlexandriaContract;
-import it.jaschke.alexandria.services.BookService;
-import it.jaschke.alexandria.services.DownloadImage;
+import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.controller.extras.Tools;
+import it.jaschke.alexandria.model.data.AlexandriaContract;
+import it.jaschke.alexandria.model.services.BookService;
+import it.jaschke.alexandria.model.services.DownloadImage;
 
 
 public class AddBookFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -67,6 +68,11 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
         mIsbnEditText = (EditText) view.findViewById(R.id.isbnEditText);
         Button scanButton = (Button) view.findViewById(R.id.scan_button);
+        mBookTitleTextView =((TextView) view.findViewById(R.id.bookTitle));
+        mBookSubTitleTextView =((TextView) view.findViewById(R.id.bookSubTitle));
+        mAuthorsTextView = ((TextView) view.findViewById(R.id.authors));
+        mCategoriesTextView =((TextView) view.findViewById(R.id.categories));
+        mBookCover=(ImageView) view.findViewById(R.id.bookCover);
 
 
         mIsbnEditText.addTextChangedListener(new TextWatcher() {
@@ -176,8 +182,8 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.e("SuperDuo", "Cursor data" + data);
         if (!data.moveToFirst()) {
+            //TODO : 2.0 add empty message
             return;
         }
 
@@ -194,12 +200,6 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
 
 
-        mBookTitleTextView =((TextView) view.findViewById(R.id.bookTitle));
-        mBookSubTitleTextView =((TextView) view.findViewById(R.id.bookSubTitle));
-        mAuthorsTextView = ((TextView) view.findViewById(R.id.authors));
-        mCategoriesTextView =((TextView) view.findViewById(R.id.categories));
-        mBookCover=(ImageView) view.findViewById(R.id.bookCover);
-
         mBookTitleTextView.setText(bookTitle);
         mBookSubTitleTextView.setText(bookSubTitle);
         mCategoriesTextView.setText(categories);
@@ -214,6 +214,8 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         }
 
         //TODO 2.4 check this method
+        //TODO 2.4 also note that there is no image display if no internet + no cache not good
+        // experience
         if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
             new DownloadImage(mBookCover).execute(imgUrl);
             mBookCover.setVisibility(View.VISIBLE);
@@ -240,6 +242,8 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         mDeleteButton.setVisibility(View.INVISIBLE);
     }
 
+
+    //TODO : 4.0 remove onAttach methods
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

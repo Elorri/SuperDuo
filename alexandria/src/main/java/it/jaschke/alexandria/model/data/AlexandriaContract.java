@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.data;
+package it.jaschke.alexandria.model.data;
 
 /**
  * Created by saj on 22/12/14.

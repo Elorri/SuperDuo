@@ -1,4 +1,4 @@
-package it.jaschke.alexandria;
+package it.jaschke.alexandria.controller.extras;
 
 /**
  * Created by Elorri on 07/01/2016.

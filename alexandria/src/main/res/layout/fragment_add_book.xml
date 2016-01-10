@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".AddBookFragment">
+    android:layout_height="match_parent" tools:context=".controller.fragment.AddBookFragment">
 <!--TODO:2.0 replace any fill_parent by match_parent-->
     <RelativeLayout
         android:orientation="horizontal"
