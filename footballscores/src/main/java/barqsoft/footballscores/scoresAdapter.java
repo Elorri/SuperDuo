@@ -39,7 +39,7 @@ public class ScoresAdapter extends CursorAdapter {
 
     //TODO : 2.0 no need for view holder
 
-    private class ViewHolder {
+    public class ViewHolder {
         public TextView home_name;
         public TextView away_name;
         public TextView score;

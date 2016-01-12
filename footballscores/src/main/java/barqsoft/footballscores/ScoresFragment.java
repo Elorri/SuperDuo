@@ -19,14 +19,14 @@ import barqsoft.footballscores.service.FootballService;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TabFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ScoresFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public ScoresAdapter mAdapter;
     public static final int SCORES_LOADER = 0;
     private String[] date = new String[1];
     private int last_selected_item = -1;
 
-    public TabFragment() {
+    public ScoresFragment() {
     }
 
 
@@ -35,7 +35,7 @@ public class TabFragment extends Fragment implements LoaderManager.LoaderCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         updateScores();
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_scores, container, false);
         final ListView scoreList = (ListView) view.findViewById(R.id.scores_list);
         mAdapter = new ScoresAdapter(getActivity(), null, 0);
         scoreList.setAdapter(mAdapter);
@@ -46,9 +46,12 @@ public class TabFragment extends Fragment implements LoaderManager.LoaderCallbac
         scoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ViewHolder selected = (ViewHolder) view.getTag();
+                //TODO : 2.0 use Uri here
+                ScoresAdapter.ViewHolder selected = (ScoresAdapter.ViewHolder) view.getTag();
                 mAdapter.detail_match_id = selected.match_id;
                 MainActivity.selectedMatchId = (int) selected.match_id;
+
+                //TODO : 2.0 mAdapter.notifyDataSetChanged(); remove and see
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -102,8 +105,8 @@ public class TabFragment extends Fragment implements LoaderManager.LoaderCallbac
 
 
     private void updateScores() {
-        Intent service_start = new Intent(getActivity(), FootballService.class);
-        getActivity().startService(service_start);
+        Intent serviceStart = new Intent(getActivity(), FootballService.class);
+        getActivity().startService(serviceStart);
     }
 
     public void setFragmentDate(String date) {

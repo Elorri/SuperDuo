@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.controller.activity.MainActivity;
-import it.jaschke.alexandria.model.data.AlexandriaContract;
+import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
 import it.jaschke.alexandria.model.services.DownloadImage;
 
@@ -83,7 +83,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
                 getActivity(),
-                AlexandriaContract.BookEntry.buildFullBookUri(Long.parseLong(isbnValue)),
+                BookContract.BookEntry.buildFullBookUri(Long.parseLong(isbnValue)),
                 null,
                 null,
                 null,
@@ -97,12 +97,12 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             return;
         }
 
-        String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
-        String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
-        String desc = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.DESC));
-        String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
-        String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
+        String bookTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.TITLE));
+        String bookSubTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.SUBTITLE));
+        String desc = data.getString(data.getColumnIndex(BookContract.BookEntry.DESC));
+        String authors = data.getString(data.getColumnIndex(BookContract.AuthorEntry.AUTHOR));
+        String imgUrl = data.getString(data.getColumnIndex(BookContract.BookEntry.IMAGE_URL));
+        String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.CATEGORY));
 
 
         ((TextView) view.findViewById(R.id.fullBookTitle)).setText(bookTitle);

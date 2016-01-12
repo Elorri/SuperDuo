@@ -18,9 +18,9 @@ import java.util.Date;
 /**
  * Created by yehya khaled on 2/27/2015.
  */
-public class PagerFragment extends Fragment {
+public class MainFragment extends Fragment {
     public static final int NUM_PAGES = 5;
-    private TabFragment[] tabs = new TabFragment[5];
+    private ScoresFragment[] tabs = new ScoresFragment[5];
     public ViewPager mViewPager;
 
 
@@ -52,7 +52,7 @@ public class PagerFragment extends Fragment {
             //TODO : 2.3 format with locale
             Date date = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            tabs[i] = new TabFragment();
+            tabs[i] = new ScoresFragment();
             //TODO :2.0 check by rotation screen or use getArguments or ask on forums
             tabs[i].setFragmentDate(dateFormat.format(date));
         }

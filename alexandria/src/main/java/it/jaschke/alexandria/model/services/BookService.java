@@ -21,7 +21,7 @@ import java.net.URL;
 
 import it.jaschke.alexandria.controller.activity.MainActivity;
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.model.data.AlexandriaContract;
+import it.jaschke.alexandria.model.data.BookContract;
 
 // I made the decision to keep the IntentService class and not changing using a SyncAdapter. With
 // a SyncAdapter we could have offer the user a selection of most read book and let him choose
@@ -68,7 +68,7 @@ public class BookService extends IntentService {
      */
     private void deleteBook(String isbn) {
         if(isbn!=null) {
-            getContentResolver().delete(AlexandriaContract.BookEntry.buildBookUri(Long.parseLong(isbn)), null, null);
+            getContentResolver().delete(BookContract.BookEntry.buildBookUri(Long.parseLong(isbn)), null, null);
         }
     }
 
@@ -83,7 +83,7 @@ public class BookService extends IntentService {
         }
 
         Cursor bookEntry = getContentResolver().query(
-                AlexandriaContract.BookEntry.buildBookUri(Long.parseLong(isbn)),
+                BookContract.BookEntry.buildBookUri(Long.parseLong(isbn)),
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
@@ -222,20 +222,20 @@ public class BookService extends IntentService {
 
     private void writeBackBook(String isbn, String title, String subtitle, String desc, String imgUrl) {
         ContentValues values= new ContentValues();
-        values.put(AlexandriaContract.BookEntry._ID, isbn);
-        values.put(AlexandriaContract.BookEntry.TITLE, title);
-        values.put(AlexandriaContract.BookEntry.IMAGE_URL, imgUrl);
-        values.put(AlexandriaContract.BookEntry.SUBTITLE, subtitle);
-        values.put(AlexandriaContract.BookEntry.DESC, desc);
-        getContentResolver().insert(AlexandriaContract.BookEntry.CONTENT_URI,values);
+        values.put(BookContract.BookEntry._ID, isbn);
+        values.put(BookContract.BookEntry.TITLE, title);
+        values.put(BookContract.BookEntry.IMAGE_URL, imgUrl);
+        values.put(BookContract.BookEntry.SUBTITLE, subtitle);
+        values.put(BookContract.BookEntry.DESC, desc);
+        getContentResolver().insert(BookContract.BookEntry.CONTENT_URI,values);
     }
 
     private void writeBackAuthors(String isbn, JSONArray jsonArray) throws JSONException {
         ContentValues values= new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
-            values.put(AlexandriaContract.AuthorEntry._ID, isbn);
-            values.put(AlexandriaContract.AuthorEntry.AUTHOR, jsonArray.getString(i));
-            getContentResolver().insert(AlexandriaContract.AuthorEntry.CONTENT_URI, values);
+            values.put(BookContract.AuthorEntry._ID, isbn);
+            values.put(BookContract.AuthorEntry.AUTHOR, jsonArray.getString(i));
+            getContentResolver().insert(BookContract.AuthorEntry.CONTENT_URI, values);
             values= new ContentValues();
         }
     }
@@ -243,9 +243,9 @@ public class BookService extends IntentService {
     private void writeBackCategories(String isbn, JSONArray jsonArray) throws JSONException {
         ContentValues values= new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
-            values.put(AlexandriaContract.CategoryEntry._ID, isbn);
-            values.put(AlexandriaContract.CategoryEntry.CATEGORY, jsonArray.getString(i));
-            getContentResolver().insert(AlexandriaContract.CategoryEntry.CONTENT_URI, values);
+            values.put(BookContract.CategoryEntry._ID, isbn);
+            values.put(BookContract.CategoryEntry.CATEGORY, jsonArray.getString(i));
+            getContentResolver().insert(BookContract.CategoryEntry.CONTENT_URI, values);
             values= new ContentValues();
         }
     }
