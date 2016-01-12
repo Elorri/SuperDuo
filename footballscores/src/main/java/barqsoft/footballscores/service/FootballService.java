@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Looper;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -22,10 +23,10 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.Vector;
 
+import barqsoft.footballscores.R;
 import barqsoft.footballscores.Status;
 import barqsoft.footballscores.Utilities;
 import barqsoft.footballscores.data.ScoresContract;
-import barqsoft.footballscores.R;
 
 /**
  * Created by yehya khaled on 3/2/2015.
@@ -45,9 +46,12 @@ public class FootballService extends IntentService {
 
     private void syncDb() {
         //TODO : 2.0 check this method works when called from (B)
+        Log.d("SuperDuo", "current thread : "+  thread() );
+
         Context context = getApplicationContext();
         boolean isInternetOn = Utilities.isNetworkAvailable(context);
         if (!isInternetOn) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isInternetOn"+isInternetOn);
             Status.setNetworkStatus(context, Status.INTERNET_OFF);
             return;
         }
@@ -55,6 +59,8 @@ public class FootballService extends IntentService {
         getData("n2");
         getData("p2");
     }
+
+
 
     /**
      * This function handle errors managed by the footballApi serveur
@@ -66,7 +72,8 @@ public class FootballService extends IntentService {
      * @throws JSONException
      */
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
-
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        Log.e("SuperDuo","setServeurStatus");
         if (jsonObject == null) {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
             Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
@@ -82,33 +89,30 @@ public class FootballService extends IntentService {
                 case HttpURLConnection.HTTP_BAD_REQUEST:
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
                     Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
-                    break;
+                    return;
                 case HttpURLConnection.HTTP_FORBIDDEN:
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_FORBIDDEN");
                     Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
-                    break;
+                    return;
                 case HttpURLConnection.HTTP_NOT_FOUND:
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_NOT_FOUND");
                     Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
-                    break;
+                    return;
                 case TOO_MANY_REQUEST:
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TOO_MANY_REQUEST");
                     Status.setFootballApiStatus(context, Status.SERVEUR_DOWN);
-                    break;
-                default:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
-                    Status.setFootballApiStatus(context, Status.SERVEUR_OK);
-                    break;
+                    return;
             }
+        }else{
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "SERVEUR_OK");
+            Status.setFootballApiStatus(context, Status.SERVEUR_OK);
         }
     }
 
     private void getData(String timeFrame) {
 
-        //TODO : 4.0 see where it crashes and add setServeurStatus DOWN or WRONG INPUT SEE OWM_MESSAGE_CODE in the
         // correct  exception catch try JSONException and IException
         final String BASE_URL = "http://api.football-data.org/alpha/fixtures";
-        //TODO : final String BASE_URL = "http://api.fooball-data.org/alpha/fixtures";
         final String QUERY_TIME_FRAME = "timeFrame";
 
 
@@ -117,6 +121,8 @@ public class FootballService extends IntentService {
                 .build();
         //TODO : 4.0 replace Log.v par Log.d
         //Log.v(LOG_TAG, "The url we are looking at is: "+fetch_build.toString());
+        Log.e("SuperDuo", "The url we are looking at is: "+fetch_build.toString());
+
         HttpURLConnection UrlConnection = null;
         BufferedReader reader = null;
         String jsonData = null;
@@ -147,6 +153,7 @@ public class FootballService extends IntentService {
                 return;
             }
             jsonData = buffer.toString();
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonData: \n"+jsonData);
 
             setServeurStatus(getApplicationContext(), new JSONObject(jsonData));
             if (!(Status.getFootballApiStatus(getApplicationContext()) == Status.SERVEUR_OK))
@@ -169,6 +176,8 @@ public class FootballService extends IntentService {
         } catch (IOException e) {
             //catch exceptions more precisely
             Log.e(LOG_TAG, "IOException" + e.getMessage());
+            //TODO : 2.0 add this line in alexanria
+            Status.setFootballApiStatus(getApplicationContext(), Status.SERVEUR_DOWN);
             e.printStackTrace();
         } catch (JSONException e) {
             Log.e(LOG_TAG, "JSONException" + e.getMessage());
@@ -324,6 +333,12 @@ public class FootballService extends IntentService {
             Log.e(LOG_TAG, e.getMessage());
         }
 
+    }
+
+    public static String thread() {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread())
+            return "ThreadUI";
+        else return "Background";
     }
 }
 

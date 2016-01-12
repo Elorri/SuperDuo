@@ -132,7 +132,6 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
             @Override
             public void onClick(View view) {
                 AddBookFragment.this.mIsbnEditText.setText("");
-                //TODO : 2.0 addToFavorites();?
             }
         });
 
@@ -194,10 +193,6 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (!data.moveToFirst()) {
-            //TODO : 2.0 add empty message
-            return;
-        }
 
         //If the book returned has an empty title, subtitle, authors, imageUrl, or category, we
         // have 2 options :
@@ -278,7 +273,6 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-//TODO: 2.0 swapCursor(null) ?
     }
 
     private void clearFields() {

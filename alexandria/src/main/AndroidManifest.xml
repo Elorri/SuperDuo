@@ -45,6 +45,9 @@
             android:name=".model.services.BookService"
             android:exported="false" >
         </service>
+
+
+
     </application>
 
 </manifest>

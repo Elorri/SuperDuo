@@ -38,8 +38,7 @@
 
 
     <!-- Empty scores listview -->
-    <string name="no_books_internet_off">No books information available. The network is
-        not available to fetch data.</string>
+    <string name="no_books_internet_off">Network error. Please check your connection.</string>
     <string name="no_books_serveur_down">No books information available. The server is
         not returning valid data.</string>
     <string name="no_books_wrong_url_app_input">No books information available. The server is not returning valid data. Please check for an updated version of Alexndria.</string>

@@ -46,12 +46,19 @@
 
 
     <!-- Empty scores listview -->
-    <string name="no_scores_internet_off">No scores information available. The network is
-        not available to fetch data.</string>
+    <string name="no_scores_internet_off">Network error. Please check your connection.</string>
     <string name="no_scores_serveur_down">No scores information available. The server is
         not returning valid data.</string>
     <string name="no_scores_wrong_url_app_input">No scores information available. The server is not returning valid data. Please check for an updated version of FootballScores.</string>
     <string name="no_scores_table_status_unknown">Loading scores...</string>
     <string name="no_scores">No scores information available.</string>
+
+
+    <!-- SyncAdapter related -->
+    <!-- that the account is specific to our OpenBeeLabApp-->
+    <string name="sync_account_type">footballscores.barqsoft</string>
+    <!-- Uri authority for our content provider-->
+    <string name="content_authority">barqsoft.footballscores</string>
+
 
 </resources>
