@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.Vector;
 
+import barqsoft.footballscores.Status;
+import barqsoft.footballscores.Utilities;
 import barqsoft.footballscores.data.ScoresContract;
 import barqsoft.footballscores.R;
 
@@ -30,34 +32,94 @@ import barqsoft.footballscores.R;
  */
 public class FootballService extends IntentService {
 
-    public static final String LOG_TAG = "FootballService";
-
+    public static final String LOG_TAG = FootballService.class.getSimpleName();
+    public static final String SERVICE_NAME="FootballService";
     public FootballService() {
-        super("FootballService");
+        super(SERVICE_NAME);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        syncDb();
+    }
+
+    private void syncDb() {
+        //TODO : 2.0 check this method works when called from (B)
+        Context context = getApplicationContext();
+        boolean isInternetOn = Utilities.isNetworkAvailable(context);
+        if (!isInternetOn) {
+            Status.setNetworkStatus(context, Status.INTERNET_OFF);
+            return;
+        }
+        Status.setNetworkStatus(context, Status.INTERNET_ON);
         getData("n2");
         getData("p2");
+    }
 
-        return;
+    /**
+     * This function handle errors managed by the footballApi serveur
+     * see http://api.football-data.org/docs/latest/index.html#_http_error_codes_returned
+     *
+     * @param context
+     * @param jsonObject
+     * @return
+     * @throws JSONException
+     */
+    void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
+
+        if (jsonObject == null) {
+            Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+            return;
+        }
+
+        String ERROR_TAG = "error";
+        final int TOO_MANY_REQUEST = 429;
+
+        if (jsonObject.has(ERROR_TAG)) {
+            int errorCode = jsonObject.getInt(ERROR_TAG);
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_BAD_REQUEST:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
+                    Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+                    break;
+                case HttpURLConnection.HTTP_FORBIDDEN:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_FORBIDDEN");
+                    Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_NOT_FOUND");
+                    Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+                    break;
+                case TOO_MANY_REQUEST:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TOO_MANY_REQUEST");
+                    Status.setFootballApiStatus(context, Status.SERVEUR_DOWN);
+                    break;
+                default:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
+                    Status.setFootballApiStatus(context, Status.SERVEUR_OK);
+                    break;
+            }
+        }
     }
 
     private void getData(String timeFrame) {
-        //Creating fetch URL
-        final String BASE_URL = "http://api.football-data.org/alpha/fixtures"; //Base URL
-        final String QUERY_TIME_FRAME = "timeFrame"; //Time Frame parameter to determine days
-        //final String QUERY_MATCH_DAY = "matchday";
+
+        //TODO : 4.0 see where it crashes and add setServeurStatus DOWN or WRONG INPUT SEE OWM_MESSAGE_CODE in the
+        // correct  exception catch try JSONException and IException
+        final String BASE_URL = "http://api.football-data.org/alpha/fixtures/normalBadDir";
+        //TODO : final String BASE_URL = "http://api.fooball-data.org/alpha/fixtures";
+        final String QUERY_TIME_FRAME = "timeFrame";
+
 
         Uri fetch_build = Uri.parse(BASE_URL).buildUpon().
                 appendQueryParameter(QUERY_TIME_FRAME, timeFrame)
                 .build();
+        //TODO : 4.0 replace Log.v par Log.d
         //Log.v(LOG_TAG, "The url we are looking at is: "+fetch_build.toString());
         HttpURLConnection UrlConnection = null;
         BufferedReader reader = null;
-        String JSON_data = null;
-        //Opening Connection
+        String jsonData = null;
+
         try {
             URL fetch = new URL(fetch_build.toString());
             UrlConnection = (HttpURLConnection) fetch.openConnection();
@@ -83,24 +145,33 @@ public class FootballService extends IntentService {
                 // Stream was empty.  No point in parsing.
                 return;
             }
-            JSON_data = buffer.toString();
+            jsonData = buffer.toString();
 
-            if (JSON_data != null) {
-                //This bit is to check if the data contains any matches. If not, we call processJson on the dummy data
-                JSONArray matches = new JSONObject(JSON_data).getJSONArray("fixtures");
-                if (matches.length() == 0) {
-                    //if there is no data, call the function on dummy data
-                    //this is expected behavior during the off season.
-                    processJSONdata(getString(R.string.dummy_data), getApplicationContext(), false);
-                    return;
-                }
-                processJSONdata(JSON_data, getApplicationContext(), true);
-            } else {
-                //Could not Connect
-                Log.d(LOG_TAG, "Could not connect to server.");
+            setServeurStatus(getApplicationContext(), new JSONObject(jsonData));
+            if (!(Status.getFootballApiStatus(getApplicationContext()) == Status.SERVEUR_OK))
+                // we won't be able to fetch data, no need to go further
+                return;
+
+            Status.setScoreTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
+
+            JSONArray matches = new JSONObject(jsonData).getJSONArray("fixtures");
+            if (matches.length() == 0) { //if there is no data, call the function on dummy data
+                //this is expected behavior during the off season.
+                processJSONdata(getString(R.string.dummy_data), getApplicationContext(), false);
+                return;
             }
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Exception here" + e.getMessage());
+            processJSONdata(jsonData, getApplicationContext(), true);
+
+            //If we reach this point app tables are up to date
+            Status.setScoreTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
+
+        } catch (IOException e) {
+            //catch exceptions more precisely
+            Log.e(LOG_TAG, "IOException" + e.getMessage());
+            e.printStackTrace();
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "JSONException" + e.getMessage());
+            e.printStackTrace();
         } finally {
             if (UrlConnection != null) {
                 UrlConnection.disconnect();
@@ -116,7 +187,6 @@ public class FootballService extends IntentService {
     }
 
     private void processJSONdata(String JSONdata, Context mContext, boolean isReal) {
-        //JSON data
         // This set of league codes is for the 2015/2016 season. In fall of 2016, they will need to
         // be updated. Feel free to use the codes
         final String DUMMY_LEAGUE = "000";
@@ -149,15 +219,15 @@ public class FootballService extends IntentService {
         final String MATCH_DAY = "matchday";
 
         //Match data
-        String league = null;
-        String date = null;
-        String time = null;
-        String home = null;
-        String away = null;
-        String homeGoals = null;
-        String awayGoals = null;
-        String matchId = null;
-        String matchDay = null;
+        String league;
+        String date;
+        String time;
+        String home;
+        String away;
+        String homeGoals;
+        String awayGoals;
+        String matchId;
+        String matchDay;
 
 
         try {
@@ -176,7 +246,7 @@ public class FootballService extends IntentService {
                 //add leagues here in order to have them be added to the DB.
                 // If you are finding no data in the app, check that this contains all the leagues.
                 // If it doesn't, that can cause an empty DB, bypassing the dummy data routine.
-                if (league.equals(DUMMY_LEAGUE)||
+                if (league.equals(DUMMY_LEAGUE) ||
                         league.equals(PREMIER_LEAGUE) ||
                         league.equals(SERIE_A) ||
                         league.equals(BUNDESLIGA1) ||

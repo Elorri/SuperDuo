@@ -75,7 +75,7 @@ public class Status {
      */
     @SuppressWarnings("ResourceType")
     @GoogleBookApiStatus
-    public static int getGoogleBookpiStatus(Context c) {
+    public static int getGoogleBookApiStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         return sp.getInt(c.getString(R.string.pref_google_book_api_status_key), SERVEUR_DOWN);
     }

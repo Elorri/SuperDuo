@@ -47,7 +47,7 @@ public class Status {
     }
 
     public static final int TABLE_STATUS_UNKNOWN = 0; /* we don't know if data store in the table is up to date */
-    public static final int TABLE_SYNC_DONE = 1;
+    public static final int TABLE_SYNC_DONE = 1; /* fetch has happened recently, data up to date */
 
 
 

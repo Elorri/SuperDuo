@@ -35,4 +35,14 @@
     <string name="pref_network_status_key" translatable="false">network_status</string>
     <string name="pref_google_book_api_status_key" translatable="false">google_book_api_status</string>
     <string name="pref_book_table_status_key" translatable="false">book_table_status</string>
+
+
+    <!-- Empty scores listview -->
+    <string name="no_books_internet_off">No books information available. The network is
+        not available to fetch data.</string>
+    <string name="no_books_serveur_down">No books information available. The server is
+        not returning valid data.</string>
+    <string name="no_books_wrong_url_app_input">No books information available. The server is not returning valid data. Please check for an updated version of Alexndria.</string>
+    <string name="no_books_table_status_unknown">Loading books...</string>
+    <string name="no_books">No books information available.</string>
 </resources>

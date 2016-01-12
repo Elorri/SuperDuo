@@ -1,5 +1,9 @@
 package it.jaschke.alexandria.controller.extras;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 /**
  * Created by Elorri on 07/01/2016.
  */
@@ -10,5 +14,18 @@ public class Tools {
             return  "978" + isbnValue;
         }
         return isbnValue;
+    }
+
+    /**
+     * Returns true if the network is available or about to become available.
+     *
+     * @param c Context used to get the ConnectivityManager
+     * @return true if the network is available
+     */
+    //Should be called on main thread
+    static public boolean isNetworkAvailable(Context c) {
+        ConnectivityManager cm =  (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&  activeNetwork.isConnectedOrConnecting();
     }
 }

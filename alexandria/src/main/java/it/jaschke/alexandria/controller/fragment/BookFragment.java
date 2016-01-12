@@ -31,7 +31,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public static final String ISBN_KEY = "ISBN";
     private final int LOADER_ID = 10;
     private View view;
-    private String isbnValue;
+    private String mIsbn;
     private ShareActionProvider shareActionProvider;
 
     public BookFragment(){
@@ -48,7 +48,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            isbnValue = arguments.getString(BookFragment.ISBN_KEY);
+            mIsbn = arguments.getString(BookFragment.ISBN_KEY);
 
             //TODO : 2.4 remove this for performance
             getLoaderManager().restartLoader(LOADER_ID, null, this);
@@ -61,7 +61,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onClick(View view) {
                 Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.ISBN, isbnValue);
+                bookIntent.putExtra(BookService.ISBN, mIsbn);
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
                 getActivity().getSupportFragmentManager().popBackStack();
@@ -83,7 +83,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
                 getActivity(),
-                BookContract.BookEntry.buildFullBookUri(Long.parseLong(isbnValue)),
+                BookContract.BookEntry.buildFullBookUri(Long.parseLong(mIsbn)),
                 null,
                 null,
                 null,
@@ -144,11 +144,14 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
     }
 
+
     @Override
     public void onPause() {
-        super.onDestroyView();
         if(MainActivity.IS_TABLET && view.findViewById(R.id.right_container)==null){
             getActivity().getSupportFragmentManager().popBackStack();
         }
+        super.onPause();
     }
+
+
 }

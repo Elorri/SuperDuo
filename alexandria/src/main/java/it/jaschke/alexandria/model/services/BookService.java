@@ -2,6 +2,7 @@ package it.jaschke.alexandria.model.services;
 
 import android.app.IntentService;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,8 +20,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import it.jaschke.alexandria.controller.activity.MainActivity;
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.Status;
+import it.jaschke.alexandria.controller.activity.MainActivity;
+import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 
 // I made the decision to keep the IntentService class and not changing using a SyncAdapter. With
@@ -53,7 +56,6 @@ public class BookService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             final String isbn = intent.getStringExtra(ISBN);
-
             if (FETCH_BOOK.equals(action)) {
                 fetchBook(isbn);
             } else if (DELETE_BOOK.equals(action)) {
@@ -98,8 +100,22 @@ public class BookService extends IntentService {
             bookEntry.close();
             return;
         }
-
         bookEntry.close();
+
+        syncDB(isbn);
+    }
+
+    private void syncDB(String isbn) {
+        //TODO : 2.0 check this method works when called from (B)
+        Context context = getApplicationContext();
+        boolean isInternetOn = Tools.isNetworkAvailable(context);
+        if (!isInternetOn) {
+            Status.setNetworkStatus(context, Status.INTERNET_OFF);
+            return;
+        }
+        Status.setNetworkStatus(context, Status.INTERNET_ON);
+
+
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -115,7 +131,7 @@ public class BookService extends IntentService {
                     .build();
 
             URL url = new URL(builtUri.toString());
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +"url"+url);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "url" + url);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -145,36 +161,27 @@ public class BookService extends IntentService {
             //TODO : 2.0 enregistrer le status du serveur for UX message
             //This string will be null if user device not connected to network
             bookJsonString = buffer.toString();
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "bookJsonString" + bookJsonString);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error ", e);
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
-                }
-            }
 
-        }
+            setServeurStatus(getApplicationContext(), new JSONObject(bookJsonString));
+            if (!(Status.getGoogleBookApiStatus(getApplicationContext()) == Status.SERVEUR_OK))
+                // we won't be able to fetch data, no need to go further
+                return;
 
-        final String ITEMS = "items";
+            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
 
-        final String VOLUME_INFO = "volumeInfo";
+            final String ITEMS = "items";
 
-        final String TITLE = "title";
-        final String SUBTITLE = "subtitle";
-        final String AUTHORS = "authors";
-        final String DESC = "description";
-        final String CATEGORIES = "categories";
-        final String IMG_URL_PATH = "imageLinks";
-        final String IMG_URL = "thumbnail";
+            final String VOLUME_INFO = "volumeInfo";
 
-        try {
+            final String TITLE = "title";
+            final String SUBTITLE = "subtitle";
+            final String AUTHORS = "authors";
+            final String DESC = "description";
+            final String CATEGORIES = "categories";
+            final String IMG_URL_PATH = "imageLinks";
+            final String IMG_URL = "thumbnail";
+
+
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "bookJsonString" + bookJsonString);
             JSONObject bookJson = new JSONObject(bookJsonString);
             JSONArray bookArray;
@@ -215,8 +222,71 @@ public class BookService extends IntentService {
                 writeBackCategories(isbn,bookInfo.getJSONArray(CATEGORIES) );
             }
 
+            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
+
+        }  catch (IOException e) {
+            //catch exceptions more precisely
+            Log.e(LOG_TAG, "IOException" + e.getMessage());
+            e.printStackTrace();
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(LOG_TAG, "JSONException" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
+
+        }
+
+
+
+    }
+
+    /**
+     * This function handle errors managed by the footballApi serveur
+     * see http://api.football-data.org/docs/latest/index.html#_http_error_codes_returned
+     *
+     * @param context
+     * @param jsonObject
+     * @return
+     * @throws JSONException
+     */
+    void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
+
+        if (jsonObject == null) {
+            Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+            return;
+        }
+
+        String ERROR_TAG = "error";
+
+        if (jsonObject.has(ERROR_TAG)) {
+            int errorCode = jsonObject.getInt(ERROR_TAG);
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_BAD_REQUEST:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
+                    Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+                    break;
+                case HttpURLConnection.HTTP_FORBIDDEN:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_FORBIDDEN");
+                    Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_NOT_FOUND");
+                    Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
+                    break;
+                default:
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
+                    Status.setGoogleBookApiStatus(context, Status.SERVEUR_OK);
+                    break;
+            }
         }
     }
 

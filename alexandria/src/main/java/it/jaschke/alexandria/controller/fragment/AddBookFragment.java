@@ -1,9 +1,15 @@
 package it.jaschke.alexandria.controller.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -21,13 +27,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.Status;
+import it.jaschke.alexandria.controller.activity.MainActivity;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
 import it.jaschke.alexandria.model.services.DownloadImage;
 
 
-public class AddBookFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AddBookFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
 
 
@@ -50,6 +58,9 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     TextView mCategoriesTextView;
     ImageView mBookCover;
 
+    String mIsbn;
+    BroadcastReceiver internetReceiver;
+
 
     public AddBookFragment() {
     }
@@ -68,11 +79,11 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
         mIsbnEditText = (EditText) view.findViewById(R.id.isbnEditText);
         Button scanButton = (Button) view.findViewById(R.id.scan_button);
-        mBookTitleTextView =((TextView) view.findViewById(R.id.bookTitle));
-        mBookSubTitleTextView =((TextView) view.findViewById(R.id.bookSubTitle));
+        mBookTitleTextView = ((TextView) view.findViewById(R.id.bookTitle));
+        mBookSubTitleTextView = ((TextView) view.findViewById(R.id.bookSubTitle));
         mAuthorsTextView = ((TextView) view.findViewById(R.id.authors));
-        mCategoriesTextView =((TextView) view.findViewById(R.id.categories));
-        mBookCover=(ImageView) view.findViewById(R.id.bookCover);
+        mCategoriesTextView = ((TextView) view.findViewById(R.id.categories));
+        mBookCover = (ImageView) view.findViewById(R.id.bookCover);
 
 
         mIsbnEditText.addTextChangedListener(new TextWatcher() {
@@ -88,13 +99,12 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
             @Override
             public void afterTextChanged(Editable isbnUserInput) {
-                String isbnValue = isbnUserInput.toString();
-                isbnValue = Tools.fixIsbn(isbnValue);
-                if (isbnValue.length() < 13) {
+                mIsbn = Tools.fixIsbn(isbnUserInput.toString());
+                if (mIsbn.length() < 13) {
                     clearFields();
                     return;
                 }
-                addBookIntent(isbnValue);
+                addBookIntent(mIsbn);
             }
         });
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -225,6 +235,43 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         //TODO android:drawableLeft="@drawable/delete" delete_button in all layouts
         mSaveButton.setVisibility(View.VISIBLE);
         mDeleteButton.setVisibility(View.VISIBLE);
+
+
+        updateEmptyView(data);
+    }
+
+    private void updateEmptyView(Cursor cursor) {
+        //TODO : 2.0  if(mIsbn.equals("")) ?
+        if (mIsbn == null)
+            return;
+        if (cursor.getCount() != 0)
+            return;
+
+
+        @Status.NetworkStatus int networkStatus = Status.getNetworkStatus(getContext());
+        TextView emptyTextView = (TextView) getView().findViewById(R.id.noBookFound);
+        clearFields();
+        emptyTextView.setVisibility(View.VISIBLE);
+        if (networkStatus == Status.INTERNET_OFF) {
+            emptyTextView.setText(R.string.no_books_internet_off);
+            return;
+        }
+        @Status.GoogleBookApiStatus int footballApiStatus = Status.getGoogleBookApiStatus(getContext());
+        if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_DOWN)) {
+            emptyTextView.setText(R.string.no_books_serveur_down);
+            return;
+        }
+        if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_WRONG_URL_APP_INPUT)) {
+            emptyTextView.setText(R.string.no_books_wrong_url_app_input);
+            return;
+        }
+        @Status.BookTableStatus int bookTableStatus = Status.getBookTableStatus(getContext());
+        if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_OK) &&
+                (bookTableStatus == Status.TABLE_STATUS_UNKNOWN)) {
+            emptyTextView.setText(R.string.no_books_table_status_unknown);
+            return;
+        }
+        emptyTextView.setText(R.string.no_books);
     }
 
     @Override
@@ -233,10 +280,16 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void clearFields() {
-        mBookTitleTextView.setText("");
-        mBookSubTitleTextView.setText("");
-        mAuthorsTextView.setText("");
-        mCategoriesTextView.setText("");
+        //TODO : 2.0 check if set INVISIBLE is enough
+        mBookTitleTextView.setVisibility(View.INVISIBLE);
+        mBookSubTitleTextView.setVisibility(View.INVISIBLE);
+        mAuthorsTextView.setVisibility(View.INVISIBLE);
+        mCategoriesTextView.setVisibility(View.INVISIBLE);
+
+//        mBookTitleTextView.setText("");
+//        mBookSubTitleTextView.setText("");
+//        mAuthorsTextView.setText("");
+//        mCategoriesTextView.setText("");
         mBookCover.setVisibility(View.INVISIBLE);
         mSaveButton.setVisibility(View.INVISIBLE);
         mDeleteButton.setVisibility(View.INVISIBLE);
@@ -248,5 +301,52 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         activity.setTitle(R.string.scan);
+    }
+
+
+    @Override
+    public void onResume() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        if (MainActivity.IS_TABLET && view.findViewById(R.id.right_container) == null) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        super.onPause();
+    }
+
+
+    @Override
+    public void onStart() {
+        internetReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (Tools.isNetworkAvailable(getContext()))
+                    restartLoader();
+            }
+        };
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(internetReceiver, filter);
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(internetReceiver);
+        super.onStop();
+    }
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_book_table_status_key))) {
+            // updateEmptyView();
+        }
     }
 }

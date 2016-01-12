@@ -1,8 +1,10 @@
 package it.jaschke.alexandria.controller.fragment;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -13,13 +15,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.Status;
 import it.jaschke.alexandria.controller.adapter.BooksAdapter;
 import it.jaschke.alexandria.model.data.BookContract;
 
 
-public class BooksFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BooksFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> ,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 
     private BooksAdapter mBooksAdapter;
     private ListView mBookList;
@@ -27,6 +32,8 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
     private EditText mSearchText;
 
     private final int LOADER_ID = 10;
+
+
 
     public interface Callback {
         void onItemSelected(String ean);
@@ -44,7 +51,7 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_of_books, container, false);
+        View view = inflater.inflate(R.layout.fragment_books, container, false);
         mSearchText = (EditText) view.findViewById(R.id.searchText);
         mBookList = (ListView) view.findViewById(R.id.bookList);
 
@@ -88,6 +95,31 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
         return view;
     }
 
+
+    @Override
+    public void onResume() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_book_table_status_key))) {
+            updateEmptyView();
+        }
+    }
+
+
+
+
     private void restartLoader() {
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
@@ -126,8 +158,37 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
         if (position != ListView.INVALID_POSITION) {
             mBookList.smoothScrollToPosition(position);
         }
+        updateEmptyView();
+    }
 
-        //TODO 2.0 if the list is null add a message
+    private void updateEmptyView() {
+        if (mBooksAdapter.getCount() != 0)
+            return;
+
+        @Status.NetworkStatus int networkStatus=Status.getNetworkStatus(getContext());
+        TextView emptyTextView = (TextView) getView().findViewById(R.id.emptyListView);
+        emptyTextView.setVisibility(View.VISIBLE);
+        mBookList.setEmptyView(emptyTextView);
+        if(networkStatus==Status.INTERNET_OFF) {
+            emptyTextView.setText(R.string.no_books_internet_off);
+            return;
+        }
+        @Status.GoogleBookApiStatus int footballApiStatus=Status.getGoogleBookApiStatus(getContext());
+        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_DOWN)) {
+            emptyTextView.setText(R.string.no_books_serveur_down);
+            return;
+        }
+        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_WRONG_URL_APP_INPUT)) {
+            emptyTextView.setText(R.string.no_books_wrong_url_app_input);
+            return;
+        }
+        @Status.BookTableStatus int bookTableStatus=Status.getBookTableStatus(getContext());
+        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_OK)&&
+                (bookTableStatus==Status.TABLE_STATUS_UNKNOWN)) {
+            emptyTextView.setText(R.string.no_books_table_status_unknown);
+            return;
+        }
+        emptyTextView.setText(R.string.no_books);
     }
 
     @Override
