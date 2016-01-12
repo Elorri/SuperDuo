@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -38,18 +37,31 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
      */
     private CharSequence title;
     public static boolean IS_TABLET = false;
-    private BroadcastReceiver messageReceiver;
 
-    public static final String NO_BOOK_AT_GOOGLE_MESSAGE = "NO_BOOK_AT_GOOGLE_MESSAGE";
+
+
+    public static final String NO_BOOK_AT_GOOGLE_MESSAGE = "com.googleapis.NO_BOOKS_RESULTS";
     public static final String NO_BOOKS_AT_GOOGLE_MESSAGE_KEY = "NO_BOOKS_AT_GOOGLE_MESSAGE_KEY";
+
+
+
+
+    private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY) != null) {
+                Toast.makeText(MainActivity.this, intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY), Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         IS_TABLET = isTablet();
-        if(IS_TABLET){
+        if (IS_TABLET) {
             setContentView(R.layout.activity_main_tablet);
-        }else {
+        } else {
             setContentView(R.layout.activity_main);
         }
 
@@ -57,14 +69,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         title = getTitle();
         // Set up the drawer.
-        navigationDrawerFragment.setUp(R.id.navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout));
-
-
-        //TODO : 2.0 NO_BOOK_AT_GOOGLE_MESSAGE is suspicious, the app will be always listening
-        // can't we achieve the same with a Callback
-        messageReceiver = new MessageReceiver();
-        IntentFilter filter = new IntentFilter(NO_BOOK_AT_GOOGLE_MESSAGE);
-        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, filter);
+        navigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
     @Override
@@ -73,7 +78,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment nextFragment;
 
-        switch (position){
+        switch (position) {
             default:
             case 0:
                 nextFragment = new BooksFragment();
@@ -133,10 +138,21 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
-    protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
-        super.onDestroy();
+    protected void onStart() {
+        //TODO : 2.0 NO_BOOK_AT_GOOGLE_MESSAGE is suspicious, the app will be always listening
+        // can't we achieve the same with a Callback
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(NO_BOOK_AT_GOOGLE_MESSAGE);
+        registerReceiver(messageReceiver, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(messageReceiver);
+        super.onPause();
     }
 
     @Override
@@ -148,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         fragment.setArguments(args);
 
         int id = R.id.container;
-        if(findViewById(R.id.right_container) != null){
+        if (findViewById(R.id.right_container) != null) {
             id = R.id.right_container;
         }
         getSupportFragmentManager().beginTransaction()
@@ -157,16 +173,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .commit();
     }
 
-    private class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY)!=null){
-                Toast.makeText(MainActivity.this, intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
-    public void goBack(View view){
+    public void goBack(View view) {
         getSupportFragmentManager().popBackStack();
     }
 
@@ -178,7 +186,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount()<2){
+        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
             finish();
         }
         super.onBackPressed();

@@ -16,6 +16,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -166,7 +167,8 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         bookIntent.putExtra(BookService.ISBN, isbnValue);
         bookIntent.setAction(BookService.FETCH_BOOK);
         getActivity().startService(bookIntent);
-        AddBookFragment.this.restartLoader();
+        //TODO : Does removing this line remove the add book without internet bug ?
+        //AddBookFragment.this.restartLoader();
     }
 
     private void restartLoader() {
@@ -328,6 +330,7 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (Tools.isNetworkAvailable(getContext()))
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                     restartLoader();
             }
         };

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -188,9 +187,7 @@ public class BookService extends IntentService {
             if(bookJson.has(ITEMS)){
                 bookArray = bookJson.getJSONArray(ITEMS);
             }else{
-                Intent messageIntent = new Intent(MainActivity.NO_BOOK_AT_GOOGLE_MESSAGE);
-                messageIntent.putExtra(MainActivity.NO_BOOKS_AT_GOOGLE_MESSAGE_KEY,getResources().getString(R.string.not_found));
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(messageIntent);
+    sendBroadcast();
                 return;
             }
 
@@ -247,6 +244,12 @@ public class BookService extends IntentService {
 
 
 
+    }
+
+    private void sendBroadcast() {
+        Intent broadcastIntent = new Intent(MainActivity.NO_BOOK_AT_GOOGLE_MESSAGE);
+        broadcastIntent.putExtra(MainActivity.NO_BOOKS_AT_GOOGLE_MESSAGE_KEY, getResources().getString(R.string.not_found));
+        sendBroadcast(broadcastIntent);
     }
 
     /**

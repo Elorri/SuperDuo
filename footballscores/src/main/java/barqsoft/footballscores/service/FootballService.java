@@ -68,6 +68,7 @@ public class FootballService extends IntentService {
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
 
         if (jsonObject == null) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
             Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
             return;
         }
@@ -106,7 +107,7 @@ public class FootballService extends IntentService {
 
         //TODO : 4.0 see where it crashes and add setServeurStatus DOWN or WRONG INPUT SEE OWM_MESSAGE_CODE in the
         // correct  exception catch try JSONException and IException
-        final String BASE_URL = "http://api.football-data.org/alpha/fixtures/normalBadDir";
+        final String BASE_URL = "http://api.football-data.org/alpha/fixtures";
         //TODO : final String BASE_URL = "http://api.fooball-data.org/alpha/fixtures";
         final String QUERY_TIME_FRAME = "timeFrame";
 
