@@ -19,9 +19,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.Status;
-import it.jaschke.alexandria.controller.activity.MainActivity;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 
@@ -183,13 +181,7 @@ public class BookService extends IntentService {
 
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "bookJsonString" + bookJsonString);
             JSONObject bookJson = new JSONObject(bookJsonString);
-            JSONArray bookArray;
-            if(bookJson.has(ITEMS)){
-                bookArray = bookJson.getJSONArray(ITEMS);
-            }else{
-    sendBroadcast();
-                return;
-            }
+            JSONArray bookArray =bookJson.getJSONArray(ITEMS);
 
             JSONObject bookInfo = ((JSONObject) bookArray.get(0)).getJSONObject(VOLUME_INFO);
 
@@ -246,11 +238,6 @@ public class BookService extends IntentService {
 
     }
 
-    private void sendBroadcast() {
-        Intent broadcastIntent = new Intent(MainActivity.NO_BOOK_AT_GOOGLE_MESSAGE);
-        broadcastIntent.putExtra(MainActivity.NO_BOOKS_AT_GOOGLE_MESSAGE_KEY, getResources().getString(R.string.not_found));
-        sendBroadcast(broadcastIntent);
-    }
 
     /**
      * This function handle errors managed by the footballApi serveur
@@ -262,8 +249,9 @@ public class BookService extends IntentService {
      * @throws JSONException
      */
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
-
+//TODO: 4.0 make sure you catch the real status
         if (jsonObject == null) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
             Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
             return;
         }

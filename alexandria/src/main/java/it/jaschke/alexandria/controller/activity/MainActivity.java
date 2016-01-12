@@ -1,9 +1,6 @@
 package it.jaschke.alexandria.controller.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +11,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.controller.fragment.AboutFragment;
@@ -46,14 +42,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 
 
-    private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY) != null) {
-                Toast.makeText(MainActivity.this, intent.getStringExtra(NO_BOOKS_AT_GOOGLE_MESSAGE_KEY), Toast.LENGTH_LONG).show();
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,21 +127,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
 
-    @Override
-    protected void onStart() {
-        //TODO : 2.0 NO_BOOK_AT_GOOGLE_MESSAGE is suspicious, the app will be always listening
-        // can't we achieve the same with a Callback
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(NO_BOOK_AT_GOOGLE_MESSAGE);
-        registerReceiver(messageReceiver, filter);
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(messageReceiver);
-        super.onPause();
-    }
 
     @Override
     public void onItemSelected(String isbn) {
