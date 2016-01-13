@@ -1,6 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".controller.fragment.AddBookFragment">
+             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:context=".controller.fragment.AddBookFragment">
 <!--TODO:2.0 replace any fill_parent by match_parent-->
     <RelativeLayout
         android:orientation="horizontal"
@@ -17,17 +19,19 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true">
 
-            <EditText
+            <android.support.v7.widget.SearchView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:minEms="@integer/ean_width"
-                android:id="@+id/isbnEditText"
+                android:id="@+id/isbnSearchView"
                 android:saveEnabled="true"
                 android:maxLength="@integer/ean_size"
                 android:maxLines="1"
                 android:hint="@string/input_hint"
-                android:paddingRight="20dp"/>
+                android:paddingRight="20dp"
+                  android:iconifiedByDefault="false"
+                />
 
             <Button
                 android:layout_width="wrap_content"

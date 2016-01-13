@@ -1,6 +1,5 @@
 package it.jaschke.alexandria.controller.fragment;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,20 +8,19 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,18 +47,19 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
 
-
-    EditText mIsbnEditText;
-    Button mSaveButton;
-    Button mDeleteButton;
-    TextView mBookTitleTextView;
-    TextView mBookSubTitleTextView;
-    TextView mAuthorsTextView;
-    TextView mCategoriesTextView;
-    ImageView mBookCover;
+    private TextView mEmptyTextView;
+    private SearchView mIsbnSearchView;
+    private Button mSaveButton;
+    private Button mDeleteButton;
+    private TextView mBookTitleTextView;
+    private TextView mBookSubTitleTextView;
+    private TextView mAuthorsTextView;
+    private TextView mCategoriesTextView;
+    private ImageView mBookCover;
 
     String mIsbn;
     BroadcastReceiver internetReceiver;
+    private boolean isLoadFinished = false;
 
 
     public AddBookFragment() {
@@ -68,17 +67,22 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onSaveInstanceState(outState);
-        if (mIsbnEditText != null) {
-            outState.putString(ISBN_CONTENT, mIsbnEditText.getText().toString());
+        if (mIsbnSearchView != null) {
+            outState.putString(ISBN_CONTENT, mIsbnSearchView.getQuery().toString());
         }
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_book, container, false);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        getActivity().setTitle(R.string.scan);
 
-        mIsbnEditText = (EditText) view.findViewById(R.id.isbnEditText);
+
+        view = inflater.inflate(R.layout.fragment_add_book, container, false);
+        mEmptyTextView = (TextView) view.findViewById(R.id.noBookFound);
+        mIsbnSearchView = (SearchView) view.findViewById(R.id.isbnSearchView);
         Button scanButton = (Button) view.findViewById(R.id.scan_button);
         mBookTitleTextView = ((TextView) view.findViewById(R.id.bookTitle));
         mBookSubTitleTextView = ((TextView) view.findViewById(R.id.bookSubTitle));
@@ -87,27 +91,39 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         mBookCover = (ImageView) view.findViewById(R.id.bookCover);
 
 
-        mIsbnEditText.addTextChangedListener(new TextWatcher() {
+        mIsbnSearchView.setIconified(false);
+        mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
+        mIsbnSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //no need
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //no need
-            }
-
-            @Override
-            public void afterTextChanged(Editable isbnUserInput) {
-                mIsbn = Tools.fixIsbn(isbnUserInput.toString());
-                if (mIsbn.length() < 13) {
-                    clearFields();
-                    return;
+            public boolean onQueryTextChange(String query) {
+                Toast.makeText(getActivity(), "text query has changed", Toast.LENGTH_SHORT).show();
+                String isbnUserInput = mIsbnSearchView.getQuery().toString();
+                if (isbnUserInput.length() == 0) {
+                    mEmptyTextView.setText(R.string.add_book_isbn);
+                    mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
+                    return false;
                 }
+                mIsbn = Tools.fixIsbn(isbnUserInput);
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:"+mIsbn);
+                if (mIsbn.length() < 13) {
+                    mIsbn=null;
+                    clearFields();
+                    return false;
+                }
+                mIsbn=mIsbn.substring(0,13);
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:"+mIsbn);
                 addBookIntent(mIsbn);
+                restartLoader();
+                return true;
             }
+
         });
+
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,34 +141,35 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
             }
         });
 
+        //TODO : 2.0 AppCompatImageButton cannot be cast to android.widget.Button
         mSaveButton = (Button) view.findViewById(R.id.save_button);
         mDeleteButton = (Button) view.findViewById(R.id.delete_button);
 
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddBookFragment.this.mIsbnEditText.setText("");
+                AddBookFragment.this.mIsbnSearchView.setQuery("", false);
             }
         });
 
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteBookIntent(mIsbnEditText.getText().toString());
-                AddBookFragment.this.mIsbnEditText.setText("");
+                deleteBookIntent(mIsbnSearchView.getQuery().toString());
+                mIsbnSearchView.setQuery("", false);
             }
         });
 
         if (savedInstanceState != null) {
-            this.mIsbnEditText.setText(savedInstanceState.getString(ISBN_CONTENT));
-            //TODO : 2.0 see behavior of this hint
-            this.mIsbnEditText.setHint("Toto is my hint did it worked ?");
+            this.mIsbnSearchView.setQuery(savedInstanceState.getString(ISBN_CONTENT), false);
         }
 
         return view;
     }
 
+
     private void deleteBookIntent(String isbnValue) {
+        Log.d("SuperDuo", "current thread : " + thread());
         Intent bookIntent = new Intent(getActivity(), BookService.class);
         bookIntent.putExtra(BookService.ISBN, isbnValue);
         bookIntent.setAction(BookService.DELETE_BOOK);
@@ -171,16 +188,20 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void restartLoader() {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //TODO : 2.0 when does this happen ?
-        if (mIsbnEditText.getText().length() == 0) {
-            return null;
-        }
-        long isbn = Long.parseLong(Tools.fixIsbn(mIsbnEditText.getText().toString()));
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        String userInput = mIsbnSearchView.getQuery().toString();
+        long isbn;
+        if (userInput.equals(""))
+            isbn = -1;
+        else
+            isbn = Long.parseLong(Tools.fixIsbn(userInput));
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn:"+isbn);
         return new CursorLoader(
                 getActivity(),
                 BookContract.BookEntry.buildFullBookUri(isbn),
@@ -193,6 +214,15 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "cursor.size:"+data.getCount());
+
+        if (data.getCount() == 0) {
+            updateEmptyView(data);
+            isLoadFinished = true;
+            return;
+        }
+
+        data.moveToFirst();
 
         //If the book returned has an empty title, subtitle, authors, imageUrl, or category, we
         // have 2 options :
@@ -206,7 +236,7 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         String imgUrl = data.getString(data.getColumnIndex(BookContract.BookEntry.IMAGE_URL));
         String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.CATEGORY));
 
-
+mEmptyTextView.setVisibility(View.INVISIBLE);
         mBookTitleTextView.setText(bookTitle);
         mBookSubTitleTextView.setText(bookSubTitle);
         mCategoriesTextView.setText(categories);
@@ -232,71 +262,61 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         //TODO android:drawableLeft="@drawable/delete" delete_button in all layouts
         mSaveButton.setVisibility(View.VISIBLE);
         mDeleteButton.setVisibility(View.VISIBLE);
-
-
-        updateEmptyView(data);
+        isLoadFinished = true;
     }
 
     private void updateEmptyView(Cursor cursor) {
         //TODO : 2.0  if(mIsbn.equals("")) ?
-        if (mIsbn == null)
+        if (mIsbn == null) {
+            mEmptyTextView.setText(R.string.add_book_isbn);
             return;
+        }
         if (cursor.getCount() != 0)
             return;
 
 
         @Status.NetworkStatus int networkStatus = Status.getNetworkStatus(getContext());
-        TextView emptyTextView = (TextView) getView().findViewById(R.id.noBookFound);
         clearFields();
-        emptyTextView.setVisibility(View.VISIBLE);
         if (networkStatus == Status.INTERNET_OFF) {
-            emptyTextView.setText(R.string.no_books_internet_off);
+            mEmptyTextView.setText(R.string.no_books_internet_off);
             return;
         }
         @Status.GoogleBookApiStatus int footballApiStatus = Status.getGoogleBookApiStatus(getContext());
         if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_DOWN)) {
-            emptyTextView.setText(R.string.no_books_serveur_down);
+            mEmptyTextView.setText(R.string.no_books_serveur_down);
             return;
         }
         if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_WRONG_URL_APP_INPUT)) {
-            emptyTextView.setText(R.string.no_books_wrong_url_app_input);
+            mEmptyTextView.setText(R.string.no_books_wrong_url_app_input);
             return;
         }
         @Status.BookTableStatus int bookTableStatus = Status.getBookTableStatus(getContext());
         if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_OK) &&
                 (bookTableStatus == Status.TABLE_STATUS_UNKNOWN)) {
-            emptyTextView.setText(R.string.no_books_table_status_unknown);
+            mEmptyTextView.setText(R.string.no_books_table_status_unknown);
             return;
         }
-        emptyTextView.setText(R.string.no_books);
+        mEmptyTextView.setText(R.string.no_books);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
     }
 
     private void clearFields() {
-        //TODO : 2.0 check if set INVISIBLE is enough
+        mEmptyTextView.setVisibility(View.VISIBLE);
         mBookTitleTextView.setVisibility(View.INVISIBLE);
         mBookSubTitleTextView.setVisibility(View.INVISIBLE);
         mAuthorsTextView.setVisibility(View.INVISIBLE);
         mCategoriesTextView.setVisibility(View.INVISIBLE);
-
-//        mBookTitleTextView.setText("");
-//        mBookSubTitleTextView.setText("");
-//        mAuthorsTextView.setText("");
-//        mCategoriesTextView.setText("");
+        mBookTitleTextView.setText("");
+        mBookSubTitleTextView.setText("");
+        mAuthorsTextView.setText("");
+        mCategoriesTextView.setText("");
         mBookCover.setVisibility(View.INVISIBLE);
         mSaveButton.setVisibility(View.INVISIBLE);
         mDeleteButton.setVisibility(View.INVISIBLE);
-    }
-
-
-    //TODO : 4.0 remove onAttach methods
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        activity.setTitle(R.string.scan);
     }
 
 
@@ -320,11 +340,17 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onStart() {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        getLoaderManager().initLoader(LOADER_ID, null, this);
         internetReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (Tools.isNetworkAvailable(getContext()))
+                boolean isConnected = Tools.isNetworkAvailable(getContext());
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isConnected" + isConnected);
+                if (isConnected)
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+                //Was crashing otherwise
+                if (isLoadFinished)
                     restartLoader();
             }
         };
@@ -345,5 +371,12 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         if (key.equals(getString(R.string.pref_book_table_status_key))) {
             // updateEmptyView();
         }
+    }
+
+    //TODO : 2.0 decide to keep or not the delete in BookServiec
+    public static String thread() {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread())
+            return "ThreadUI";
+        else return "Background";
     }
 }

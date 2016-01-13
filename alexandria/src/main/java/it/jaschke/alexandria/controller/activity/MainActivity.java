@@ -15,13 +15,13 @@ import android.view.View;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.controller.fragment.AboutFragment;
 import it.jaschke.alexandria.controller.fragment.AddBookFragment;
-import it.jaschke.alexandria.controller.fragment.BookFragment;
-import it.jaschke.alexandria.controller.fragment.BooksFragment;
+import it.jaschke.alexandria.controller.fragment.BookDetailFragment;
+import it.jaschke.alexandria.controller.fragment.BookListFragment;
 import it.jaschke.alexandria.controller.fragment.NavigationDrawerFragment;
 
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        BooksFragment.Callback {
+        BookListFragment.Callback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         switch (position) {
             default:
             case 0:
-                nextFragment = new BooksFragment();
+                nextFragment = new BookListFragment();
                 break;
             case 1:
                 nextFragment = new AddBookFragment();
@@ -131,9 +131,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     public void onItemSelected(String isbn) {
         Bundle args = new Bundle();
-        args.putString(BookFragment.ISBN_KEY, isbn);
+        args.putString(BookDetailFragment.ISBN_KEY, isbn);
 
-        BookFragment fragment = new BookFragment();
+        BookDetailFragment fragment = new BookDetailFragment();
         fragment.setArguments(args);
 
         int id = R.id.container;

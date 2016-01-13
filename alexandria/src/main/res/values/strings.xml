@@ -11,7 +11,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="scan_button">Scan</string>
-    <string name="input_hint">Insert ISBN-13. Digits only.</string>
+    <string name="input_hint">ex: 9780310941781</string>
     <string name="book_cover">Bookcover</string>
 
     <string name="ok_button">Next</string>
@@ -42,6 +42,8 @@
     <string name="no_books_serveur_down">No books information available. The server is
         not returning valid data.</string>
     <string name="no_books_wrong_url_app_input">No books information available. The server is not returning valid data. Please check for an updated version of Alexndria.</string>
-    <string name="no_books_table_status_unknown">Loading books...</string>
-    <string name="no_books">No books information available.</string>
+    <string name="no_books_table_status_unknown">Looking for book...</string>
+    <string name="no_books">No books found.</string>
+    <string name="no_books_in_your_library">Add books in your library to start</string>
+    <string name="add_book_isbn">Add isbn book you want</string>
 </resources>

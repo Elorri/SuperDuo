@@ -45,7 +45,7 @@ public class FootballService extends IntentService {
     }
 
     private void syncDb() {
-        //TODO : 2.0 check this method works when called from (B)
+        //TODO : 2.0 check this method works when called from (B).Read http://stackoverflow.com/questions/9570237/android-check-internet-connection
         Log.d("SuperDuo", "current thread : "+  thread() );
 
         Context context = getApplicationContext();

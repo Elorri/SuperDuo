@@ -26,7 +26,7 @@ import it.jaschke.alexandria.model.services.BookService;
 import it.jaschke.alexandria.model.services.DownloadImage;
 
 
-public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BookDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ISBN_KEY = "ISBN";
     private final int LOADER_ID = 10;
@@ -34,7 +34,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private String mIsbn;
     private ShareActionProvider shareActionProvider;
 
-    public BookFragment(){
+    public BookDetailFragment(){
     }
 
     @Override
@@ -48,7 +48,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mIsbn = arguments.getString(BookFragment.ISBN_KEY);
+            mIsbn = arguments.getString(BookDetailFragment.ISBN_KEY);
 
             //TODO : 2.4 remove this for performance
             getLoaderManager().restartLoader(LOADER_ID, null, this);

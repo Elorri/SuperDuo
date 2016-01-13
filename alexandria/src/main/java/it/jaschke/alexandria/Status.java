@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
+import android.util.Log;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -101,6 +102,7 @@ public class Status {
      * @param networkStatus The IntDef value to set
      */
     public static  void setNetworkStatus(Context c, @NetworkStatus int networkStatus) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_network_status_key), networkStatus);
@@ -118,6 +120,7 @@ public class Status {
      */
     public static  void setGoogleBookApiStatus(Context c, @GoogleBookApiStatus int
             googleBookApiStatus) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_google_book_api_status_key), googleBookApiStatus);
@@ -133,6 +136,7 @@ public class Status {
      * @param bookTableStatus The IntDef value to set
      */
     public static  void setBookTableStatus(Context c, @BookTableStatus int bookTableStatus) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_book_table_status_key), bookTableStatus);

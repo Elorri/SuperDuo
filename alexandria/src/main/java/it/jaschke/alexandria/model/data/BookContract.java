@@ -10,6 +10,8 @@ import android.provider.BaseColumns;
 
 public class BookContract {
 
+
+
     public static final String CONTENT_AUTHORITY = "it.jaschke.alexandria";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
@@ -23,6 +25,7 @@ public class BookContract {
     public static final class BookEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_BOOKS).build();
 
+        //content://it.jaschke.alexandria/fullbook/1234567898765
         public static final Uri FULL_CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FULLBOOK).build();
 
         public static final String CONTENT_TYPE =

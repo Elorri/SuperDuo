@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Looper;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -28,6 +29,7 @@ import it.jaschke.alexandria.model.data.BookContract;
 // beetween them. But there would have been little chance that we got the isbn he was looking for.
 // Searching through the network everytime he looks for a book, although more battery draining
 // (especially if the user search more than one book), seems the best option to me.
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -46,7 +48,6 @@ public class BookService extends IntentService {
         super("Alexandria");
     }
 
-    //TODO : 2.0 add a connectivity check
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -66,7 +67,8 @@ public class BookService extends IntentService {
      * parameters.
      */
     private void deleteBook(String isbn) {
-        if(isbn!=null) {
+        Log.d("SuperDuo", "current thread : " + thread());
+        if (isbn != null) {
             getContentResolver().delete(BookContract.BookEntry.buildBookUri(Long.parseLong(isbn)), null, null);
         }
     }
@@ -76,8 +78,9 @@ public class BookService extends IntentService {
      * parameters.
      */
     private void fetchBook(String isbn) {
-
-        if(isbn.length()!=13){
+        Log.d("SuperDuo", "current thread : " + thread());
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        if (isbn.length() != 13) {
             return;
         }
 
@@ -93,7 +96,7 @@ public class BookService extends IntentService {
         //TODO: 2.0 no we don't get broadcast receiver message (mistakefrom me) the registered
         // book is displayed.
         // same book
-        if(bookEntry.getCount()>0){
+        if (bookEntry.getCount() > 0) {
             bookEntry.close();
             return;
         }
@@ -113,7 +116,6 @@ public class BookService extends IntentService {
         Status.setNetworkStatus(context, Status.INTERNET_ON);
 
 
-
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String bookJsonString = null;
@@ -128,7 +130,7 @@ public class BookService extends IntentService {
                     .build();
 
             URL url = new URL(builtUri.toString());
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "url" + url);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "url " + url);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -136,11 +138,12 @@ public class BookService extends IntentService {
             //This is where we get an error if manifest has no internet permission
             urlConnection.connect();
 
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "urlConnection" + urlConnection);
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "urlConnection" +
+                    urlConnection);
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "inputStream" + inputStream);
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "inputStream" + inputStream);
             if (inputStream == null) {
                 return;
             }
@@ -179,46 +182,50 @@ public class BookService extends IntentService {
             final String IMG_URL = "thumbnail";
 
 
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "bookJsonString" + bookJsonString);
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookJsonString" +
+                    bookJsonString);
             JSONObject bookJson = new JSONObject(bookJsonString);
-            JSONArray bookArray =bookJson.getJSONArray(ITEMS);
+            JSONArray bookArray = bookJson.getJSONArray(ITEMS);
 
             JSONObject bookInfo = ((JSONObject) bookArray.get(0)).getJSONObject(VOLUME_INFO);
 
             String title = bookInfo.getString(TITLE);
 
             String subtitle = "";
-            if(bookInfo.has(SUBTITLE)) {
+            if (bookInfo.has(SUBTITLE)) {
                 subtitle = bookInfo.getString(SUBTITLE);
             }
 
-            String desc="";
-            if(bookInfo.has(DESC)){
+            String desc = "";
+            if (bookInfo.has(DESC)) {
                 desc = bookInfo.getString(DESC);
             }
 
             String imgUrl = "";
-            if(bookInfo.has(IMG_URL_PATH) && bookInfo.getJSONObject(IMG_URL_PATH).has(IMG_URL)) {
+            if (bookInfo.has(IMG_URL_PATH) && bookInfo.getJSONObject(IMG_URL_PATH).has(IMG_URL)) {
                 imgUrl = bookInfo.getJSONObject(IMG_URL_PATH).getString(IMG_URL);
             }
 
             writeBackBook(isbn, title, subtitle, desc, imgUrl);
 
-            if(bookInfo.has(AUTHORS)) {
+            if (bookInfo.has(AUTHORS)) {
                 writeBackAuthors(isbn, bookInfo.getJSONArray(AUTHORS));
             }
-            if(bookInfo.has(CATEGORIES)){
-                writeBackCategories(isbn,bookInfo.getJSONArray(CATEGORIES) );
+            if (bookInfo.has(CATEGORIES)) {
+                writeBackCategories(isbn, bookInfo.getJSONArray(CATEGORIES));
             }
 
             Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
 
-        }  catch (IOException e) {
+        } catch (IOException e) {
             //catch exceptions more precisely
             Log.e(LOG_TAG, "IOException" + e.getMessage());
+            Log.e("SuperDuo", "IOException" + e.getMessage());
+            Status.setGoogleBookApiStatus(getApplicationContext(), Status.SERVEUR_DOWN);
             e.printStackTrace();
         } catch (JSONException e) {
             Log.e(LOG_TAG, "JSONException" + e.getMessage());
+            Log.e("SuperDuo", "JSONException" + e.getMessage());
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {
@@ -235,7 +242,6 @@ public class BookService extends IntentService {
         }
 
 
-
     }
 
 
@@ -250,6 +256,8 @@ public class BookService extends IntentService {
      */
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
 //TODO: 4.0 make sure you catch the real status
+
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         if (jsonObject == null) {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
             Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
@@ -273,41 +281,46 @@ public class BookService extends IntentService {
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_NOT_FOUND");
                     Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
                     break;
-                default:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
-                    Status.setGoogleBookApiStatus(context, Status.SERVEUR_OK);
-                    break;
             }
+        } else {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "SERVEUR_OK");
+            Status.setGoogleBookApiStatus(context, Status.SERVEUR_OK);
         }
     }
 
     private void writeBackBook(String isbn, String title, String subtitle, String desc, String imgUrl) {
-        ContentValues values= new ContentValues();
+        ContentValues values = new ContentValues();
         values.put(BookContract.BookEntry._ID, isbn);
         values.put(BookContract.BookEntry.TITLE, title);
         values.put(BookContract.BookEntry.IMAGE_URL, imgUrl);
         values.put(BookContract.BookEntry.SUBTITLE, subtitle);
         values.put(BookContract.BookEntry.DESC, desc);
-        getContentResolver().insert(BookContract.BookEntry.CONTENT_URI,values);
+        getContentResolver().insert(BookContract.BookEntry.CONTENT_URI, values);
     }
 
     private void writeBackAuthors(String isbn, JSONArray jsonArray) throws JSONException {
-        ContentValues values= new ContentValues();
+        ContentValues values = new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
             values.put(BookContract.AuthorEntry._ID, isbn);
             values.put(BookContract.AuthorEntry.AUTHOR, jsonArray.getString(i));
             getContentResolver().insert(BookContract.AuthorEntry.CONTENT_URI, values);
-            values= new ContentValues();
+            values = new ContentValues();
         }
     }
 
     private void writeBackCategories(String isbn, JSONArray jsonArray) throws JSONException {
-        ContentValues values= new ContentValues();
+        ContentValues values = new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
             values.put(BookContract.CategoryEntry._ID, isbn);
             values.put(BookContract.CategoryEntry.CATEGORY, jsonArray.getString(i));
             getContentResolver().insert(BookContract.CategoryEntry.CONTENT_URI, values);
-            values= new ContentValues();
+            values = new ContentValues();
         }
+    }
+
+    public static String thread() {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread())
+            return "ThreadUI";
+        else return "Background";
     }
 }

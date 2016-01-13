@@ -3,6 +3,7 @@ package it.jaschke.alexandria.controller.extras;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 /**
  * Created by Elorri on 07/01/2016.
@@ -26,6 +27,8 @@ public class Tools {
     static public boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm =  (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&  activeNetwork.isConnectedOrConnecting();
+        boolean isConnected= activeNetwork != null &&  activeNetwork.isConnectedOrConnecting();
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isConnected"+isConnected);
+        return isConnected;
     }
 }

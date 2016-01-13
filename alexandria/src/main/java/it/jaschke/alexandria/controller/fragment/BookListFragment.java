@@ -1,6 +1,5 @@
 package it.jaschke.alexandria.controller.fragment;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,30 +8,31 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.Status;
 import it.jaschke.alexandria.controller.adapter.BooksAdapter;
 import it.jaschke.alexandria.model.data.BookContract;
 
 
-public class BooksFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> ,
-        SharedPreferences.OnSharedPreferenceChangeListener{
+public class BookListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private BooksAdapter mBooksAdapter;
     private ListView mBookList;
     private int position = ListView.INVALID_POSITION;
-    private EditText mSearchText;
+    private SearchView mSearchView;
 
     private final int LOADER_ID = 10;
-
+    private boolean areAllBooksDisplayed;
 
 
     public interface Callback {
@@ -40,19 +40,23 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
 
-
-    public BooksFragment() {
+    public BookListFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
+
+        //Remove depreciated method onAttach
+        getActivity().setTitle(R.string.books);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.fragment_books, container, false);
-        mSearchText = (EditText) view.findViewById(R.id.searchText);
+        mSearchView = (SearchView) view.findViewById(R.id.searchView);
         mBookList = (ListView) view.findViewById(R.id.bookList);
 
 
@@ -69,15 +73,25 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
         mBooksAdapter = new BooksAdapter(getActivity(), cursor, 0);
         mBookList.setAdapter(mBooksAdapter);
 
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Toast.makeText(getActivity(), "query has been submitted : "
+//                                + mSearchView.getQuery().toString(),
+//                        Toast.LENGTH_SHORT).show();
+//                restartLoader();
+//                return true;
+                return false;
+            }
 
-        view.findViewById(R.id.searchButton).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        BooksFragment.this.restartLoader();
-                    }
-                }
-        );
+            @Override
+            public boolean onQueryTextChange(String query) {
+                Toast.makeText(getActivity(), "text query has changed", Toast.LENGTH_SHORT).show();
+                restartLoader();
+                return true;
+            }
+
+        });
 
         mBookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -98,6 +112,8 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onResume() {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        getLoaderManager().initLoader(LOADER_ID, null, this);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sp.registerOnSharedPreferenceChangeListener(this);
         super.onResume();
@@ -118,20 +134,21 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
 
-
-
     private void restartLoader() {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
 
         final String selection = BookContract.BookEntry.TITLE + " LIKE ? OR " + BookContract.BookEntry.SUBTITLE + " LIKE ? ";
-        String searchString = mSearchText.getText().toString();
+        String searchString = mSearchView.getQuery().toString();
 
         if (searchString.length() > 0) {
             searchString = "%" + searchString + "%";
+            areAllBooksDisplayed = false;
             return new CursorLoader(
                     getActivity(),
                     BookContract.BookEntry.CONTENT_URI,
@@ -141,7 +158,7 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
                     null
             );
         }
-
+        areAllBooksDisplayed = true;
         return new CursorLoader(
                 getActivity(),
                 BookContract.BookEntry.CONTENT_URI,
@@ -154,6 +171,7 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         mBooksAdapter.swapCursor(data);
         if (position != ListView.INVALID_POSITION) {
             mBookList.smoothScrollToPosition(position);
@@ -164,41 +182,20 @@ public class BooksFragment extends Fragment implements LoaderManager.LoaderCallb
     private void updateEmptyView() {
         if (mBooksAdapter.getCount() != 0)
             return;
-
-        @Status.NetworkStatus int networkStatus=Status.getNetworkStatus(getContext());
         TextView emptyTextView = (TextView) getView().findViewById(R.id.emptyListView);
         emptyTextView.setVisibility(View.VISIBLE);
         mBookList.setEmptyView(emptyTextView);
-        if(networkStatus==Status.INTERNET_OFF) {
-            emptyTextView.setText(R.string.no_books_internet_off);
-            return;
-        }
-        @Status.GoogleBookApiStatus int footballApiStatus=Status.getGoogleBookApiStatus(getContext());
-        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_DOWN)) {
-            emptyTextView.setText(R.string.no_books_serveur_down);
-            return;
-        }
-        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_WRONG_URL_APP_INPUT)) {
-            emptyTextView.setText(R.string.no_books_wrong_url_app_input);
-            return;
-        }
-        @Status.BookTableStatus int bookTableStatus=Status.getBookTableStatus(getContext());
-        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_OK)&&
-                (bookTableStatus==Status.TABLE_STATUS_UNKNOWN)) {
-            emptyTextView.setText(R.string.no_books_table_status_unknown);
-            return;
-        }
-        emptyTextView.setText(R.string.no_books);
+        if (areAllBooksDisplayed)
+            emptyTextView.setText(R.string.no_books_in_your_library);
+        else
+            emptyTextView.setText(R.string.no_books);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         mBooksAdapter.swapCursor(null);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        activity.setTitle(R.string.books);
-    }
+
 }

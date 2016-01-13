@@ -32,12 +32,12 @@ public class BookProvider extends ContentProvider {
 
     private static final SQLiteQueryBuilder bookFull;
 
-    static{
+    static {
         bookFull = new SQLiteQueryBuilder();
         bookFull.setTables(
                 BookContract.BookEntry.TABLE_NAME + " LEFT OUTER JOIN " +
                         BookContract.AuthorEntry.TABLE_NAME + " USING (" + BookContract.BookEntry._ID + ")" +
-                        " LEFT OUTER JOIN " +  BookContract.CategoryEntry.TABLE_NAME + " USING (" + BookContract.BookEntry._ID + ")");
+                        " LEFT OUTER JOIN " + BookContract.CategoryEntry.TABLE_NAME + " USING (" + BookContract.BookEntry._ID + ")");
     }
 
 
@@ -46,15 +46,14 @@ public class BookProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = BookContract.CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, BookContract.PATH_BOOKS+"/#", BOOK_ID);
-        matcher.addURI(authority, BookContract.PATH_AUTHORS+"/#", AUTHOR_ID);
-        matcher.addURI(authority, BookContract.PATH_CATEGORIES+"/#", CATEGORY_ID);
+        matcher.addURI(authority, BookContract.PATH_BOOKS + "/#", BOOK_ID);
+        matcher.addURI(authority, BookContract.PATH_AUTHORS + "/#", AUTHOR_ID);
+        matcher.addURI(authority, BookContract.PATH_CATEGORIES + "/#", CATEGORY_ID);
+        matcher.addURI(authority, BookContract.PATH_FULLBOOK + "/*", BOOK_FULLDETAIL);
 
         matcher.addURI(authority, BookContract.PATH_BOOKS, BOOK);
         matcher.addURI(authority, BookContract.PATH_AUTHORS, AUTHOR);
         matcher.addURI(authority, BookContract.PATH_CATEGORIES, CATEGORY);
-
-        matcher.addURI(authority, BookContract.PATH_FULLBOOK +"/#", BOOK_FULLDETAIL);
         matcher.addURI(authority, BookContract.PATH_FULLBOOK, BOOK_FULL);
 
         return matcher;
@@ -72,18 +71,18 @@ public class BookProvider extends ContentProvider {
         Cursor retCursor;
         switch (uriMatcher.match(uri)) {
             case BOOK:
-                retCursor= bookDbHelper.getReadableDatabase().query(
+                retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.BookEntry.TABLE_NAME,
                         projection,
                         selection,
-                        selection==null? null : selectionArgs,
+                        selection == null ? null : selectionArgs,
                         null,
                         null,
                         sortOrder
                 );
                 break;
             case AUTHOR:
-                retCursor= bookDbHelper.getReadableDatabase().query(
+                retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.AuthorEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -94,7 +93,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case CATEGORY:
-                retCursor= bookDbHelper.getReadableDatabase().query(
+                retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.CategoryEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -105,7 +104,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case BOOK_ID:
-                retCursor= bookDbHelper.getReadableDatabase().query(
+                retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.BookEntry.TABLE_NAME,
                         projection,
                         BookContract.BookEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
@@ -116,7 +115,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case AUTHOR_ID:
-                retCursor= bookDbHelper.getReadableDatabase().query(
+                retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.AuthorEntry.TABLE_NAME,
                         projection,
                         BookContract.AuthorEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
@@ -127,7 +126,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case CATEGORY_ID:
-                retCursor= bookDbHelper.getReadableDatabase().query(
+                retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.CategoryEntry.TABLE_NAME,
                         projection,
                         BookContract.CategoryEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
@@ -138,28 +137,36 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case BOOK_FULLDETAIL:
-                String[] bfd_projection ={
+                String[] bfd_projection = {
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.TITLE,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.SUBTITLE,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.IMAGE_URL,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.DESC,
-                        "group_concat(DISTINCT " + BookContract.AuthorEntry.TABLE_NAME+ "."+ BookContract.AuthorEntry.AUTHOR +") as " + BookContract.AuthorEntry.AUTHOR,
-                        "group_concat(DISTINCT " + BookContract.CategoryEntry.TABLE_NAME+ "."+ BookContract.CategoryEntry.CATEGORY +") as " + BookContract.CategoryEntry.CATEGORY
+                        "group_concat(DISTINCT "
+                                + BookContract.AuthorEntry.TABLE_NAME + "."
+                                + BookContract.AuthorEntry.AUTHOR + ") as "
+                                + BookContract.AuthorEntry.AUTHOR, "group_concat(DISTINCT "
+                        + BookContract.CategoryEntry.TABLE_NAME + "."
+                        + BookContract.CategoryEntry.CATEGORY + ") as "
+                        + BookContract.CategoryEntry.CATEGORY
                 };
                 retCursor = bookFull.query(bookDbHelper.getReadableDatabase(),
                         bfd_projection,
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        BookContract.BookEntry.TABLE_NAME + "."
+                                + BookContract.BookEntry._ID + " = '"
+                                + ContentUris.parseId(uri) + "'",
                         selectionArgs,
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry._ID,
+                        BookContract.BookEntry.TABLE_NAME + "."
+                                + BookContract.BookEntry._ID,
                         null,
                         sortOrder);
                 break;
             case BOOK_FULL:
-                String[] bf_projection ={
+                String[] bf_projection = {
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.TITLE,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.IMAGE_URL,
-                        "group_concat(DISTINCT " + BookContract.AuthorEntry.TABLE_NAME+ "."+ BookContract.AuthorEntry.AUTHOR + ") as " + BookContract.AuthorEntry.AUTHOR,
-                        "group_concat(DISTINCT " + BookContract.CategoryEntry.TABLE_NAME+ "."+ BookContract.CategoryEntry.CATEGORY +") as " + BookContract.CategoryEntry.CATEGORY
+                        "group_concat(DISTINCT " + BookContract.AuthorEntry.TABLE_NAME + "." + BookContract.AuthorEntry.AUTHOR + ") as " + BookContract.AuthorEntry.AUTHOR,
+                        "group_concat(DISTINCT " + BookContract.CategoryEntry.TABLE_NAME + "." + BookContract.CategoryEntry.CATEGORY + ") as " + BookContract.CategoryEntry.CATEGORY
                 };
                 retCursor = bookFull.query(bookDbHelper.getReadableDatabase(),
                         bf_projection,
@@ -177,7 +184,6 @@ public class BookProvider extends ContentProvider {
 
         return retCursor;
     }
-
 
 
     @Override
@@ -212,7 +218,7 @@ public class BookProvider extends ContentProvider {
         switch (match) {
             case BOOK: {
                 long _id = db.insert(BookContract.BookEntry.TABLE_NAME, null, values);
-                if ( _id > 0 ){
+                if (_id > 0) {
                     returnUri = BookContract.BookEntry.buildBookUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
@@ -220,9 +226,9 @@ public class BookProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(BookContract.BookEntry.buildFullBookUri(_id), null);
                 break;
             }
-            case AUTHOR:{
+            case AUTHOR: {
                 long _id = db.insert(BookContract.AuthorEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
+                if (_id > 0)
                     returnUri = BookContract.AuthorEntry.buildAuthorUri(values.getAsLong("_id"));
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
