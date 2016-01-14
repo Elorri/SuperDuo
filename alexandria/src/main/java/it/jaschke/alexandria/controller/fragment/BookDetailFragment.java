@@ -71,6 +71,8 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
 
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_detail, menu);

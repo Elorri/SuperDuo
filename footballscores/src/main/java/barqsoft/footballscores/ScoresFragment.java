@@ -1,6 +1,5 @@
 package barqsoft.footballscores;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import barqsoft.footballscores.data.ScoresContract;
-import barqsoft.footballscores.service.FootballService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -38,7 +37,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
-        updateScores();
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.fragment_scores, container, false);
          mScoreList = (ListView) view.findViewById(R.id.scores_list);
         mAdapter = new ScoresAdapter(getActivity(), null, 0);
@@ -107,10 +106,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
 
-    private void updateScores() {
-        Intent serviceStart = new Intent(getActivity(), FootballService.class);
-        getActivity().startService(serviceStart);
-    }
+
 
     public void setFragmentDate(String date) {
         this.date[0] = date;

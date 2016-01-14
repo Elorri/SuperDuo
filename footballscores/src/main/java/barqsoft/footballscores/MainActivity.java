@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import barqsoft.footballscores.service.FootballService;
+
 public class MainActivity extends ActionBarActivity {
     private static final String CURRENT_ITEM = "current_item";
     private static final String SELECTED_MATCH_ID = "selectedMatchId";
@@ -27,6 +29,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        syncDB();
+
         if (savedInstanceState == null) {
             mMainFragment = new MainFragment();
             getSupportFragmentManager().beginTransaction()
@@ -35,6 +39,11 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+//TODO : delete old db data
+    private void syncDB() {
+        Intent serviceStart = new Intent(this, FootballService.class);
+        startService(serviceStart);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

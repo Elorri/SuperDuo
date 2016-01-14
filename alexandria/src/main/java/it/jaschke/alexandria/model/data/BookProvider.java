@@ -223,13 +223,12 @@ public class BookProvider extends ContentProvider {
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
-                getContext().getContentResolver().notifyChange(BookContract.BookEntry.buildFullBookUri(_id), null);
                 break;
             }
             case AUTHOR: {
                 long _id = db.insert(BookContract.AuthorEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = BookContract.AuthorEntry.buildAuthorUri(values.getAsLong("_id"));
+                    returnUri = BookContract.AuthorEntry.buildAuthorUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -237,7 +236,7 @@ public class BookProvider extends ContentProvider {
             case CATEGORY: {
                 long _id = db.insert(BookContract.CategoryEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = BookContract.CategoryEntry.buildCategoryUri(values.getAsLong("_id"));
+                    returnUri = BookContract.CategoryEntry.buildCategoryUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -245,6 +244,7 @@ public class BookProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
 
@@ -253,6 +253,8 @@ public class BookProvider extends ContentProvider {
         final SQLiteDatabase db = bookDbHelper.getWritableDatabase();
         final int match = uriMatcher.match(uri);
         int rowsDeleted;
+        // this makes delete all rows return the number of rows deleted
+        if (null == selection) selection = "1";
         switch (match) {
             case BOOK:
                 rowsDeleted = db.delete(
@@ -276,7 +278,7 @@ public class BookProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         // Because a null deletes all rows
-        if (selection == null || rowsDeleted != 0) {
+        if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;

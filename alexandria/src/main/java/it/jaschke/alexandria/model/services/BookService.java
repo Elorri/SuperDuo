@@ -106,10 +106,14 @@ public class BookService extends IntentService {
     }
 
     private void syncDB(String isbn) {
+        // re-init table status
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_STATUS_UNKNOWN");
+            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
+
+
         //TODO : 2.0 check this method works when called from (B)
         Context context = getApplicationContext();
-        boolean isInternetOn = Tools.isNetworkAvailable(context);
-        if (!isInternetOn) {
+        if (!Tools.isNetworkAvailable(context)) {
             Status.setNetworkStatus(context, Status.INTERNET_OFF);
             return;
         }
@@ -167,7 +171,9 @@ public class BookService extends IntentService {
                 // we won't be able to fetch data, no need to go further
                 return;
 
-            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
+            //TODO : remove those lines
+//            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_STATUS_UNKNOWN");
+//            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
 
             final String ITEMS = "items";
 
@@ -182,13 +188,22 @@ public class BookService extends IntentService {
             final String IMG_URL = "thumbnail";
 
 
+
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookJsonString" +
                     bookJsonString);
             JSONObject bookJson = new JSONObject(bookJsonString);
-            JSONArray bookArray = bookJson.getJSONArray(ITEMS);
+            JSONArray bookArray;
+            if(bookJson.has(ITEMS)){
+                bookArray = bookJson.getJSONArray(ITEMS);
+            }else{
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_SYNC_DONE");
+                Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
+                //TODO : if book not found the db does not change hence the fragment. Add
+                // callback here
+                return;
+            }
 
             JSONObject bookInfo = ((JSONObject) bookArray.get(0)).getJSONObject(VOLUME_INFO);
-
             String title = bookInfo.getString(TITLE);
 
             String subtitle = "";
@@ -214,7 +229,7 @@ public class BookService extends IntentService {
             if (bookInfo.has(CATEGORIES)) {
                 writeBackCategories(isbn, bookInfo.getJSONArray(CATEGORIES));
             }
-
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_SYNC_DONE");
             Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
 
         } catch (IOException e) {

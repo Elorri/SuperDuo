@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -34,7 +35,8 @@ import barqsoft.footballscores.data.ScoresContract;
 public class FootballService extends IntentService {
 
     public static final String LOG_TAG = FootballService.class.getSimpleName();
-    public static final String SERVICE_NAME="FootballService";
+    public static final String SERVICE_NAME = "FootballService";
+
     public FootballService() {
         super(SERVICE_NAME);
     }
@@ -44,14 +46,14 @@ public class FootballService extends IntentService {
         syncDb();
     }
 
-    private void syncDb() {
+    public void syncDb() {
         //TODO : 2.0 check this method works when called from (B).Read http://stackoverflow.com/questions/9570237/android-check-internet-connection
-        Log.d("SuperDuo", "current thread : "+  thread() );
+        Log.d("SuperDuo", "current thread : " + thread());
 
         Context context = getApplicationContext();
         boolean isInternetOn = Utilities.isNetworkAvailable(context);
         if (!isInternetOn) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isInternetOn"+isInternetOn);
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isInternetOn" + isInternetOn);
             Status.setNetworkStatus(context, Status.INTERNET_OFF);
             return;
         }
@@ -59,7 +61,6 @@ public class FootballService extends IntentService {
         getData("n2");
         getData("p2");
     }
-
 
 
     /**
@@ -73,7 +74,7 @@ public class FootballService extends IntentService {
      */
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        Log.e("SuperDuo","setServeurStatus");
+        Log.e("SuperDuo", "setServeurStatus");
         if (jsonObject == null) {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
             Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
@@ -103,7 +104,7 @@ public class FootballService extends IntentService {
                     Status.setFootballApiStatus(context, Status.SERVEUR_DOWN);
                     return;
             }
-        }else{
+        } else {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "SERVEUR_OK");
             Status.setFootballApiStatus(context, Status.SERVEUR_OK);
         }
@@ -121,7 +122,7 @@ public class FootballService extends IntentService {
                 .build();
         //TODO : 4.0 replace Log.v par Log.d
         //Log.v(LOG_TAG, "The url we are looking at is: "+fetch_build.toString());
-        Log.e("SuperDuo", "The url we are looking at is: "+fetch_build.toString());
+        Log.e("SuperDuo", "The url we are looking at is: " + fetch_build.toString());
 
         HttpURLConnection UrlConnection = null;
         BufferedReader reader = null;
@@ -153,7 +154,7 @@ public class FootballService extends IntentService {
                 return;
             }
             jsonData = buffer.toString();
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonData: \n"+jsonData);
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonData: \n" + jsonData);
 
             setServeurStatus(getApplicationContext(), new JSONObject(jsonData));
             if (!(Status.getFootballApiStatus(getApplicationContext()) == Status.SERVEUR_OK))
@@ -197,6 +198,9 @@ public class FootballService extends IntentService {
     }
 
     private void processJSONdata(String JSONdata, Context mContext, boolean isReal) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+
+
         // This set of league codes is for the 2015/2016 season. In fall of 2016, they will need to
         // be updated. Feel free to use the codes
         final String DUMMY_LEAGUE = "000";
@@ -274,29 +278,44 @@ public class FootballService extends IntentService {
                     }
 
                     //TODO 2.4 make sure you get time and datefrom timestamp
-                    date = matchData.getString(MATCH_DATE);
+                    date = matchData.getString(MATCH_DATE); //get timestamp ex:2016-01-13T19:45:00Z
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp from" +
+                            " serveur: " + date);
+
                     time = date.substring(date.indexOf("T") + 1, date.indexOf("Z"));
                     date = date.substring(0, date.indexOf("T"));
                     SimpleDateFormat match_date = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
                     match_date.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    try {
-                        Date parseddate = match_date.parse(date + time);
-                        SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd:HH:mm");
-                        new_date.setTimeZone(TimeZone.getDefault());
-                        date = new_date.format(parseddate);
-                        time = date.substring(date.indexOf(":") + 1);
-                        date = date.substring(0, date.indexOf(":"));
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "match_date:"
+                            + match_date);
 
-                        if (!isReal) {
-                            //This if statement changes the dummy data's date to match our current date range.
-                            Date fragmentdate = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
-                            SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
-                            date = mformat.format(fragmentdate);
-                        }
-                    } catch (Exception e) {
-                        Log.d(LOG_TAG, "error here!");
-                        Log.e(LOG_TAG, e.getMessage());
+
+                    Date parseddate = match_date.parse(date + time);
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "parseDate:"
+                            + parseddate);
+                    SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd:HH:mm");
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "new_date:"
+                            + new_date);
+                    new_date.setTimeZone(TimeZone.getDefault());
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "new_date:"
+                            + new_date);
+                    date = new_date.format(parseddate);
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:"
+                            + date);
+                    time = date.substring(date.indexOf(":") + 1);
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "time:"
+                            + time);
+                    date = date.substring(0, date.indexOf(":"));
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:"
+                            + date);
+
+                    if (!isReal) {
+                        //This if statement changes the dummy data's date to match our current date range.
+                        Date fragmentdate = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
+                        SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+                        date = mformat.format(fragmentdate);
                     }
+
                     home = matchData.getString(HOME_TEAM);
                     away = matchData.getString(AWAY_TEAM);
                     homeGoals = matchData.getJSONObject(RESULT).getString(HOME_GOALS);
@@ -329,6 +348,8 @@ public class FootballService extends IntentService {
             insertedData = mContext.getContentResolver().bulkInsert(
                     ScoresContract.BASE_CONTENT_URI, insert_data);
             //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(insertedData));
+        } catch (ParseException e) {
+            Log.d(LOG_TAG, e.getMessage());
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage());
         }
