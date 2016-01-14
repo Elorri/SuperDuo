@@ -17,7 +17,7 @@ import barqsoft.footballscores.R;
 /**
  * Created by Elorri on 01/12/2015.
  */
-public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
+public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
 
@@ -29,10 +29,10 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
     private static final int BEE_NOTIFICATION_ID = 3004;
-    private String LOG_TAG = BeeSyncAdapter.class.getSimpleName();
+    private String LOG_TAG = ScoresSyncAdapter.class.getSimpleName();
 
 
-    public BeeSyncAdapter(Context context, boolean autoInitialize) {
+    public ScoresSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
     }
 
@@ -91,7 +91,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
         /*
          * Since we've created an account
          */
-        BeeSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+        ScoresSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
 
         /*
          * Without calling setSyncAutomatically, our periodic sync will not be enabled.

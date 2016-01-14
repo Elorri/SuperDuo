@@ -10,9 +10,9 @@ import android.os.Bundle;
 /**
  * Created by Elorri on 01/12/2015.
  */
-public class BeeAuthenticator extends AbstractAccountAuthenticator {
+public class ScoresAuthenticator extends AbstractAccountAuthenticator {
 
-    public BeeAuthenticator(Context context) {
+    public ScoresAuthenticator(Context context) {
         super(context);
     }
 

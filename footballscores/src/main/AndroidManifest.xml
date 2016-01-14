@@ -44,7 +44,7 @@
 
 
         <!-- SyncAdapter's dummy authentication service -->
-        <service android:name=".sync.BeeAuthenticatorService">
+        <service android:name=".sync.ScoresAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -54,7 +54,7 @@
         </service>
         <!-- The SyncAdapter service -->
         <service
-            android:name=".sync.BeeSyncService"
+            android:name=".sync.ScoresSyncService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />

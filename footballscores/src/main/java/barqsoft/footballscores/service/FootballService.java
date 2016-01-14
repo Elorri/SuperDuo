@@ -120,7 +120,7 @@ public class FootballService extends IntentService {
         Uri fetch_build = Uri.parse(BASE_URL).buildUpon().
                 appendQueryParameter(QUERY_TIME_FRAME, timeFrame)
                 .build();
-        //TODO : 4.0 replace Log.v par Log.d
+        //TODO : 2.4 replace Log.v par Log.d
         //Log.v(LOG_TAG, "The url we are looking at is: "+fetch_build.toString());
         Log.e("SuperDuo", "The url we are looking at is: " + fetch_build.toString());
 
@@ -177,7 +177,6 @@ public class FootballService extends IntentService {
         } catch (IOException e) {
             //catch exceptions more precisely
             Log.e(LOG_TAG, "IOException" + e.getMessage());
-            //TODO : 2.0 add this line in alexanria
             Status.setFootballApiStatus(getApplicationContext(), Status.SERVEUR_DOWN);
             e.printStackTrace();
         } catch (JSONException e) {
@@ -271,8 +270,8 @@ public class FootballService extends IntentService {
                     matchId = matchId.replace(MATCH_LINK, "");
                     if (!isReal) {
                         //This if statement changes the match ID of the dummy data so that it all goes into the database
-                        //This is useful because the mock data has always the same match_id 000000,
-                        // and match_id should be unique in db, concatanating i value
+                        //This is useful because the mock data has always the same matchId 000000,
+                        // and matchId should be unique in db, concatanating i value
                         // will solve the pb
                         matchId = matchId + Integer.toString(i);
                     }

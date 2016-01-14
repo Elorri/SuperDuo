@@ -5,12 +5,12 @@
     tools:context=".controller.activity.MainActivity">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:baselineAligned="false"
         android:orientation="horizontal">
         <FrameLayout
-            android:id="@+id/container"
+            android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"/>

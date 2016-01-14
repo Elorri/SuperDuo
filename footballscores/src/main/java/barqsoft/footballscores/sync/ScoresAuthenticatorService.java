@@ -7,14 +7,14 @@ import android.os.IBinder;
 /**
  * Created by Elorri on 01/12/2015.
  */
-public class BeeAuthenticatorService extends Service {
+public class ScoresAuthenticatorService extends Service {
     // Instance field that stores the authenticator object
-    private BeeAuthenticator mAuthenticator;
+    private ScoresAuthenticator mAuthenticator;
 
     @Override
     public void onCreate() {
         // Create a new authenticator object
-        mAuthenticator = new BeeAuthenticator(this);
+        mAuthenticator = new ScoresAuthenticator(this);
     }
 
     /*

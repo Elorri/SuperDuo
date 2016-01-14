@@ -21,7 +21,7 @@ public class ScoresDBHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        final String CreateScoresTable = "CREATE TABLE " + ScoresContract.SCORES_TABLE + " ("
+        final String CreateScoresTable = "CREATE TABLE " + ScoreEntry.TABLE_NAME + " ("
                 + ScoreEntry._ID + " INTEGER PRIMARY KEY,"
                 + ScoreEntry.DATE_COL + " TEXT NOT NULL,"
                 + ScoreEntry.TIME_COL + " INTEGER NOT NULL,"
@@ -31,7 +31,7 @@ public class ScoresDBHelper extends SQLiteOpenHelper
                 + ScoreEntry.HOME_GOALS_COL + " TEXT NOT NULL,"
                 + ScoreEntry.AWAY_GOALS_COL + " TEXT NOT NULL,"
                 + ScoreEntry.MATCH_ID + " INTEGER NOT NULL,"
-                + ScoresContract.ScoreEntry.MATCH_DAY + " INTEGER NOT NULL,"
+                + ScoreEntry.MATCH_DAY + " INTEGER NOT NULL,"
                 + " UNIQUE ("+ ScoreEntry.MATCH_ID+") ON CONFLICT REPLACE"
                 + " );";
         db.execSQL(CreateScoresTable);
@@ -41,6 +41,6 @@ public class ScoresDBHelper extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         //Remove old values when upgrading.
-        db.execSQL("DROP TABLE IF EXISTS " + ScoresContract.SCORES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + ScoreEntry.TABLE_NAME);
     }
 }

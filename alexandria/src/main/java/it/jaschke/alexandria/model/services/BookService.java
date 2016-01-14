@@ -79,8 +79,17 @@ public class BookService extends IntentService {
      */
     private void fetchBook(String isbn) {
         Log.d("SuperDuo", "current thread : " + thread());
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn"+isbn);
+
+
+        // re-init table status
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_STATUS_UNKNOWN");
+        Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
+
+
         if (isbn.length() != 13) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn.length() != 13");
+            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
             return;
         }
 
@@ -92,12 +101,13 @@ public class BookService extends IntentService {
                 null  // sort order
         );
 
-        //TODO: 2.0 why do we get a broadcast receiver message if we leave here ? when adding
-        //TODO: 2.0 no we don't get broadcast receiver message (mistakefrom me) the registered
-        // book is displayed.
-        // same book
+
         if (bookEntry.getCount() > 0) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookEntry.getCount() > 0");
             bookEntry.close();
+
+            //this line will induce a restartLoader in AddBookFragment
+            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
             return;
         }
         bookEntry.close();
@@ -106,12 +116,6 @@ public class BookService extends IntentService {
     }
 
     private void syncDB(String isbn) {
-        // re-init table status
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_STATUS_UNKNOWN");
-            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
-
-
-        //TODO : 2.0 check this method works when called from (B)
         Context context = getApplicationContext();
         if (!Tools.isNetworkAvailable(context)) {
             Status.setNetworkStatus(context, Status.INTERNET_OFF);
@@ -162,7 +166,6 @@ public class BookService extends IntentService {
             if (buffer.length() == 0) {
                 return;
             }
-            //TODO : 2.0 enregistrer le status du serveur for UX message
             //This string will be null if user device not connected to network
             bookJsonString = buffer.toString();
 
@@ -170,10 +173,6 @@ public class BookService extends IntentService {
             if (!(Status.getGoogleBookApiStatus(getApplicationContext()) == Status.SERVEUR_OK))
                 // we won't be able to fetch data, no need to go further
                 return;
-
-            //TODO : remove those lines
-//            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_STATUS_UNKNOWN");
-//            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
 
             final String ITEMS = "items";
 

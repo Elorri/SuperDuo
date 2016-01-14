@@ -6,15 +6,13 @@
 
     <RelativeLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|top">
 
 
-
-
         <android.support.v7.widget.SearchView
-            android:layout_width = "fill_parent"
+            android:layout_width = "match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/searchView"
             android:inputType="text"
@@ -40,8 +38,7 @@
         <TextView android:id="@+id/emptyListView"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:visibility="invisible"
-            />
+                  android:visibility="invisible"        />
 
 
 

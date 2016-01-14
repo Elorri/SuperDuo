@@ -78,10 +78,6 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:" + mIsbn);
         //This will restart the loader when table book status will change.  No need to call restartLoader here.
         addBookIntent(mIsbn);
-
-
-
-
     }
 
 
@@ -251,7 +247,7 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void updateEmptyView(Cursor cursor) {
-        if (mIsbn == null) {
+        if (mIsbn == null){
             mEmptyTextView.setText(R.string.add_book_isbn);
             return;
         }
@@ -352,7 +348,9 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "key"+key);
         if (key.equals(getString(R.string.pref_book_table_status_key))) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             //updateEmptyView(mCursor);
             restartLoader();
         }

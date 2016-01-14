@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, nextFragment)
+                .replace(R.id.main_container, nextFragment)
                 .addToBackStack((String) title)
                 .commit();
     }
@@ -136,7 +136,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         BookDetailFragment fragment = new BookDetailFragment();
         fragment.setArguments(args);
 
-        int id = R.id.container;
+        int id = R.id.main_container;
         if (findViewById(R.id.right_container) != null) {
             id = R.id.right_container;
         }

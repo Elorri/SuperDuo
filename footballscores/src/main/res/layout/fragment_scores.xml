@@ -1,5 +1,6 @@
 <!-- TODO 2.1 try remove padding here and see if design is better -->
 <!-- TODO 2.1 put  15sp material desgn guide lines-->
+<!-- TODO 2.1 remove hardcoded  dimens -->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,8 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"
-        android:dividerHeight="15sp"
-        />
+        android:dividerHeight="15sp" />
 
     <TextView android:id="@+id/emptyListView"
               android:layout_width="match_parent"

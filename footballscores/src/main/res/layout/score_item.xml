@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO 2.0 add tool: propertext whe needed -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -29,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/test_text"
+                android:text="@string/home_team_tool"
                 android:textSize="@dimen/TeamNames"/>
         </LinearLayout>
         <LinearLayout
@@ -44,7 +43,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/test_text"
+                android:text="@string/scores_tool"
                 android:textSize="@dimen/Score"/>
             <TextView
                 android:id="@+id/data_textview"
@@ -53,7 +52,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/test_text"/>
+                android:text="@string/time"/>
 
         </LinearLayout>
         <LinearLayout
@@ -72,12 +71,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/test_text"
+                android:text="@string/away_team_tool"
                 android:textSize="@dimen/TeamNames"/>
         </LinearLayout>
     </LinearLayout>
     <FrameLayout
-        android:id="@+id/details_fragment_container"
+        android:id="@+id/detailview_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </FrameLayout>

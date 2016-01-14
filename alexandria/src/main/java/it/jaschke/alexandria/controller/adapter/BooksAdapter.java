@@ -53,7 +53,7 @@ public class BooksAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.book_list_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_list_book, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);

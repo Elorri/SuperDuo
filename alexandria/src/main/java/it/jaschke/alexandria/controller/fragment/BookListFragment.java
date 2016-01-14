@@ -55,7 +55,7 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        View view = inflater.inflate(R.layout.fragment_books, container, false);
+        View view = inflater.inflate(R.layout.fragment_book_list, container, false);
         mSearchView = (SearchView) view.findViewById(R.id.searchView);
         mBookList = (ListView) view.findViewById(R.id.bookList);
 

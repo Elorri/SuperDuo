@@ -26,8 +26,36 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     public ScoresAdapter mAdapter;
     public static final int SCORES_LOADER = 0;
-    private String[] date = new String[1];
+    private String date;
     private ListView mScoreList;
+
+    private static final String[] MATCHES_COLUMNS = {
+                     ScoresContract.ScoreEntry._ID   ,
+                     ScoresContract.ScoreEntry.DATE_COL  ,
+                     ScoresContract.ScoreEntry.TIME_COL  ,
+                     ScoresContract.ScoreEntry.HOME_COL  ,
+                     ScoresContract.ScoreEntry.AWAY_COL  ,
+                     ScoresContract.ScoreEntry.LEAGUE_COL  ,
+                     ScoresContract.ScoreEntry.HOME_GOALS_COL  ,
+                     ScoresContract.ScoreEntry.AWAY_GOALS_COL  ,
+                     ScoresContract.ScoreEntry.MATCH_ID  ,
+                     ScoresContract.ScoreEntry.MATCH_DAY  ,
+    };
+
+    // These indices are tied to MATCHES_COLUMNS.  If MATCHES_COLUMNS changes, these
+    // must change.
+    public static final int COL_MATCH_ID = 0;
+    public static final int COL_DATE = 1;
+    public static final int COL_MATCHTIME = 2;
+    public static final int COL_HOME = 3;
+    public static final int COL_AWAY = 4;
+    public static final int COL_LEAGUE = 5;
+    public static final int COL_HOME_GOALS = 6;
+    public static final int COL_AWAY_GOALS = 7;
+    public static final int COL_ID = 8;
+    public static final int COL_MATCHDAY = 9;
+
+
 
 
     public ScoresFragment() {
@@ -44,17 +72,16 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
         mScoreList.setAdapter(mAdapter);
 
 
-        mAdapter.detail_match_id = MainActivity.selectedMatchId;
+        mAdapter.selectedMatchId = MainActivity.selectedMatchId;
         mScoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO : 2.0 use Uri here
                 ScoresAdapter.ViewHolder selected = (ScoresAdapter.ViewHolder) view.getTag();
-                mAdapter.detail_match_id = selected.match_id;
-                MainActivity.selectedMatchId = (int) selected.match_id;
+                mAdapter.selectedMatchId = selected.matchId;
+                MainActivity.selectedMatchId = (int) selected.matchId;
 
                 //TODO : 2.0 mAdapter.notifyDataSetChanged(); remove and see
-                mAdapter.notifyDataSetChanged();
+                //mAdapter.notifyDataSetChanged();
             }
         });
         return view;
@@ -69,24 +96,15 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(getActivity(),
-                ScoresContract.ScoreEntry.buildScoreWithDate(),
+                ScoresContract.ScoreEntry.buildScoreByDate(date),
+                MATCHES_COLUMNS,
                 null,
                 null,
-                date,
                 null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        //Log.v(FetchScoreTask.LOG_TAG,"loader finished");
-        //cursor.moveToFirst();
-        /*
-        while (!cursor.isAfterLast())
-        {
-            Log.v(FetchScoreTask.LOG_TAG,cursor.getString(1));
-            cursor.moveToNext();
-        }
-        */
 
         int i = 0;
         cursor.moveToFirst();
@@ -94,9 +112,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
             i++;
             cursor.moveToNext();
         }
-        //Log.v(FetchScoreTask.LOG_TAG,"Loader query: " + String.valueOf(i));
-        mAdapter.swapCursor(cursor);
-        //mAdapter.notifyDataSetChanged();
+       mAdapter.swapCursor(cursor);
         updateEmptyView();
     }
 
@@ -108,8 +124,8 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
 
 
-    public void setFragmentDate(String date) {
-        this.date[0] = date;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override

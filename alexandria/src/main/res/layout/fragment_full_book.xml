@@ -28,7 +28,8 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp"
+                    tools:text="Holy Bible"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -38,7 +39,9 @@
                     android:layout_marginTop="15dp"
                     android:layout_below="@+id/fullBookTitle"
                     android:layout_alignLeft="@+id/fullBookTitle"
-                    android:layout_alignStart="@+id/fullBookTitle"/>
+                    android:layout_alignStart="@+id/fullBookTitle"
+                    tools:src="@drawable/ic_launcher"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -51,7 +54,8 @@
                     android:layout_marginRight="10dp"
                     android:layout_alignTop="@+id/fullBookCover"
                     android:layout_toRightOf="@+id/fullBookCover"
-                    android:layout_toEndOf="@+id/fullBookCover"/>
+                    android:layout_toEndOf="@+id/fullBookCover"
+                    android:text="Authorized King James Version"/>
 
 
                 <TextView
@@ -62,7 +66,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_below="@+id/fullBookCover"
                     android:layout_margin="10dp"
-                    />
+                    tools:text="The King James Version from Zondervan is now available in an easily readable pew Bible. Perfect for personal use as well as for use in churches, the King James Version Large Print Pew Bible comes in a sturdy binding at an attractive price point."           />
 
 
                 <LinearLayout
@@ -78,7 +82,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/categories"
                         android:layout_weight="1"
-                        android:gravity="left|top"/>
+                        android:gravity="left|top"
+                        tools:text="Bibles"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -86,23 +91,9 @@
                         android:id="@+id/authors"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:gravity="right|top"/>
+                        android:gravity="right|top"
+                        tools:text="Zondervan Bibles"/>
                 </LinearLayout>
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/back_button"
-                    android:id="@+id/backButton"
-                    android:onClick="goBack"
-                    android:src="@drawable/ic_action_undo"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_gravity="right|top"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignRight="@+id/fullBookTitle"
-                    android:layout_alignEnd="@+id/fullBookTitle"/>
-
-
             </RelativeLayout>
 
         </ScrollView>
@@ -113,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right">
 
-            <!-- TODO: 4.0 delete images -->
+            <!-- TODO: 2.1 delete images -->
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -12,12 +12,12 @@ import barqsoft.footballscores.service.FootballService;
 public class MainActivity extends ActionBarActivity {
     private static final String CURRENT_ITEM = "current_item";
     private static final String SELECTED_MATCH_ID = "selectedMatchId";
-    private static final String PAGER_FRAGMENT = "pager_fragment";
+    private static final String PAGER_FRAGMENT = "fragment_pager";
     private static final String SAVE_TAG = "save_tag";
 
     private MainFragment mMainFragment;
 
-    //TODO : 2.0 put this private and store it in Preferences
+    //TODO : 2.1 put this private and store it in Preferences
     public static int selectedMatchId;
     public static int currentItem = 2;
 
@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-//TODO : delete old db data
+//TODO : 2.2 delete old db data
     private void syncDB() {
         Intent serviceStart = new Intent(this, FootballService.class);
         startService(serviceStart);
@@ -70,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        //TODO :2.0 mViewPager should be private
+        //TODO :2.1 mViewPager should be private
         Log.v(SAVE_TAG, "will save");
         Log.v(SAVE_TAG, "fragment: " + String.valueOf(mMainFragment.mViewPager.getCurrentItem()));
         Log.v(SAVE_TAG, "selected id: " + selectedMatchId);

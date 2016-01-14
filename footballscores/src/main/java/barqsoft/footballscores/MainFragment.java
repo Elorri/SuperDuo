@@ -26,7 +26,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.pager_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_pager, container, false);
 
         for (int i = 0; i < NUM_PAGES; i++) {
             //TODO : 2.3 should be converted in julianday dig into the below
@@ -53,14 +53,14 @@ public class MainFragment extends Fragment {
             Date date = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             tabs[i] = new ScoresFragment();
-            //TODO :2.0 check by rotation screen or use getArguments or ask on forums
-            tabs[i].setFragmentDate(dateFormat.format(date));
+            //TODO :2.1 check by rotation screen or use getArguments or ask on forums
+            tabs[i].setDate(dateFormat.format(date));
         }
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         PageAdapter pageAdapter = new PageAdapter(getChildFragmentManager());
         mViewPager.setAdapter(pageAdapter);
-        //TODO : 2.0 use preferences
+        //TODO : 2.1 use preferences
         mViewPager.setCurrentItem(MainActivity.currentItem);
         return view;
     }

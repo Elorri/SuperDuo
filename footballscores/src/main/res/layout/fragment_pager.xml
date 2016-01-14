@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,7 +10,8 @@
         android:id="@+id/viewpager"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_scores">
 
 
         <android.support.v4.view.PagerTabStrip
@@ -19,6 +21,7 @@
             android:layout_gravity="top"
             android:paddingBottom="@dimen/tabsTopBottomPadding"
             android:paddingTop="@dimen/tabsTopBottomPadding"/>
+
     </android.support.v4.view.ViewPager>
 
 </LinearLayout>

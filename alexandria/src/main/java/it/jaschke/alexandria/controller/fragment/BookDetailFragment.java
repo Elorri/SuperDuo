@@ -32,7 +32,7 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
     private final int LOADER_ID = 10;
     private View view;
     private String mIsbn;
-    private ShareActionProvider shareActionProvider;
+    private ShareActionProvider mShareActionProvider;
 
     public BookDetailFragment(){
     }
@@ -76,9 +76,8 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_detail, menu);
-
         MenuItem menuItem = menu.findItem(R.id.action_share);
-        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
     }
 
     @Override
@@ -131,12 +130,9 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
-        shareActionProvider.setShareIntent(shareIntent);
 
-
-    //TODO :4.1 remove back buton on tablette and phone
-        if(view.findViewById(R.id.right_container)!=null){
-            view.findViewById(R.id.backButton).setVisibility(View.INVISIBLE);
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
         }
 
     }

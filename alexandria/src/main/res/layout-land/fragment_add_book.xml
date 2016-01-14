@@ -4,8 +4,8 @@
 
     <RelativeLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="left|center_vertical">
 
         <android.support.v7.widget.SearchView
@@ -65,7 +65,8 @@
             android:layout_alignStart="@+id/isbnSearchView"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            tools:text="Holy Bible"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -74,7 +75,8 @@
             android:layout_below="@+id/bookTitle"
             android:layout_alignLeft="@+id/bookTitle"
             android:layout_alignStart="@+id/bookTitle"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            tools:text="Authorized King James Version"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -86,7 +88,7 @@
             android:layout_below="@+id/bookSubTitle"
             android:layout_alignLeft="@+id/bookSubTitle"
             android:layout_alignStart="@+id/bookSubTitle"
-            />
+            tools:src="@drawable/ic_launcher"       />
 
         <TextView
             android:layout_width="wrap_content"
@@ -96,6 +98,7 @@
             android:layout_marginLeft="25dp"
             android:layout_alignTop="@+id/bookCover"
             android:layout_toRightOf="@+id/bookCover"
+            tools:text="Zondervan Bibles"
             />
 
         <TextView
@@ -106,7 +109,8 @@
             android:layout_below="@+id/bookCover"
             android:layout_alignLeft="@+id/bookCover"
             android:layout_alignStart="@+id/bookCover"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            tools:text="Bibles"/>
 
     </RelativeLayout>
 </FrameLayout>

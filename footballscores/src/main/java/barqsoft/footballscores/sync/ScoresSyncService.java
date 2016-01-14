@@ -6,21 +6,21 @@ import android.os.IBinder;
 /**
  * Created by Elorri on 01/12/2015.
  */
-public class BeeSyncService extends Service {
+public class ScoresSyncService extends Service {
     private static final Object sSyncAdapterLock = new Object();
-    private static BeeSyncAdapter sBeeSyncAdapter = null;
+    private static ScoresSyncAdapter sScoresSyncAdapter = null;
 
     @Override
     public void onCreate() {
         synchronized (sSyncAdapterLock) {
-            if (sBeeSyncAdapter == null) {
-                sBeeSyncAdapter = new BeeSyncAdapter(getApplicationContext(), true);
+            if (sScoresSyncAdapter == null) {
+                sScoresSyncAdapter = new ScoresSyncAdapter(getApplicationContext(), true);
             }
         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return sBeeSyncAdapter.getSyncAdapterBinder();
+        return sScoresSyncAdapter.getSyncAdapterBinder();
     }
 }

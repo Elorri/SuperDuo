@@ -136,6 +136,7 @@ public class Status {
      * @param bookTableStatus The IntDef value to set
      */
     public static  void setBookTableStatus(Context c, @BookTableStatus int bookTableStatus) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_book_table_status_key), bookTableStatus);
