@@ -30,15 +30,17 @@ public class ScoresAdapter extends CursorAdapter {
 
 
     public class ViewHolder {
-        public TextView homeName;
-        public TextView awayName;
-        public TextView score;
-        public TextView date;
-        public ImageView homeCrest;
-        public ImageView awayCrest;
+        private FrameLayout detailViewConainer;
+        private TextView homeName;
+        private TextView awayName;
+        private TextView score;
+        private TextView date;
+        private ImageView homeCrest;
+        private ImageView awayCrest;
         public double matchId;
 
         public ViewHolder(View view) {
+            detailViewConainer = (FrameLayout) view.findViewById(R.id.detailview_container);
             homeName = (TextView) view.findViewById(R.id.home_name);
             awayName = (TextView) view.findViewById(R.id.away_name);
             score = (TextView) view.findViewById(R.id.score_textview);
@@ -51,10 +53,10 @@ public class ScoresAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View scoreItem = LayoutInflater.from(context).inflate(R.layout.score_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(scoreItem);
-        scoreItem.setTag(viewHolder);
-        return scoreItem;
+        View scoreItemView = LayoutInflater.from(context).inflate(R.layout.item_score, parent, false);
+        ViewHolder viewHolder = new ViewHolder(scoreItemView);
+        scoreItemView.setTag(viewHolder);
+        return scoreItemView;
     }
 
     @Override
@@ -73,16 +75,12 @@ public class ScoresAdapter extends CursorAdapter {
 
 
 
-        FrameLayout detailViewConainer = (FrameLayout) view.findViewById(R.id.detailview_container);
         if (viewHolder.matchId == selectedMatchId) {
-            //TODO 2.0 I added those 3 lines inside the if. Does this create propblem ?
-            //TODO 2.0 houldn't we add them in newView ?
             LayoutInflater layoutInflater = (LayoutInflater) context.getApplicationContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            LinearLayout detailView = (LinearLayout)layoutInflater.inflate(R.layout.score_item_detail, null);
+            LinearLayout detailView = (LinearLayout)layoutInflater.inflate(R.layout.item_score_detail, null);
 
-
-            detailViewConainer.addView(detailView, 0,
+            viewHolder.detailViewConainer.addView(detailView, 0,
                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT));
             TextView matchDay = (TextView) detailView.findViewById(R.id.matchday_textview);
@@ -103,7 +101,7 @@ public class ScoresAdapter extends CursorAdapter {
                 }
             });
         } else {
-            detailViewConainer.removeAllViews();
+            viewHolder.detailViewConainer.removeAllViews();
         }
 
     }

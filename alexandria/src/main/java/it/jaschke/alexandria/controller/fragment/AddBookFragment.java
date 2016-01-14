@@ -356,7 +356,6 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         }
     }
 
-    //TODO : 2.0 decide to keep or not the delete in BookServiec
     public static String thread() {
         if (Looper.getMainLooper().getThread() == Thread.currentThread())
             return "ThreadUI";

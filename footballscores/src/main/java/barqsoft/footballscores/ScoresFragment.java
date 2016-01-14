@@ -79,9 +79,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
                 ScoresAdapter.ViewHolder selected = (ScoresAdapter.ViewHolder) view.getTag();
                 mAdapter.selectedMatchId = selected.matchId;
                 MainActivity.selectedMatchId = (int) selected.matchId;
-
-                //TODO : 2.0 mAdapter.notifyDataSetChanged(); remove and see
-                //mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
         });
         return view;
@@ -107,12 +105,6 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-/*        int i = 0;
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            i++;
-            cursor.moveToNext();
-        }*/
        mAdapter.swapCursor(cursor);
         updateEmptyView();
     }

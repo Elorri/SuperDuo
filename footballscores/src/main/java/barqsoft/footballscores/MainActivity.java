@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import barqsoft.footballscores.service.FootballService;
+import barqsoft.footballscores.sync.ScoresSyncAdapter;
 
 public class MainActivity extends ActionBarActivity {
     private static final String CURRENT_ITEM = "current_item";
@@ -26,10 +27,12 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        syncDB();
+        //syncDB();
+        ScoresSyncAdapter.initializeSyncAdapter(this);
 
         if (savedInstanceState == null) {
             mMainFragment = new MainFragment();

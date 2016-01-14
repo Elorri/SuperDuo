@@ -259,18 +259,7 @@ public class BookService extends IntentService {
     }
 
 
-    /**
-     * This function handle errors managed by the footballApi serveur
-     * see http://api.football-data.org/docs/latest/index.html#_http_error_codes_returned
-     *
-     * @param context
-     * @param jsonObject
-     * @return
-     * @throws JSONException
-     */
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
-//TODO: 4.0 make sure you catch the real status
-
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         if (jsonObject == null) {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
