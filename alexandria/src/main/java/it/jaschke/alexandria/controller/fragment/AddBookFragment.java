@@ -28,6 +28,7 @@ import android.widget.Toast;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.Status;
 import it.jaschke.alexandria.controller.activity.MainActivity;
+import it.jaschke.alexandria.controller.camera.BarcodeActivity;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
@@ -140,6 +141,11 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
                 Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
                 toast.show();
                 //TODO : 2.1 addBookIntent(isbnValue);
+
+                                Intent intent = new Intent(getContext(), BarcodeActivity.class);
+                                intent.putExtra(BarcodeActivity.AutoFocus, true);
+                                intent.putExtra(BarcodeActivity.UseFlash, false);
+                                startActivityForResult(intent, RC_BARCODE_CAPTURE);
             }
         });
 

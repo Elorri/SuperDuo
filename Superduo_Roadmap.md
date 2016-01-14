@@ -143,5 +143,5 @@ The user can see a message that there is no data shown because no internet conne
 | :------: | :-----: |:-----: |
 | 851  |  29  |  |
 
-Last number of LOC : 8783
+Last number of LOC : 8895
 Starting Code number of LOC : 8124
