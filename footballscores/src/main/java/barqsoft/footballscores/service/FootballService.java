@@ -342,10 +342,10 @@ public class FootballService extends IntentService {
                 }
             }
             int insertedData = 0;
-            ContentValues[] insert_data = new ContentValues[values.size()];
-            values.toArray(insert_data);
+            ContentValues[] insertData = new ContentValues[values.size()];
+            values.toArray(insertData);
             insertedData = mContext.getContentResolver().bulkInsert(
-                    ScoresContract.BASE_CONTENT_URI, insert_data);
+                    ScoresContract.ScoreEntry.CONTENT_URI, insertData);
             //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(insertedData));
         } catch (ParseException e) {
             Log.d(LOG_TAG, e.getMessage());

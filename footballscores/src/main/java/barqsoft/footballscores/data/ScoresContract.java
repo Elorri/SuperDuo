@@ -21,6 +21,8 @@ public class ScoresContract {
 
     public static final class ScoreEntry implements BaseColumns {
 
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MATCHES).build();
+
         public static final String TABLE_NAME = "scores";
         public static final String LEAGUE_COL = "league";
         public static final String DATE_COL = "date";
@@ -56,12 +58,13 @@ public class ScoresContract {
         public static Uri buildScoreByDate(String date) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(PATH_MATCHES)
+                    .appendPath(PATH_DATE)
                     .appendPath(date)
                     .build();
         }
 
         public static String getDateFromScoresByDateUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+            return uri.getPathSegments().get(2);
         }
     }
 

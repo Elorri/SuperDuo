@@ -26,7 +26,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     public ScoresAdapter mAdapter;
     public static final int SCORES_LOADER = 0;
-    private String date;
+    private String mDate;
     private ListView mScoreList;
 
     private static final String[] MATCHES_COLUMNS = {
@@ -94,9 +94,11 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:"
+                + mDate);
         return new CursorLoader(getActivity(),
-                ScoresContract.ScoreEntry.buildScoreByDate(date),
+                ScoresContract.ScoreEntry.buildScoreByDate(mDate),
                 MATCHES_COLUMNS,
                 null,
                 null,
@@ -105,13 +107,12 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-
-        int i = 0;
+/*        int i = 0;
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             i++;
             cursor.moveToNext();
-        }
+        }*/
        mAdapter.swapCursor(cursor);
         updateEmptyView();
     }
@@ -125,7 +126,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     public void setDate(String date) {
-        this.date = date;
+        this.mDate = date;
     }
 
     @Override

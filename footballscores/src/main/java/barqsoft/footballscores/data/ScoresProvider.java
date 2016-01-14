@@ -16,17 +16,17 @@ public class ScoresProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private ScoresDBHelper mOpenHelper;
 
-    private static final int MATCHES = 100;
-    private static final int MATCHES_BY_LEAGUE = 101;
-    private static final int MATCHES_BY_ID = 102;
-    private static final int MATCHES_BY_DATE = 103;
+    public static final int MATCHES = 100;
+    public static final int MATCHES_BY_LEAGUE = 101;
+    public static final int MATCHES_BY_ID = 102;
+    public static final int MATCHES_BY_DATE = 103;
 
     private static final String SCORES_BY_LEAGUE = ScoresContract.ScoreEntry.LEAGUE_COL + " = ?";
-    private static final String SCORES_BY_DATE = ScoresContract.ScoreEntry.DATE_COL + " LIKE ?";
+    private static final String SCORES_BY_DATE = ScoresContract.ScoreEntry.DATE_COL + " = ?";
     private static final String SCORES_BY_ID = ScoresContract.ScoreEntry.MATCH_ID + " = ?";
 
 
-    static UriMatcher buildUriMatcher() {
+    public static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = ScoresContract.CONTENT_AUTHORITY;
 
@@ -94,7 +94,7 @@ public class ScoresProvider extends ContentProvider {
                         projection, SCORES_BY_LEAGUE, selectionArgs, null, null, sortOrder);
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown Uri" + uri);
+                throw new UnsupportedOperationException("Unknown Uri " + uri);
         }
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
