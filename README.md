@@ -28,6 +28,7 @@ The apk realease can be found under the respected app directories.
 
 ## Roadmap
 [https://gist.github.com/Elorri/baab9e004b1d504926b1]
+(../2.0_errors_and_guidance_messages/Superduo_Roadmap.md)
 	
 ## License
 	

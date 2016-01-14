@@ -127,7 +127,7 @@ The user can see a message that there is no data shown because no internet conne
 
 | Branches  | LOC    | Hours |
 | ------------- | :-----------: |:-------------: |
-| 2.0_errors_and_guidance_messages|739 |  23   |
+| 2.0_errors_and_guidance_messages|851 |  29   |
 | 2.1_building_a_total_experience|0|0|
 | 2.2_accessibility|0|0|
 | 2.3_localisation|0|0|
@@ -141,7 +141,7 @@ The user can see a message that there is no data shown because no internet conne
 
 | LOC    | Hours | Days | 
 | :------: | :-----: |:-----: |
-| 739  |  23  |  |
+| 851  |  29  |  |
 
 Last number of LOC : 8783
 Starting Code number of LOC : 8124
