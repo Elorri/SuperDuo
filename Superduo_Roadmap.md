@@ -22,7 +22,7 @@ This the actual version of the app. The user can search for a book using the ISB
   - [ ] button "scan" se transforme en button "OK" when rotating the screen "add a book"
   - [ ] settings has no toolbar
   - [ ] setting does not display current option
-  - [ ] scan button display a toast
+  - [x] scan button display a toast
 
 ### Release 2 
 The user can search for book without internet connection and the app does not crashes or when adding a book.
@@ -37,6 +37,7 @@ The user can search for book without internet connection and the app does not cr
    - [x] https://www.googleapis.com/books/v1/volumes?q=9780743477116
 
 ##### 2.1_building_a_total_experience
+  - [x] add barcode scanner functionnality
   - [ ] put tablet layout in its own directory
   - [ ] create a CustomView
   - [ ] use a Library : scanning bar code integrated inside the screen
@@ -128,7 +129,7 @@ The user can see a message that there is no data shown because no internet conne
 | Branches  | LOC    | Hours |
 | ------------- | :-----------: |:-------------: |
 | 2.0_errors_and_guidance_messages|851 |  29   |
-| 2.1_building_a_total_experience|0|0|
+| 2.1_building_a_total_experience|12997|2,5|
 | 2.2_accessibility|0|0|
 | 2.3_localisation|0|0|
 | 2.4_performance|0|0|
@@ -141,7 +142,7 @@ The user can see a message that there is no data shown because no internet conne
 
 | LOC    | Hours | Days | 
 | :------: | :-----: |:-----: |
-| 851  |  29  |  |
+| 13768  |  31,5  |  |
 
-Last number of LOC : 8895
+Last number of LOC : 21892
 Starting Code number of LOC : 8124

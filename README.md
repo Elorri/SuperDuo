@@ -3,6 +3,8 @@
 This repository contains the app SuperDuo project, which is part of the Android Developer Nanodegree program.
 It is subdivided into 2 apps Alexandria and FootballScores.
 
+## Min Android Api supported
+
 ## Features
 
 Alexandria : 
@@ -13,9 +15,15 @@ FootballScores :
 
 ## Libraries used
 
-* [Picasso](https://github.com/square/picasso)
-* [TextDrawable](https://github.com/amulyakhare/TextDrawable)
-* [Stetho]('com.facebook.stetho:stetho:1.2.0) (for tests)
+| <  | Api level    | >= |
+| ------------- | :-----------: |:-------------: |
+| Zxing|18 |  Google Play Mobile Vision Api   |
+
+## Libraries infos
+
+* [Google Play Mobile Vision Api](https://github.com/googlesamples/android-vision/tree/master/visionSamples/barcode-reader)
+* [Zxing](https://github.com/zxing/zxing/wiki/Scanning-Via-Intent)
+
 
 
 ## API key needed

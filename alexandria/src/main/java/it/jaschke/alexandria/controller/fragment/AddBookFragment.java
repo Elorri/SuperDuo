@@ -164,7 +164,7 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
             String barcode = scanResult.getContents();
             mIsbnSearchView.setQuery(barcode, true);
         }
-        
+
         //Device support GooglePlayMobileVisionApi
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (data == null) {
