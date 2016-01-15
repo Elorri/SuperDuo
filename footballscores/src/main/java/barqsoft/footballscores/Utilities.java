@@ -3,6 +3,7 @@ package barqsoft.footballscores;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 
 /**
  * Created by yehya khaled on 3/3/2015.
@@ -131,5 +132,9 @@ public class Utilities {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public static boolean isDeviceReadyForFlexTimeSync() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 }

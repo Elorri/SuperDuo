@@ -3,6 +3,7 @@ package it.jaschke.alexandria.controller.extras;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -30,5 +31,13 @@ public class Tools {
         boolean isConnected= activeNetwork != null &&  activeNetwork.isConnectedOrConnecting();
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isConnected"+isConnected);
         return isConnected;
+    }
+
+
+
+    // is device ready for features
+
+    static public boolean isDeviceReadyForGooglePlayMobileVisionApi(){
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
     }
 }

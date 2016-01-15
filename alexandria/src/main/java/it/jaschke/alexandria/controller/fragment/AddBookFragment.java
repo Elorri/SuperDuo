@@ -25,10 +25,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
+
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.Status;
+import it.jaschke.alexandria.controller.activity.BarcodeCaptureActivity;
 import it.jaschke.alexandria.controller.activity.MainActivity;
-import it.jaschke.alexandria.controller.camera.BarcodeActivity;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
@@ -36,17 +39,15 @@ import it.jaschke.alexandria.model.services.DownloadImage;
 
 
 public class AddBookFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
+
+    private static final int RC_BARCODE_CAPTURE = 0;
+    private static final String LOG_TAG = AddBookFragment.class.getSimpleName();
 
 
     private final int LOADER_ID = 1;
     private View view;
     private final String ISBN_CONTENT = "isbnContent";
-    private static final String SCAN_FORMAT = "scanFormat";
-    private static final String SCAN_CONTENTS = "scanContents";
 
-    private String mScanFormat = "Format:";
-    private String mScanContents = "Contents:";
 
     private TextView mEmptyTextView;
     private SearchView mIsbnSearchView;
@@ -130,31 +131,52 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // This is the callback method that the system will invoke when your button is
-                // clicked. You might do this by launching another app or by including the
-                //functionality directly in this app.
-                // Hint: Use a Try/Catch block to handle the Intent dispatch gracefully, if you
-                // are using an external app.
-                //when you're done, remove the toast below.
-                //TODO : 2.1 remove this toast
-                CharSequence text = "This button should let you scan a book for its barcode!";
-                Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
-                toast.show();
-                //TODO : 2.1 addBookIntent(isbnValue);
 
-                                Intent intent = new Intent(getContext(), BarcodeActivity.class);
-                                intent.putExtra(BarcodeActivity.AutoFocus, true);
-                                intent.putExtra(BarcodeActivity.UseFlash, false);
-                                startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                if (Tools.isDeviceReadyForGooglePlayMobileVisionApi()) {
+                    Intent intent = new Intent(getContext(), BarcodeCaptureActivity.class);
+                    intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
+                    intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
+                    startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                } else {
+                    Toast.makeText(getActivity(),
+                            getResources().getString(R.string.notReadyForFeature),
+                            Toast.LENGTH_SHORT).show();
+                    //TODO : 2.4 if time integrate zxing http://stackoverflow.com/questions/8708705/how-to-use-zxing-in-android
+//                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+//                    if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+//                        startActivityForResult(intent, RC_BARCODE_CAPTURE);
+//                    } else {
+//                        Log.d(LOG_TAG, "Couldn't call barcode viewer no receiving apps installed!");
+//                    }
+                }
+
             }
         });
-
 
         if (savedInstanceState != null) {
             this.mIsbnSearchView.setQuery(savedInstanceState.getString(ISBN_CONTENT), false);
         }
-
         return view;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    mIsbnSearchView.setQuery(barcode.displayValue, true);
+                } else {
+                    Log.d(LOG_TAG, "No barcode captured, intent data is null");
+                }
+            } else {
+//                statusMessage.setText(String.format(getString(R.string.barcode_error),
+//                        CommonStatusCodes.getStatusCodeString(resultCode)));
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 
@@ -253,7 +275,7 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void updateEmptyView(Cursor cursor) {
-        if (mIsbn == null){
+        if (mIsbn == null) {
             mEmptyTextView.setText(R.string.add_book_isbn);
             return;
         }
@@ -354,7 +376,7 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "key"+key);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "key" + key);
         if (key.equals(getString(R.string.pref_book_table_status_key))) {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             //updateEmptyView(mCursor);

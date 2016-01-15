@@ -49,8 +49,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
     //public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_INTERVAL = 60 * 720;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
-    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
-    private static final int BEE_NOTIFICATION_ID = 3004;
     private String LOG_TAG = ScoresSyncAdapter.class.getSimpleName();
 
 
@@ -137,19 +135,19 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         final String QUERY_TIME_FRAME = "timeFrame";
 
 
-        Uri fetch_build = Uri.parse(BASE_URL).buildUpon().
+        Uri uri = Uri.parse(BASE_URL).buildUpon().
                 appendQueryParameter(QUERY_TIME_FRAME, timeFrame)
                 .build();
         //TODO : 2.4 replace Log.v par Log.d
-        //Log.v(LOG_TAG, "The url we are looking at is: "+fetch_build.toString());
-        Log.e("SuperDuo", "The url we are looking at is: " + fetch_build.toString());
+        //Log.v(LOG_TAG, "The url we are looking at is: "+uri.toString());
+        Log.e("SuperDuo", "The url we are looking at is: " + uri.toString());
 
         HttpURLConnection UrlConnection = null;
         BufferedReader reader = null;
         String jsonData = null;
 
         try {
-            URL fetch = new URL(fetch_build.toString());
+            URL fetch = new URL(uri.toString());
             UrlConnection = (HttpURLConnection) fetch.openConnection();
             UrlConnection.setRequestMethod("GET");
             UrlConnection.addRequestProperty("X-Auth-Token",
@@ -458,7 +456,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Utilities.isDeviceReadyForFlexTimeSync()) {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             // we can enable inexact timers in our periodic sync
             SyncRequest request = new SyncRequest.Builder().

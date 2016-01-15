@@ -46,4 +46,15 @@
     <string name="no_books">No book found.</string>
     <string name="no_books_in_your_library">Add books in your library to start</string>
     <string name="add_book_isbn">Add isbn book you want</string>
+
+
+
+    <!--Google Play services 7.8 Mobile Vision API-->
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="ok">OK</string>
+    <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+
+    <!-- Toasts -->
+    <string name="notReadyForFeature">This feature is not available</string>
 </resources>
