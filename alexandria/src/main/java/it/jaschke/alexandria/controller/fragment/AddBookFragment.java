@@ -23,9 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import it.jaschke.alexandria.R;
@@ -36,6 +34,9 @@ import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
 import it.jaschke.alexandria.model.services.DownloadImage;
+import it.jaschke.alexandria.zxing.FragmentIntentIntegrator;
+import it.jaschke.alexandria.zxing.IntentIntegrator;
+import it.jaschke.alexandria.zxing.IntentResult;
 
 
 public class AddBookFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -131,25 +132,16 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (Tools.isDeviceReadyForGooglePlayMobileVisionApi()) {
                     Intent intent = new Intent(getContext(), BarcodeCaptureActivity.class);
                     intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
                     intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
                     startActivityForResult(intent, RC_BARCODE_CAPTURE);
                 } else {
-                    Toast.makeText(getActivity(),
-                            getResources().getString(R.string.notReadyForFeature),
-                            Toast.LENGTH_SHORT).show();
-                    //TODO : 2.4 if time integrate zxing http://stackoverflow.com/questions/8708705/how-to-use-zxing-in-android
-//                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-//                    if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-//                        startActivityForResult(intent, RC_BARCODE_CAPTURE);
-//                    } else {
-//                        Log.d(LOG_TAG, "Couldn't call barcode viewer no receiving apps installed!");
-//                    }
+                    FragmentIntentIntegrator integrator =
+                            new FragmentIntentIntegrator(AddBookFragment.this);
+                    integrator.initiateScan();
                 }
-
             }
         });
 
@@ -162,21 +154,27 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_BARCODE_CAPTURE) {
-            if (resultCode == CommonStatusCodes.SUCCESS) {
-                if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    mIsbnSearchView.setQuery(barcode.displayValue, true);
-                } else {
-                    Log.d(LOG_TAG, "No barcode captured, intent data is null");
-                }
-            } else {
-//                statusMessage.setText(String.format(getString(R.string.barcode_error),
-//                        CommonStatusCodes.getStatusCodeString(resultCode)));
+        if (!Tools.isDeviceReadyForGooglePlayMobileVisionApi()) {
+            IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode,
+                    resultCode, data);
+            if (scanResult == null) {
+                Log.d(LOG_TAG, "No barcode captured, intent data is null");
+                return;
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            String barcode = scanResult.getContents();
+            mIsbnSearchView.setQuery(barcode, true);
         }
+        
+        //Device support GooglePlayMobileVisionApi
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (data == null) {
+                Log.d(LOG_TAG, "No barcode captured, intent data is null");
+                return;
+            }
+            Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+            mIsbnSearchView.setQuery(barcode.displayValue, true);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
