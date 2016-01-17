@@ -9,30 +9,18 @@
         android:id="@+id/widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:orientation="horizontal"
-        android:paddingTop="5dp"
-        android:background="@android:color/white">
-        <LinearLayout
+        android:paddingTop="5dp">
+        <ImageView
+            android:id="@+id/home_crest"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/home_crest"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/aston_villa"/>
-            <TextView
-                android:id="@+id/home_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/home_team_tool"
-                android:textSize="@dimen/teamNames"/>
-        </LinearLayout>
+            android:src="@drawable/aston_villa"/>
+
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -57,26 +45,15 @@
                 android:text="@string/time"/>
 
         </LinearLayout>
-        <LinearLayout
+
+        <ImageView
+            android:id="@+id/away_crest"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/away_crest"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/leicester_city_fc_hd_logo"/>
-            <TextView
-                android:id="@+id/away_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/away_team_tool"
-                android:textSize="@dimen/teamNames"/>
-        </LinearLayout>
+            android:src="@drawable/leicester_city_fc_hd_logo"/>
+
+
     </LinearLayout>
 </FrameLayout>
