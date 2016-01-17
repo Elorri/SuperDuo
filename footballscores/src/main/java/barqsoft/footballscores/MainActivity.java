@@ -32,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //syncDB();
+        //updateWidgets();
         ScoresSyncAdapter.initializeSyncAdapter(this);
 
         if (savedInstanceState == null) {
@@ -42,7 +43,9 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-//TODO : 2.2 delete old db data
+
+
+    //TODO : 2.2 delete old db data
     private void syncDB() {
         Intent serviceStart = new Intent(this, FootballService.class);
         startService(serviceStart);

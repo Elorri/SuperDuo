@@ -52,9 +52,10 @@ public class MainFragment extends Fragment {
             //TODO : 2.3 format with locale
             Date date = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString=dateFormat.format(date);
             tabs[i] = new ScoresFragment();
             //TODO :2.1 check by rotation screen or use getArguments or ask on forums
-            tabs[i].setDate(dateFormat.format(date));
+            tabs[i].setDate(dateString);
         }
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);

@@ -7,10 +7,10 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -52,6 +52,9 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
     private String LOG_TAG = ScoresSyncAdapter.class.getSimpleName();
 
 
+    public static final String ACTION_DATA_UPDATED ="footballscores.barqsoft.ACTION_DATA_UPDATED";
+
+
     public ScoresSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
@@ -79,7 +82,17 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         Status.setNetworkStatus(context, Status.INTERNET_ON);
         getData("n2");
         getData("p2");
+        updateWidgets();
     }
+
+    private void updateWidgets() {
+        Context context = getContext();
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
+    }
+
 
     /**
      * This function handle errors managed by the footballApi serveur

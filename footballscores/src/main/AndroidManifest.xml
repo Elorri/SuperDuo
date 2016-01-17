@@ -65,16 +65,18 @@
         </service>
 
 
-        <!-- Next Matches Widget -->
+        <!-- Next Match Widget -->
         <receiver
             android:name=".widget.FootballWidgetProvider"
             android:label="@string/title_widget_next_match">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="footballscores.barqsoft.ACTION_DATA_UPDATED" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                        android:resource="@xml/football_widget_provider_info"/>
         </receiver>
+        <service android:name=".widget.FootballWidgetIntentService" />
 
     </application>
 

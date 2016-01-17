@@ -29,7 +29,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     private String mDate;
     private ListView mScoreList;
 
-    private static final String[] MATCHES_COLUMNS = {
+    public static final String[] MATCHES_COLUMNS = {
                      ScoresContract.ScoreEntry._ID   ,
                      ScoresContract.ScoreEntry.DATE_COL  ,
                      ScoresContract.ScoreEntry.TIME_COL  ,
