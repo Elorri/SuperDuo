@@ -32,8 +32,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //syncDB();
-        //updateWidgets();
-        ScoresSyncAdapter.initializeSyncAdapter(this);
+        updateWidgets();
+        //ScoresSyncAdapter.initializeSyncAdapter(this);
 
         if (savedInstanceState == null) {
             mMainFragment = new MainFragment();
@@ -43,7 +43,13 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-
+    private void updateWidgets() {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent =
+                new Intent(ScoresSyncAdapter.ACTION_DATA_UPDATED).setPackage(getPackageName());
+        sendBroadcast(dataUpdatedIntent);
+    }
 
     //TODO : 2.2 delete old db data
     private void syncDB() {
