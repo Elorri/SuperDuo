@@ -101,5 +101,8 @@
     <string name="team_sunderland">Sunderland AFC</string>
     <string name="team_stoke_city">Stoke City FC</string>
 
+    <!-- Widget related -->
+    <string name="title_widget_next_match">Next match</string>
+
 
 </resources>
