@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -20,7 +21,6 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -102,10 +102,10 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         getActivity().setTitle(R.string.scan);
 
 
-        view = inflater.inflate(R.layout.fragment_add_book, container, false);
+        view = inflater.inflate(R.layout.my_layout, container, false);
         mEmptyTextView = (TextView) view.findViewById(R.id.noBookFound);
         mIsbnSearchView = (SearchView) view.findViewById(R.id.isbnSearchView);
-        Button scanButton = (Button) view.findViewById(R.id.scan_button);
+        FloatingActionButton scanButton = (FloatingActionButton) view.findViewById(R.id.scan_button);
         mBookTitleTextView = ((TextView) view.findViewById(R.id.bookTitle));
         mBookSubTitleTextView = ((TextView) view.findViewById(R.id.bookSubTitle));
         mAuthorsTextView = ((TextView) view.findViewById(R.id.authors));

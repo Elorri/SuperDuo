@@ -23,6 +23,7 @@ This the actual version of the app. The user can search for a book using the ISB
   - [ ] settings has no toolbar
   - [ ] setting does not display current option
   - [x] scan button display a toast
+  - [ ] add floating action button
 
 ### Release 2 
 The user can search for book without internet connection and the app does not crashes or when adding a book.
@@ -103,8 +104,8 @@ The user can see a message that there is no data shown because no internet conne
   - [ ] improve tab layout implementation
   - [ ] create a CustomView
   - [ ] use a Library
-  - [ ] add a fixed sized widget
-  - [ ] add a collection widget  
+  - [x] add a fixed sized widget
+  - [x] add a collection widget  
 
 ##### 2.2_accessibility
   - [ ] add content description for talkback use by sight-impaired users

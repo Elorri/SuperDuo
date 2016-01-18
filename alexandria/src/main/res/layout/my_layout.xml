@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@color/primary">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/isbnSearchView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:hint="@string/input_hint"
+                android:iconifiedByDefault="false"
+                android:inputType="number"
+                android:maxLength="@integer/ean_size"
+                android:maxLines="1"
+                android:minEms="@integer/ean_width"
+                android:saveEnabled="true"/>
+        </RelativeLayout>
+
+        <include layout="@layout/book_detail"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/scan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_local_see_white_24dp"
+        app:layout_anchor="@id/header"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>
