@@ -51,6 +51,10 @@ public class BookContract {
             return ContentUris.withAppendedId(FULL_CONTENT_URI, id);
         }
 
+        public static String getIsbnFromFullBookUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
     }
 
     public static final class AuthorEntry implements BaseColumns {

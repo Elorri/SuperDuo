@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -27,9 +26,8 @@ import android.widget.TextView;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.Status;
 import it.jaschke.alexandria.controller.activity.BarcodeCaptureActivity;
-import it.jaschke.alexandria.controller.activity.MainActivity;
+import it.jaschke.alexandria.controller.extras.Status;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
@@ -39,10 +37,10 @@ import it.jaschke.alexandria.zxing.IntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentResult;
 
 
-public class AddBookFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class AddFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int RC_BARCODE_CAPTURE = 0;
-    private static final String LOG_TAG = AddBookFragment.class.getSimpleName();
+    private static final String LOG_TAG = AddFragment.class.getSimpleName();
 
 
     private final int LOADER_ID = 1;
@@ -61,31 +59,10 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     private String mIsbn;
     private BroadcastReceiver internetReceiver;
 
-    private void refresh() {
-        String isbnUserInput = mIsbnSearchView.getQuery().toString();
-        if (isbnUserInput.length() == 0) {
-            mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
-            mEmptyTextView.setText(R.string.add_book_isbn);
-            return;
-        }
-        mIsbn = Tools.fixIsbn(isbnUserInput);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:" + mIsbn);
-        if (mIsbn.length() < 13) {
-            mIsbn = null;
-            clearFields();
-            mEmptyTextView.setText(R.string.add_book_isbn);
-            return;
-        }
-        //TODO : 2.1 disallow to enter more than 13 char
-        mIsbn = mIsbn.substring(0, 13);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:" + mIsbn);
-        //This will restart the loader when table book status will change.  No need to call restartLoader here.
-        addBookIntent(mIsbn);
-    }
 
 
-    public AddBookFragment() {
-    }
+
+    public AddFragment() {    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -97,10 +74,16 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Remove depreciated method onAttach
+        getActivity().setTitle(R.string.scan);
+    }
+
+    @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        getActivity().setTitle(R.string.scan);
-
 
         view = inflater.inflate(R.layout.my_layout, container, false);
         mEmptyTextView = (TextView) view.findViewById(R.id.noBookFound);
@@ -139,7 +122,7 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
                     startActivityForResult(intent, RC_BARCODE_CAPTURE);
                 } else {
                     FragmentIntentIntegrator integrator =
-                            new FragmentIntentIntegrator(AddBookFragment.this);
+                            new FragmentIntentIntegrator(AddFragment.this);
                     integrator.initiateScan();
                 }
             }
@@ -185,13 +168,37 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
         bookIntent.setAction(BookService.FETCH_BOOK);
         getActivity().startService(bookIntent);
         //TODO : Does removing this line remove the add book without internet bug ?
-        //AddBookFragment.this.restartLoader();
+        //AddFragment.this.restartLoader();
     }
 
     private void restartLoader() {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
+
+
+    private void refresh() {
+        String isbnUserInput = mIsbnSearchView.getQuery().toString();
+        if (isbnUserInput.length() == 0) {
+            mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
+            mEmptyTextView.setText(R.string.add_book_isbn);
+            return;
+        }
+        mIsbn = Tools.fixIsbn(isbnUserInput);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:" + mIsbn);
+        if (mIsbn.length() < 13) {
+            mIsbn = null;
+            clearFields();
+            mEmptyTextView.setText(R.string.add_book_isbn);
+            return;
+        }
+        //TODO : 2.1 disallow to enter more than 13 char
+        mIsbn = mIsbn.substring(0, 13);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:" + mIsbn);
+        //This will restart the loader when table book status will change.  No need to call restartLoader here.
+        addBookIntent(mIsbn);
+    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -335,9 +342,11 @@ public class AddBookFragment extends Fragment implements LoaderManager.LoaderCal
     public void onPause() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sp.unregisterOnSharedPreferenceChangeListener(this);
-        if (MainActivity.IS_TABLET && view.findViewById(R.id.right_container) == null) {
-            getActivity().getSupportFragmentManager().popBackStack();
-        }
+
+        //TODO : 2.1 see what happen
+//        if (MainActivity.IS_TABLET && view.findViewById(R.id.right_container) == null) {
+//            getActivity().getSupportFragmentManager().popBackStack();
+//        }
         super.onPause();
     }
 

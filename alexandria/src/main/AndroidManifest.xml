@@ -33,6 +33,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".controller.activity.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".controller.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controller.activity.MainActivity"/>
+        </activity>
+        <activity
             android:name=".controller.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".controller.activity.MainActivity">

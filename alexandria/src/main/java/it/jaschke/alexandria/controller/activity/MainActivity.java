@@ -1,114 +1,85 @@
 package it.jaschke.alexandria.controller.activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.controller.fragment.AboutFragment;
-import it.jaschke.alexandria.controller.fragment.AddBookFragment;
-import it.jaschke.alexandria.controller.fragment.BookDetailFragment;
-import it.jaschke.alexandria.controller.fragment.BookListFragment;
-import it.jaschke.alexandria.controller.fragment.NavigationDrawerFragment;
+import it.jaschke.alexandria.controller.extras.Tools;
+import it.jaschke.alexandria.controller.fragment.AddFragment;
+import it.jaschke.alexandria.controller.fragment.DetailFragment;
+import it.jaschke.alexandria.controller.fragment.ListFragment;
+import it.jaschke.alexandria.controller.fragment.MainFragment;
+import it.jaschke.alexandria.model.data.BookContract;
 
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        BookListFragment.Callback {
-
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment navigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence title;
-    public static boolean IS_TABLET = false;
+public class MainActivity extends AppCompatActivity implements ListFragment.Callback {
 
 
+    //TODO: 2.1 make sure all screens have a title
 
-    public static final String NO_BOOK_AT_GOOGLE_MESSAGE = "com.googleapis.NO_BOOKS_RESULTS";
-    public static final String NO_BOOKS_AT_GOOGLE_MESSAGE_KEY = "NO_BOOKS_AT_GOOGLE_MESSAGE_KEY";
-
-
-
-
+    private boolean mTwoPane;
+    private Uri mMainUri;
+    static final String MAIN_URI = "mMainUri";
+    private MainFragment mMainFragment;
+    private static final String DETAILFRAGMENT_TAG = "detail_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        IS_TABLET = isTablet();
-        if (IS_TABLET) {
-            setContentView(R.layout.activity_main_tablet);
+        setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null)
+            mMainUri = buildMainPageUri();
+        else
+            mMainUri = savedInstanceState.getParcelable(MAIN_URI);
+
+        mMainFragment = getFragment(mMainUri);
+        mMainFragment.setUri(mMainUri);
+        getSupportFragmentManager().beginTransaction().replace(
+                R.id.main_container,  mMainFragment).commit();
+
+        if (findViewById(R.id.detail_fragment_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction().replace(
+                        R.id.detail_fragment_container,
+                        new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
         } else {
-            setContentView(R.layout.activity_main);
+            mTwoPane = false;
         }
 
-        navigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        title = getTitle();
-        // Set up the drawer.
-        navigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment nextFragment;
-
-        switch (position) {
-            default:
-            case 0:
-                nextFragment = new BookListFragment();
-                break;
-            case 1:
-                nextFragment = new AddBookFragment();
-                break;
-            case 2:
-                nextFragment = new AboutFragment();
-                break;
-
-        }
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.main_container, nextFragment)
-                .addToBackStack((String) title)
-                .commit();
+    private MainFragment getFragment(Uri uri) {
+        if (getPageFromUri(uri).equals(getString(R.string.pref_start_page_list)))
+            return new ListFragment();
+        else
+            return new AddFragment();
     }
 
-    public void setTitle(int titleId) {
-        title = getString(titleId);
+
+    public Uri buildMainPageUri() {
+        return BookContract.BASE_CONTENT_URI.buildUpon()
+                .appendPath(Tools.getMainPagePreferences(this))
+                .build();
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(title);
+    public static String getPageFromUri(Uri uri) {
+        return uri.getPathSegments().get(0);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!navigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
     }
 
     @Override
@@ -127,43 +98,54 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Uri currentMainUri = buildMainPageUri();
+        if (!Tools.compareUris(mMainUri, currentMainUri)) {
+            onMainUriChange(currentMainUri);
+        }
+    }
+
+    private void onMainUriChange(Uri newUri) {
+        mMainUri = newUri;
+        mMainFragment = getFragment(mMainUri);
+        mMainFragment.setUri(mMainUri);
+        getSupportFragmentManager().beginTransaction().replace(
+                R.id.main_container,  mMainFragment).commit();
+
+        DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+        if (null != detailFragment) {
+            //TODO : 2.1 see what to do here
+            //detailFragment.onMainUriChange();
+        }
+    }
+
 
     @Override
-    public void onItemSelected(String isbn) {
-        Bundle args = new Bundle();
-        args.putString(BookDetailFragment.ISBN_KEY, isbn);
+    public void onItemSelected(Uri uri) {
+        if (mTwoPane) {
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(DetailFragment.URI, uri);
 
-        BookDetailFragment fragment = new BookDetailFragment();
-        fragment.setArguments(args);
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(arguments);
 
-        int id = R.id.main_container;
-        if (findViewById(R.id.right_container) != null) {
-            id = R.id.right_container;
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.setData(uri);
+            startActivity(intent);
         }
-        getSupportFragmentManager().beginTransaction()
-                .replace(id, fragment)
-                .addToBackStack(getResources().getString(R.string.book_detail))
-                .commit();
     }
 
-
-    public void goBack(View view) {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    private boolean isTablet() {
-        return (getApplicationContext().getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-    }
 
     @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
-            finish();
-        }
-        super.onBackPressed();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(MAIN_URI, mMainUri);
     }
-
 
 }

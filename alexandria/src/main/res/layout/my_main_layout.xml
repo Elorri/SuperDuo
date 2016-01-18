@@ -16,17 +16,17 @@
             android:background="@color/primary">
 
             <android.support.v7.widget.SearchView
-                android:id="@+id/isbnSearchView"
-                android:layout_width="wrap_content"
+                android:layout_width = "match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:hint="@string/input_hint"
-                android:iconifiedByDefault="false"
-                android:inputType="number"
-                android:maxLength="@integer/ean_size"
-                android:maxLines="1"
-                android:minEms="@integer/ean_width"
-                android:saveEnabled="true"/>
+                android:id="@+id/searchView"
+                android:inputType="text"
+                android:saveEnabled="true"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:iconifiedByDefault="false"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -53,6 +53,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_white_24dp"
         app:layout_anchor="@id/content"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"
+            />
 
 </android.support.design.widget.CoordinatorLayout>

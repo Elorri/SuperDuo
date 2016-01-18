@@ -20,7 +20,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import it.jaschke.alexandria.Status;
+import it.jaschke.alexandria.controller.extras.Status;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 
@@ -106,7 +106,7 @@ public class BookService extends IntentService {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookEntry.getCount() > 0");
             bookEntry.close();
 
-            //this line will induce a restartLoader in AddBookFragment
+            //this line will induce a restartLoader in AddFragment
             Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
             return;
         }

@@ -2,9 +2,9 @@ package it.jaschke.alexandria.controller.fragment;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -14,21 +14,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.controller.adapter.BooksAdapter;
 import it.jaschke.alexandria.model.data.BookContract;
 
 
-public class BookListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+public class ListFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private BooksAdapter mBooksAdapter;
     private ListView mBookList;
-    private int position = ListView.INVALID_POSITION;
+    private int mPosition = ListView.INVALID_POSITION;
+    private static final String SELECTED_KEY = "selected_position";
     private SearchView mSearchView;
 
     private final int LOADER_ID = 10;
@@ -36,11 +37,11 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
 
 
     public interface Callback {
-        void onItemSelected(String ean);
+        void onItemSelected(Uri uri);
     }
 
 
-    public BookListFragment() {
+    public ListFragment() {
     }
 
     @Override
@@ -50,14 +51,6 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
 
         //Remove depreciated method onAttach
         getActivity().setTitle(R.string.books);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        View view = inflater.inflate(R.layout.fragment_book_list, container, false);
-        mSearchView = (SearchView) view.findViewById(R.id.searchView);
-        mBookList = (ListView) view.findViewById(R.id.bookList);
 
 
         //TODO 2.4 check that the query method is call in the background thread, but this request
@@ -71,22 +64,26 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
         );
 
         mBooksAdapter = new BooksAdapter(getActivity(), cursor, 0);
-        mBookList.setAdapter(mBooksAdapter);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        View view = inflater.inflate(R.layout.my_main_layout, container, false);
+
+        // Get a reference to the ListView, and attach this adapter to it.
+        mSearchView = (SearchView) view.findViewById(R.id.searchView);
+        mBookList = (ListView) view.findViewById(R.id.bookList);
+
+        mBookList.setAdapter(mBooksAdapter);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                Toast.makeText(getActivity(), "query has been submitted : "
-//                                + mSearchView.getQuery().toString(),
-//                        Toast.LENGTH_SHORT).show();
-//                restartLoader();
-//                return true;
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                Toast.makeText(getActivity(), "text query has changed", Toast.LENGTH_SHORT).show();
                 restartLoader();
                 return true;
             }
@@ -97,18 +94,36 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Cursor cursor = mBooksAdapter.getCursor();
-                if (cursor != null && cursor.moveToPosition(position)) {
-                    String isbn = cursor.getString(cursor.getColumnIndex(BookContract
-                            .BookEntry._ID));
-                    ((Callback) getActivity()).onItemSelected(isbn);
-                }
+                onItemClicked(adapterView, position);
+                setPosition(position);
             }
         });
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
 
         return view;
     }
 
+    private void onItemClicked(AdapterView<?> adapterView, int position) {
+        Cursor cursor = (Cursor)adapterView.getItemAtPosition(position);
+        if (cursor != null) {
+            String isbn = cursor.getString(cursor.getColumnIndex(BookContract
+                    .BookEntry._ID));
+            Uri uri = BookContract.BookEntry.buildFullBookUri(Long.parseLong(isbn));
+            ((Callback) getActivity()).onItemSelected(uri);
+        }
+    }
+
+    @Override
+    public void setUri(Uri mMainUri) {
+        mUri=BookContract.BookEntry.CONTENT_URI;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
+    }
 
     @Override
     public void onResume() {
@@ -151,7 +166,7 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
             areAllBooksDisplayed = false;
             return new CursorLoader(
                     getActivity(),
-                    BookContract.BookEntry.CONTENT_URI,
+                    mUri,
                     null,
                     selection,
                     new String[]{searchString, searchString},
@@ -161,7 +176,7 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
         areAllBooksDisplayed = true;
         return new CursorLoader(
                 getActivity(),
-                BookContract.BookEntry.CONTENT_URI,
+                mUri,
                 null,
                 null,
                 null,
@@ -173,8 +188,8 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         mBooksAdapter.swapCursor(data);
-        if (position != ListView.INVALID_POSITION) {
-            mBookList.smoothScrollToPosition(position);
+        if (mPosition != ListView.INVALID_POSITION) {
+            mBookList.smoothScrollToPosition(mPosition);
         }
         updateEmptyView();
     }
@@ -197,5 +212,12 @@ public class BookListFragment extends Fragment implements LoaderManager.LoaderCa
         mBooksAdapter.swapCursor(null);
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(MainFragment.URI, mUri);
+        if (mPosition != GridView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
 }

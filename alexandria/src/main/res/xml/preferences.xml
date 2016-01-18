@@ -8,7 +8,7 @@
 
     <ListPreference
         android:key="pref_startFragment"
-        android:title="@string/pref_startScreen"
+        android:title="@string/pref_start_page_label"
         android:entries="@array/pref_start_options"
         android:entryValues="@array/pref_start_values"
         />

@@ -2,6 +2,7 @@ package it.jaschke.alexandria.controller.fragment;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -20,48 +21,41 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.controller.activity.MainActivity;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
 import it.jaschke.alexandria.model.services.DownloadImage;
 
 
-public class BookDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String ISBN_KEY = "ISBN";
+    public static final String URI = "uri";
     private final int LOADER_ID = 10;
     private View view;
-    private String mIsbn;
+
+    private Uri mUri;
+
     private ShareActionProvider mShareActionProvider;
 
-    public BookDetailFragment(){
+    public DetailFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TODO :2.1 does this change something ?
         setHasOptionsMenu(true);
     }
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            mIsbn = arguments.getString(BookDetailFragment.ISBN_KEY);
-
-            //TODO : 2.4 remove this for performance
-            getLoaderManager().restartLoader(LOADER_ID, null, this);
-        }
-
-        view = inflater.inflate(R.layout.fragment_full_book, container, false);
-
-
+        view = inflater.inflate(R.layout.book_detail, container, false);
         view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.ISBN, mIsbn);
+                String isbn = BookContract.BookEntry.getIsbnFromFullBookUri(mUri);
+                bookIntent.putExtra(BookService.ISBN, isbn);
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
                 getActivity().getSupportFragmentManager().popBackStack();
@@ -71,8 +65,6 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
 
-
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_detail, menu);
@@ -80,20 +72,34 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
     }
 
+
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(
-                getActivity(),
-                BookContract.BookEntry.buildFullBookUri(Long.parseLong(mIsbn)),
-                null,
-                null,
-                null,
-                null
-        );
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(LOADER_ID, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader cursorLoader = null;
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(URI);
+            if (mUri != null) {
+                cursorLoader = new CursorLoader(getActivity(),
+                        mUri,
+                        null,
+                        null,
+                        null,
+                        null);
+            }
+        }
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor
+            data) {
         if (!data.moveToFirst()) {
             return;
         }
@@ -106,11 +112,11 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
         String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.CATEGORY));
 
 
-        ((TextView) view.findViewById(R.id.fullBookTitle)).setText(bookTitle);
-        ((TextView) view.findViewById(R.id.fullBookSubTitle)).setText(bookSubTitle);
-        ((TextView) view.findViewById(R.id.fullBookDesc)).setText(desc);
+        ((TextView) view.findViewById(R.id.bookTitle)).setText(bookTitle);
+        ((TextView) view.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
+        ((TextView) view.findViewById(R.id.bookDesc)).setText(desc);
         ((TextView) view.findViewById(R.id.categories)).setText(categories);
-        TextView authorsTextView=((TextView) view.findViewById(R.id.authors));
+        TextView authorsTextView = ((TextView) view.findViewById(R.id.authors));
         //String[] authorsArr = authors.split(","); //could cause NullPointerException
         if (authors == null)
             authorsTextView.setText("");
@@ -119,8 +125,8 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
             authorsTextView.setLines(authorsArr.length);
             authorsTextView.setText(authors.replace(",", "\n"));
         }
-        if(Patterns.WEB_URL.matcher(imgUrl).matches()){
-            ImageView bookCover=(ImageView) view.findViewById(R.id.fullBookCover);
+        if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
+            ImageView bookCover = (ImageView) view.findViewById(R.id.fullBookCover);
             new DownloadImage(bookCover).execute(imgUrl);
             bookCover.setVisibility(View.VISIBLE);
         }
@@ -142,14 +148,21 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
 
     }
 
-
-    @Override
-    public void onPause() {
-        if(MainActivity.IS_TABLET && view.findViewById(R.id.right_container)==null){
-            getActivity().getSupportFragmentManager().popBackStack();
+    public void onMainUriChange() {
+        if (mUri != null) {
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
-        super.onPause();
     }
+
+
+    //TODO: 2.1 does removing this pause problems ?
+//    @Override
+//    public void onPause() {
+//        if (MainActivity.IS_TABLET && view.findViewById(R.id.right_container) == null) {
+//            getActivity().getSupportFragmentManager().popBackStack();
+//        }
+//        super.onPause();
+//    }
 
 
 }
