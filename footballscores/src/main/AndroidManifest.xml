@@ -67,16 +67,32 @@
 
         <!-- Next Match Widget -->
         <receiver
-            android:name=".widget.FootballWidgetProvider"
+            android:name=".widget.WidgetProvider"
             android:label="@string/title_widget_next_match">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="footballscores.barqsoft.ACTION_DATA_UPDATED" />
+                <action android:name="footballscores.barqsoft.ACTION_DATA_UPDATED"/>
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                       android:resource="@xml/football_widget_provider_info"/>
+                       android:resource="@xml/widget_provider_info"/>
         </receiver>
-        <service android:name=".widget.FootballWidgetIntentService" />
+        <service android:name=".widget.WidgetIntentService"/>
+
+        <!-- List Widget -->
+        <receiver
+            android:name=".widget.WidgetListProvider"
+            android:label="@string/title_widget_list">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="footballscores.barqsoft.ACTION_DATA_UPDATED"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/widget_provider_list_info"/>
+        </receiver>
+        <service
+            android:name=".widget.WidgetListRemoteViewsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
     </application>
 

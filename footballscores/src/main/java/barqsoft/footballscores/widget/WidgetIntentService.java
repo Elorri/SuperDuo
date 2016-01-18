@@ -19,12 +19,12 @@ import barqsoft.footballscores.data.ScoresContract;
 /**
  * Created by Elorri on 17/01/2016.
  */
-public class FootballWidgetIntentService extends IntentService {
+public class WidgetIntentService extends IntentService {
     /**
      * IntentService which handles updating all Football widgets with the latest data
      */
-    public FootballWidgetIntentService() {
-        super("FootballWidgetIntentService");
+    public WidgetIntentService() {
+        super("WidgetIntentService");
     }
 
     @Override
@@ -33,7 +33,7 @@ public class FootballWidgetIntentService extends IntentService {
         // Retrieve all of the Today widget ids: these are the widgets we need to update
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
-                FootballWidgetProvider.class));
+                WidgetProvider.class));
 
 
         // Get now's data from the ContentProvider
@@ -53,7 +53,7 @@ public class FootballWidgetIntentService extends IntentService {
         }
 
         //TODO :2.1 when no icons put the teams name instead
-        // Extract the weather data from the Cursor
+        // Extract the data from the Cursor
         Context context=getApplicationContext();
         int homeCrest=Utilities.getTeamCrestByTeamName(context,
                 cursor.getString(ScoresFragment.COL_HOME));
@@ -69,7 +69,7 @@ public class FootballWidgetIntentService extends IntentService {
         // Perform this loop procedure for each widget
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(context.getPackageName(), 
-                    R.layout.widget_next_match);
+                    R.layout.widget_one);
 
             //TODO: 2.3 set content description here
             // Add the data to the RemoteViews
@@ -81,7 +81,7 @@ public class FootballWidgetIntentService extends IntentService {
             // Create an Intent to launch MainActivity
             Intent launchIntent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
-            views.setOnClickPendingIntent(R.id.widget, pendingIntent);
+            views.setOnClickPendingIntent(R.id.widget_item, pendingIntent);
 
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);

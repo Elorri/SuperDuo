@@ -103,6 +103,8 @@
 
     <!-- Widget related -->
     <string name="title_widget_next_match">Next match</string>
+    <string name="empty_widget_list">No matches today</string>
+    <string name="title_widget_list">Today matches</string>
 
 
 </resources>
