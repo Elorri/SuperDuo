@@ -10,6 +10,7 @@
     <!-- App pages titles -->
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_detail">Book detail</string>
+    <string name="title_activity_add">Add a book</string>
 
 
     <!-- data stored in SharedPreference file : label, key, values -->
@@ -79,5 +80,6 @@
     <string name="dismiss_button">dismiss</string>
     <string name="save_button">save</string>
     <string name="delete_button">delete</string>
+
 
 </resources>

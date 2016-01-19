@@ -20,6 +20,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,11 +56,14 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
     private TextView mAuthorsTextView;
     private TextView mCategoriesTextView;
     private ImageView mBookCover;
+    private TextView mDesc;
+    private Button mDismiss;
+    private Button mDelete;
+    private Button mSave;
 
     private String mIsbn;
     private BroadcastReceiver internetReceiver;
-
-
+    private boolean isBookFound;
 
 
     public AddFragment() {    }
@@ -94,9 +98,14 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
         mAuthorsTextView = ((TextView) view.findViewById(R.id.authors));
         mCategoriesTextView = ((TextView) view.findViewById(R.id.categories));
         mBookCover = (ImageView) view.findViewById(R.id.bookCover);
+        mDesc=(TextView) view.findViewById(R.id.bookDesc);
+        mDismiss=(Button) view.findViewById(R.id.dismiss_button);
+        mDelete=(Button) view.findViewById(R.id.delete_button);
+        mSave=(Button) view.findViewById(R.id.save_button);
 
 
         mIsbnSearchView.setIconified(false);
+        mIsbnSearchView.clearFocus();
         mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
         mIsbnSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -125,6 +134,28 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
                             new FragmentIntentIntegrator(AddFragment.this);
                     integrator.initiateScan();
                 }
+            }
+        });
+
+        mDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent bookIntent = new Intent(getActivity(), BookService.class);
+                bookIntent.putExtra(BookService.ISBN, mIsbn);
+                bookIntent.setAction(BookService.DELETE_BOOK);
+                getActivity().startService(bookIntent);
+                getActivity().b
+            }
+        });
+
+        mSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent bookIntent = new Intent(getActivity(), BookService.class);
+                bookIntent.putExtra(BookService.ISBN, mIsbn);
+                bookIntent.setAction(BookService.SAVE_AS_FAVORITE_BOOK);
+                getActivity().startService(bookIntent);
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -179,7 +210,10 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
     private void refresh() {
         String isbnUserInput = mIsbnSearchView.getQuery().toString();
+        if(isBookFound)
+            mIsbnSearchView.clearFocus();
         if (isbnUserInput.length() == 0) {
+            mIsbnSearchView.clearFocus();
             mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
             mEmptyTextView.setText(R.string.add_book_isbn);
             return;
@@ -222,6 +256,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        isBookFound=(data.getCount()>0);
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "cursor.size:" + data.getCount());
         if (data.getCount() == 0) {
             updateEmptyView(data);
@@ -236,27 +271,25 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
         // - including it in the db with its isbn, and display empty string to the user.
         // Note : setText(null) does exactly that without crashing.
         // We only need to make sure we won't access those object (here String) methods.
-        String bookTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.TITLE));
-        String bookSubTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.SUBTITLE));
-        String authors = data.getString(data.getColumnIndex(BookContract.AuthorEntry.AUTHOR));
-        String imgUrl = data.getString(data.getColumnIndex(BookContract.BookEntry.IMAGE_URL));
-        String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.CATEGORY));
-
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookTitle:" + bookTitle);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookSubTitle:" + bookSubTitle);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "authors:" + authors);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "imgUrl:" + imgUrl);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "categories:" + categories);
-
+        String bookTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_TITLE));
+        String bookSubTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_SUBTITLE));
+        String authors = data.getString(data.getColumnIndex(BookContract.AuthorEntry.COLUMN_AUTHOR));
+        String imgUrl = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_IMAGE_URL));
+        String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.COLUMN_CATEGORY));
+        String desc = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_DESC));
 
         mEmptyTextView.setVisibility(View.INVISIBLE);
         mBookTitleTextView.setVisibility(View.VISIBLE);
         mBookSubTitleTextView.setVisibility(View.VISIBLE);
         mCategoriesTextView.setVisibility(View.VISIBLE);
+        mDesc.setVisibility(View.VISIBLE);
+        mDismiss.setVisibility(View.VISIBLE);
+        mSave.setVisibility(View.VISIBLE);
 
         mBookTitleTextView.setText(bookTitle);
         mBookSubTitleTextView.setText(bookSubTitle);
         mCategoriesTextView.setText(categories);
+        mDesc.setText(desc);
 
         //String[] authorsArr = authors.split(","); //could cause NullPointerException
         if (authors == null) {
@@ -323,11 +356,17 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
         mBookSubTitleTextView.setVisibility(View.INVISIBLE);
         mAuthorsTextView.setVisibility(View.INVISIBLE);
         mCategoriesTextView.setVisibility(View.INVISIBLE);
+        mDismiss.setVisibility(View.INVISIBLE);
+        mDelete.setVisibility(View.INVISIBLE);
+        mSave.setVisibility(View.INVISIBLE);
+        mDesc.setVisibility(View.INVISIBLE);
         mBookTitleTextView.setText("");
         mBookSubTitleTextView.setText("");
         mAuthorsTextView.setText("");
         mCategoriesTextView.setText("");
+        mDesc.setText("");
         mBookCover.setVisibility(View.INVISIBLE);
+
     }
 
 

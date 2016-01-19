@@ -19,26 +19,27 @@
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/isbnSearchView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:hint="@string/input_hint"
-                android:iconifiedByDefault="false"
+                android:iconifiedByDefault="true"
                 android:inputType="number"
                 android:maxLength="@integer/ean_size"
                 android:maxLines="1"
                 android:minEms="@integer/ean_width"
-                android:saveEnabled="true"/>
+                android:saveEnabled="true"
+                android:layout_margin="16dp"/>
         </RelativeLayout>
 
         <ScrollView
+            android:id="@+id/body"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/header">
             <RelativeLayout
-                android:id="@+id/body"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/header">
+                android:layout_height="match_parent"    >
 
                 <ImageView
                     android:id="@+id/bookCover"
@@ -106,7 +107,7 @@
                     tools:text="in Bibles"/>
 
                 <TextView
-                    android:id="@+id/text"
+                    android:id="@+id/bookDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/categories"
@@ -120,9 +121,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_below="@id/text"
+                    android:layout_below="@id/bookDesc"
                     android:layout_margin="16dp"
                     android:text="@string/dismiss_button"
+                    android:visibility="invisible"
                     android:textColor="@color/secondary_text"/>
 
                 <Button
@@ -132,9 +134,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@id/text"
+                    android:layout_below="@id/bookDesc"
                     android:layout_margin="16dp"
-                    android:text="@string/save_button"/>
+                    android:text="@string/save_button"
+                    android:visibility="invisible"/>
 
                 <Button
                     android:id="@+id/delete_button"
@@ -143,10 +146,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@id/text"
+                    android:layout_below="@id/bookDesc"
                     android:layout_margin="16dp"
-                    android:text="@string/delete_button"/>
-
+                    android:text="@string/delete_button"
+                    android:visibility="invisible"/>
             </RelativeLayout>
         </ScrollView>
 

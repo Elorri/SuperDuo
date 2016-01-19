@@ -41,6 +41,14 @@
                 android:value=".controller.activity.MainActivity"/>
         </activity>
         <activity
+            android:name=".controller.activity.AddActivity"
+            android:label="@string/title_activity_add"
+            android:parentActivityName=".controller.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controller.activity.MainActivity"/>
+        </activity>
+        <activity
             android:name=".controller.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".controller.activity.MainActivity">

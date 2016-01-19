@@ -104,12 +104,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             return;
         }
 
-        String bookTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.TITLE));
-        String bookSubTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.SUBTITLE));
-        String desc = data.getString(data.getColumnIndex(BookContract.BookEntry.DESC));
-        String authors = data.getString(data.getColumnIndex(BookContract.AuthorEntry.AUTHOR));
-        String imgUrl = data.getString(data.getColumnIndex(BookContract.BookEntry.IMAGE_URL));
-        String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.CATEGORY));
+        String bookTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_TITLE));
+        String bookSubTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_SUBTITLE));
+        String desc = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_DESC));
+        String authors = data.getString(data.getColumnIndex(BookContract.AuthorEntry.COLUMN_AUTHOR));
+        String imgUrl = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_IMAGE_URL));
+        String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.COLUMN_CATEGORY));
 
 
         ((TextView) view.findViewById(R.id.bookTitle)).setText(bookTitle);
@@ -126,7 +126,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             authorsTextView.setText(authors.replace(",", "\n"));
         }
         if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
-            ImageView bookCover = (ImageView) view.findViewById(R.id.fullBookCover);
+            ImageView bookCover = (ImageView) view.findViewById(R.id.bookCover);
             new DownloadImage(bookCover).execute(imgUrl);
             bookCover.setVisibility(View.VISIBLE);
         }

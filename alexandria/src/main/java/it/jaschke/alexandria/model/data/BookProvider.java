@@ -8,6 +8,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
+
+
+import it.jaschke.alexandria.model.data.BookContract.BookEntry;
+import it.jaschke.alexandria.model.data.BookContract.AuthorEntry;
+import it.jaschke.alexandria.model.data.BookContract.CategoryEntry;
 
 /**
  * Created by saj on 24/12/14.
@@ -71,7 +77,11 @@ public class BookProvider extends ContentProvider {
         Cursor retCursor;
         switch (uriMatcher.match(uri)) {
             case BOOK:
-                retCursor = bookDbHelper.getReadableDatabase().query(
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK uri: " + uri);
+                final SQLiteDatabase db = bookDbHelper.getWritableDatabase();
+                //we need first to delete unfavorite book to prevent db from growing
+                delete(BookEntry.CONTENT_URI, null, null);
+                retCursor = db.query(
                         BookContract.BookEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -82,6 +92,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case AUTHOR:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "COLUMN_AUTHOR uri: " + uri);
                 retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.AuthorEntry.TABLE_NAME,
                         projection,
@@ -93,6 +104,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case CATEGORY:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "COLUMN_CATEGORY uri: " + uri);
                 retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.CategoryEntry.TABLE_NAME,
                         projection,
@@ -104,6 +116,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case BOOK_ID:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_ID uri: " + uri);
                 retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.BookEntry.TABLE_NAME,
                         projection,
@@ -115,6 +128,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case AUTHOR_ID:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR_ID uri: " + uri);
                 retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.AuthorEntry.TABLE_NAME,
                         projection,
@@ -126,6 +140,7 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case CATEGORY_ID:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "CATEGORY_ID uri: " + uri);
                 retCursor = bookDbHelper.getReadableDatabase().query(
                         BookContract.CategoryEntry.TABLE_NAME,
                         projection,
@@ -137,18 +152,19 @@ public class BookProvider extends ContentProvider {
                 );
                 break;
             case BOOK_FULLDETAIL:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_FULLDETAIL uri: " + uri);
                 String[] bfd_projection = {
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.TITLE,
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.SUBTITLE,
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.IMAGE_URL,
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.DESC,
+                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_TITLE,
+                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_SUBTITLE,
+                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_IMAGE_URL,
+                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_DESC,
                         "group_concat(DISTINCT "
                                 + BookContract.AuthorEntry.TABLE_NAME + "."
-                                + BookContract.AuthorEntry.AUTHOR + ") as "
-                                + BookContract.AuthorEntry.AUTHOR, "group_concat(DISTINCT "
+                                + BookContract.AuthorEntry.COLUMN_AUTHOR + ") as "
+                                + BookContract.AuthorEntry.COLUMN_AUTHOR, "group_concat(DISTINCT "
                         + BookContract.CategoryEntry.TABLE_NAME + "."
-                        + BookContract.CategoryEntry.CATEGORY + ") as "
-                        + BookContract.CategoryEntry.CATEGORY
+                        + BookContract.CategoryEntry.COLUMN_CATEGORY + ") as "
+                        + BookContract.CategoryEntry.COLUMN_CATEGORY
                 };
                 retCursor = bookFull.query(bookDbHelper.getReadableDatabase(),
                         bfd_projection,
@@ -162,11 +178,18 @@ public class BookProvider extends ContentProvider {
                         sortOrder);
                 break;
             case BOOK_FULL:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_FULL uri: " + uri);
                 String[] bf_projection = {
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.TITLE,
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.IMAGE_URL,
-                        "group_concat(DISTINCT " + BookContract.AuthorEntry.TABLE_NAME + "." + BookContract.AuthorEntry.AUTHOR + ") as " + BookContract.AuthorEntry.AUTHOR,
-                        "group_concat(DISTINCT " + BookContract.CategoryEntry.TABLE_NAME + "." + BookContract.CategoryEntry.CATEGORY + ") as " + BookContract.CategoryEntry.CATEGORY
+                        BookContract.BookEntry.TABLE_NAME + "." +
+                                BookContract.BookEntry.COLUMN_TITLE,
+                        BookContract.BookEntry.TABLE_NAME + "." +
+                                BookContract.BookEntry.COLUMN_IMAGE_URL, "group_concat(DISTINCT " +
+                        BookContract.AuthorEntry.TABLE_NAME + "." +
+                        BookContract.AuthorEntry.COLUMN_AUTHOR + ") as " +
+                        BookContract.AuthorEntry.COLUMN_AUTHOR, "group_concat(DISTINCT " +
+                        BookContract.CategoryEntry.TABLE_NAME + "." +
+                        BookContract.CategoryEntry.COLUMN_CATEGORY + ") as " +
+                        BookContract.CategoryEntry.COLUMN_CATEGORY
                 };
                 retCursor = bookFull.query(bookDbHelper.getReadableDatabase(),
                         bf_projection,
@@ -217,6 +240,7 @@ public class BookProvider extends ContentProvider {
         Uri returnUri;
         switch (match) {
             case BOOK: {
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK uri: " + uri);
                 long _id = db.insert(BookContract.BookEntry.TABLE_NAME, null, values);
                 if (_id > 0) {
                     returnUri = BookContract.BookEntry.buildBookUri(_id);
@@ -226,6 +250,7 @@ public class BookProvider extends ContentProvider {
                 break;
             }
             case AUTHOR: {
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "COLUMN_AUTHOR uri: " + uri);
                 long _id = db.insert(BookContract.AuthorEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = BookContract.AuthorEntry.buildAuthorUri(_id);
@@ -234,6 +259,7 @@ public class BookProvider extends ContentProvider {
                 break;
             }
             case CATEGORY: {
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "COLUMN_CATEGORY uri: " + uri);
                 long _id = db.insert(BookContract.CategoryEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = BookContract.CategoryEntry.buildCategoryUri(_id);
@@ -257,18 +283,26 @@ public class BookProvider extends ContentProvider {
         if (null == selection) selection = "1";
         switch (match) {
             case BOOK:
-                rowsDeleted = db.delete(
-                        BookContract.BookEntry.TABLE_NAME, selection, selectionArgs);
+                //Need to delete Authors and Categories entry first to avoid foreign key conflict
+                //Need to delete Authors and Categories, because 'on delete cascade does not seems 
+                // to work'
+                //delete from books where favorite=0;
+                delete(AuthorEntry.CONTENT_URI, null, null);
+                delete(CategoryEntry.CONTENT_URI, null, null);
+                rowsDeleted = db.delete(BookEntry.TABLE_NAME, BookEntry.COLUMN_FAVORITE + "=?", new String[]{BookEntry.FAVORITE_OFF_VALUE});
                 break;
             case AUTHOR:
-                rowsDeleted = db.delete(
-                        BookContract.AuthorEntry.TABLE_NAME, selection, selectionArgs);
+                //delete from authors where _id in (select _id from books where favorite=0);
+                rowsDeleted = db.delete(AuthorEntry.TABLE_NAME, AuthorEntry._ID + " in (select " + 
+                        BookEntry._ID + " from " + BookEntry.TABLE_NAME + " where " + BookEntry.COLUMN_FAVORITE + "=" + BookEntry.FAVORITE_OFF_VALUE + ")", null);
                 break;
             case CATEGORY:
-                rowsDeleted = db.delete(
-                        BookContract.CategoryEntry.TABLE_NAME, selection, selectionArgs);
+                //delete from categories where _id in (select _id from books where favorite=0);
+                rowsDeleted = db.delete(CategoryEntry.TABLE_NAME, CategoryEntry._ID + " in " +
+                        "(select " + BookEntry._ID + " from " + BookEntry.TABLE_NAME + " where " + BookEntry.COLUMN_FAVORITE + "=" + BookEntry.FAVORITE_OFF_VALUE + ")", null);
                 break;
             case BOOK_ID:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_ID uri: " + uri);
                 rowsDeleted = db.delete(
                         BookContract.BookEntry.TABLE_NAME,
                         BookContract.BookEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
@@ -284,6 +318,8 @@ public class BookProvider extends ContentProvider {
         return rowsDeleted;
     }
 
+
+    //TODO : 2.1 remove unused URi
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = bookDbHelper.getWritableDatabase();
@@ -291,18 +327,13 @@ public class BookProvider extends ContentProvider {
         int rowsUpdated;
         switch (match) {
             case BOOK:
-                rowsUpdated = db.update(BookContract.BookEntry.TABLE_NAME, values, selection,
-                        selectionArgs);
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK uri: " + uri);
+                db.execSQL("update " + BookContract.BookEntry.TABLE_NAME + " set "
+                                + BookContract.BookEntry.COLUMN_FAVORITE + "=? where "
+                                + BookContract.BookEntry._ID + "=?",
+                        new String[]{BookContract.BookEntry.FAVORITE_ON_VALUE, selectionArgs[0]});
+                rowsUpdated = 1;
                 break;
-            case AUTHOR:
-                rowsUpdated = db.update(BookContract.AuthorEntry.TABLE_NAME, values, selection,
-                        selectionArgs);
-                break;
-            case CATEGORY:
-                rowsUpdated = db.update(BookContract.CategoryEntry.TABLE_NAME, values, selection,
-                        selectionArgs);
-                break;
-
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

@@ -1,10 +1,12 @@
 package it.jaschke.alexandria.controller.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.controller.activity.AddActivity;
 import it.jaschke.alexandria.controller.adapter.BooksAdapter;
 import it.jaschke.alexandria.model.data.BookContract;
 
@@ -74,8 +77,12 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         // Get a reference to the ListView, and attach this adapter to it.
         mSearchView = (SearchView) view.findViewById(R.id.searchView);
         mBookList = (ListView) view.findViewById(R.id.bookList);
+        FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id
+                .add_button);
 
         mBookList.setAdapter(mBooksAdapter);
+        mSearchView.setIconified(false);
+        mSearchView.clearFocus();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -84,6 +91,7 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
 
             @Override
             public boolean onQueryTextChange(String query) {
+                if(query.equals(""))mSearchView.clearFocus();
                 restartLoader();
                 return true;
             }
@@ -96,6 +104,14 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 onItemClicked(adapterView, position);
                 setPosition(position);
+            }
+        });
+
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AddActivity.class));
             }
         });
 
@@ -158,7 +174,7 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
 
-        final String selection = BookContract.BookEntry.TITLE + " LIKE ? OR " + BookContract.BookEntry.SUBTITLE + " LIKE ? ";
+        final String selection = BookContract.BookEntry.COLUMN_TITLE + " LIKE ? OR " + BookContract.BookEntry.COLUMN_SUBTITLE + " LIKE ? ";
         String searchString = mSearchView.getQuery().toString();
 
         if (searchString.length() > 0) {

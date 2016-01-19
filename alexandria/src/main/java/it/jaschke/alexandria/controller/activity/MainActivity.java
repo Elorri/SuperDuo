@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Call
     //TODO: 2.1 make sure all screens have a title
 
     private boolean mTwoPane;
-    private Uri mMainUri;
-    static final String MAIN_URI = "mMainUri";
+    private Uri mUri;
+    static final String URI = "mUri";
     private MainFragment mMainFragment;
     private static final String DETAILFRAGMENT_TAG = "detail_fragment";
 
@@ -33,12 +33,12 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Call
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null)
-            mMainUri = buildMainPageUri();
+            mUri = buildMainPageUri();
         else
-            mMainUri = savedInstanceState.getParcelable(MAIN_URI);
+            mUri = savedInstanceState.getParcelable(URI);
 
-        mMainFragment = getFragment(mMainUri);
-        mMainFragment.setUri(mMainUri);
+        mMainFragment = getFragment(mUri);
+        mMainFragment.setUri(mUri);
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.main_container,  mMainFragment).commit();
 
@@ -102,15 +102,15 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Call
     protected void onResume() {
         super.onResume();
         Uri currentMainUri = buildMainPageUri();
-        if (!Tools.compareUris(mMainUri, currentMainUri)) {
+        if (!Tools.compareUris(mUri, currentMainUri)) {
             onMainUriChange(currentMainUri);
         }
     }
 
     private void onMainUriChange(Uri newUri) {
-        mMainUri = newUri;
-        mMainFragment = getFragment(mMainUri);
-        mMainFragment.setUri(mMainUri);
+        mUri = newUri;
+        mMainFragment = getFragment(mUri);
+        mMainFragment.setUri(mUri);
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.main_container,  mMainFragment).commit();
 
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Call
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(MAIN_URI, mMainUri);
+        outState.putParcelable(URI, mUri);
     }
 
 }

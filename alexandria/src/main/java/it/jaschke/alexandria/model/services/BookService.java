@@ -41,6 +41,8 @@ public class BookService extends IntentService {
 
     public static final String FETCH_BOOK = "it.jaschke.alexandria.services.action.FETCH_BOOK";
     public static final String DELETE_BOOK = "it.jaschke.alexandria.services.action.DELETE_BOOK";
+    public static final String SAVE_AS_FAVORITE_BOOK =
+            "it.jaschke.alexandria.services.action.SAVE_AS_FAVORITE";
 
     public static final String ISBN = "it.jaschke.alexandria.services.extra.ISBN";
 
@@ -58,6 +60,8 @@ public class BookService extends IntentService {
                 fetchBook(isbn);
             } else if (DELETE_BOOK.equals(action)) {
                 deleteBook(isbn);
+            } else if (SAVE_AS_FAVORITE_BOOK.equals(action)) {
+                saveAsFavorite(isbn);
             }
         }
     }
@@ -73,13 +77,22 @@ public class BookService extends IntentService {
         }
     }
 
+    private void saveAsFavorite(String isbn) {
+        Log.d("SuperDuo", "current thread : " + thread());
+        if (isbn != null) {
+            getContentResolver().update(BookContract.BookEntry.buildBookUri(Long.parseLong(isbn)), null,
+                    null, null);
+        }
+    }
+
+
     /**
      * Handle action fetchBook in the provided background thread with the provided
      * parameters.
      */
     private void fetchBook(String isbn) {
         Log.d("SuperDuo", "current thread : " + thread());
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn"+isbn);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn" + isbn);
 
 
         // re-init table status
@@ -187,14 +200,13 @@ public class BookService extends IntentService {
             final String IMG_URL = "thumbnail";
 
 
-
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookJsonString" +
                     bookJsonString);
             JSONObject bookJson = new JSONObject(bookJsonString);
             JSONArray bookArray;
-            if(bookJson.has(ITEMS)){
+            if (bookJson.has(ITEMS)) {
                 bookArray = bookJson.getJSONArray(ITEMS);
-            }else{
+            } else {
                 Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_SYNC_DONE");
                 Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
                 //TODO : if book not found the db does not change hence the fragment. Add
@@ -294,10 +306,11 @@ public class BookService extends IntentService {
     private void writeBackBook(String isbn, String title, String subtitle, String desc, String imgUrl) {
         ContentValues values = new ContentValues();
         values.put(BookContract.BookEntry._ID, isbn);
-        values.put(BookContract.BookEntry.TITLE, title);
-        values.put(BookContract.BookEntry.IMAGE_URL, imgUrl);
-        values.put(BookContract.BookEntry.SUBTITLE, subtitle);
-        values.put(BookContract.BookEntry.DESC, desc);
+        values.put(BookContract.BookEntry.COLUMN_TITLE, title);
+        values.put(BookContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
+        values.put(BookContract.BookEntry.COLUMN_SUBTITLE, subtitle);
+        values.put(BookContract.BookEntry.COLUMN_DESC, desc);
+        values.put(BookContract.BookEntry.COLUMN_FAVORITE, BookContract.BookEntry.FAVORITE_OFF_VALUE);
         getContentResolver().insert(BookContract.BookEntry.CONTENT_URI, values);
     }
 
@@ -305,7 +318,7 @@ public class BookService extends IntentService {
         ContentValues values = new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
             values.put(BookContract.AuthorEntry._ID, isbn);
-            values.put(BookContract.AuthorEntry.AUTHOR, jsonArray.getString(i));
+            values.put(BookContract.AuthorEntry.COLUMN_AUTHOR, jsonArray.getString(i));
             getContentResolver().insert(BookContract.AuthorEntry.CONTENT_URI, values);
             values = new ContentValues();
         }
@@ -315,7 +328,7 @@ public class BookService extends IntentService {
         ContentValues values = new ContentValues();
         for (int i = 0; i < jsonArray.length(); i++) {
             values.put(BookContract.CategoryEntry._ID, isbn);
-            values.put(BookContract.CategoryEntry.CATEGORY, jsonArray.getString(i));
+            values.put(BookContract.CategoryEntry.COLUMN_CATEGORY, jsonArray.getString(i));
             getContentResolver().insert(BookContract.CategoryEntry.CONTENT_URI, values);
             values = new ContentValues();
         }

@@ -45,10 +45,10 @@ public class TestDb extends AndroidTestCase {
 
         String[] columns = {
                 BookContract.BookEntry._ID,
-                BookContract.BookEntry.TITLE,
-                BookContract.BookEntry.IMAGE_URL,
-                BookContract.BookEntry.SUBTITLE,
-                BookContract.BookEntry.DESC
+                BookContract.BookEntry.COLUMN_TITLE,
+                BookContract.BookEntry.COLUMN_IMAGE_URL,
+                BookContract.BookEntry.COLUMN_SUBTITLE,
+                BookContract.BookEntry.COLUMN_DESC
         };
 
         // A cursor is your primary interface to the query results.
@@ -71,7 +71,7 @@ public class TestDb extends AndroidTestCase {
 
         columns = new String[]{
                 BookContract.AuthorEntry._ID,
-                BookContract.AuthorEntry.AUTHOR
+                BookContract.AuthorEntry.COLUMN_AUTHOR
         };
 
         cursor = db.query(
@@ -92,7 +92,7 @@ public class TestDb extends AndroidTestCase {
 
         columns = new String[]{
                 BookContract.CategoryEntry._ID,
-                BookContract.CategoryEntry.CATEGORY
+                BookContract.CategoryEntry.COLUMN_CATEGORY
         };
 
         cursor = db.query(
@@ -130,10 +130,10 @@ public class TestDb extends AndroidTestCase {
 
         final ContentValues values = new ContentValues();
         values.put(BookContract.BookEntry._ID, ean);
-        values.put(BookContract.BookEntry.TITLE, title);
-        values.put(BookContract.BookEntry.IMAGE_URL, imgUrl);
-        values.put(BookContract.BookEntry.SUBTITLE, subtitle);
-        values.put(BookContract.BookEntry.DESC, desc);
+        values.put(BookContract.BookEntry.COLUMN_TITLE, title);
+        values.put(BookContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
+        values.put(BookContract.BookEntry.COLUMN_SUBTITLE, subtitle);
+        values.put(BookContract.BookEntry.COLUMN_DESC, desc);
 
         return values;
     }
@@ -142,7 +142,7 @@ public class TestDb extends AndroidTestCase {
 
         final ContentValues values= new ContentValues();
         values.put(BookContract.AuthorEntry._ID, ean);
-        values.put(BookContract.AuthorEntry.AUTHOR, author);
+        values.put(BookContract.AuthorEntry.COLUMN_AUTHOR, author);
 
         return values;
     }
@@ -151,7 +151,7 @@ public class TestDb extends AndroidTestCase {
 
         final ContentValues values= new ContentValues();
         values.put(BookContract.CategoryEntry._ID, ean);
-        values.put(BookContract.CategoryEntry.CATEGORY, category);
+        values.put(BookContract.CategoryEntry.COLUMN_CATEGORY, category);
 
         return values;
     }
@@ -159,22 +159,22 @@ public class TestDb extends AndroidTestCase {
     public static ContentValues getFullDetailValues() {
 
         final ContentValues values= new ContentValues();
-        values.put(BookContract.BookEntry.TITLE, title);
-        values.put(BookContract.BookEntry.IMAGE_URL, imgUrl);
-        values.put(BookContract.BookEntry.SUBTITLE, subtitle);
-        values.put(BookContract.BookEntry.DESC, desc);
-        values.put(BookContract.AuthorEntry.AUTHOR, author);
-        values.put(BookContract.CategoryEntry.CATEGORY, category);
+        values.put(BookContract.BookEntry.COLUMN_TITLE, title);
+        values.put(BookContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
+        values.put(BookContract.BookEntry.COLUMN_SUBTITLE, subtitle);
+        values.put(BookContract.BookEntry.COLUMN_DESC, desc);
+        values.put(BookContract.AuthorEntry.COLUMN_AUTHOR, author);
+        values.put(BookContract.CategoryEntry.COLUMN_CATEGORY, category);
         return values;
     }
 
     public static ContentValues getFullListValues() {
 
         final ContentValues values= new ContentValues();
-        values.put(BookContract.BookEntry.TITLE, title);
-        values.put(BookContract.BookEntry.IMAGE_URL, imgUrl);
-        values.put(BookContract.AuthorEntry.AUTHOR, author);
-        values.put(BookContract.CategoryEntry.CATEGORY, category);
+        values.put(BookContract.BookEntry.COLUMN_TITLE, title);
+        values.put(BookContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
+        values.put(BookContract.AuthorEntry.COLUMN_AUTHOR, author);
+        values.put(BookContract.CategoryEntry.COLUMN_CATEGORY, category);
         return values;
     }
 }
