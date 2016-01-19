@@ -3,7 +3,6 @@ package it.jaschke.alexandria.controller.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,16 +15,16 @@ import it.jaschke.alexandria.controller.fragment.MainFragment;
 import it.jaschke.alexandria.model.data.BookContract;
 
 
-public class MainActivity extends AppCompatActivity implements ListFragment.Callback {
+public class MainActivity extends BaseActivity {
 
 
     //TODO: 2.1 make sure all screens have a title
 
-    private boolean mTwoPane;
+    public static boolean mTwoPane;
     private Uri mUri;
     static final String URI = "mUri";
     private MainFragment mMainFragment;
-    private static final String DETAILFRAGMENT_TAG = "detail_fragment";
+    public static final String DETAILFRAGMENT_TAG = "detail_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Call
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+        if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -122,24 +125,7 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Call
     }
 
 
-    @Override
-    public void onItemSelected(Uri uri) {
-        if (mTwoPane) {
-            Bundle arguments = new Bundle();
-            arguments.putParcelable(DetailFragment.URI, uri);
 
-            DetailFragment fragment = new DetailFragment();
-            fragment.setArguments(arguments);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
-                    .commit();
-        } else {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.setData(uri);
-            startActivity(intent);
-        }
-    }
 
 
     @Override

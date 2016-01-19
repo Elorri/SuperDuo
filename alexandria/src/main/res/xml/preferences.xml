@@ -1,16 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:tag="PREFERENCE_TAG"
-    >
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
-        android:key="pref_startFragment"
         android:title="@string/pref_start_page_label"
-        android:entries="@array/pref_start_options"
-        android:entryValues="@array/pref_start_values"
-        />
-
+        android:key="@string/pref_start_page_key"
+        android:defaultValue="@string/pref_start_page_list"
+        android:entryValues="@array/pref_start_page_values"
+        android:entries="@array/pref_start_page_options" />
 </PreferenceScreen>

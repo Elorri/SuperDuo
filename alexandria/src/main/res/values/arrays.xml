@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="pref_start_options">
-        <item>@string/books</item>
-        <item>@string/scan</item>
+    <string-array name="pref_start_page_options">
+        <item>@string/pref_start_page_label_list</item>
+        <item>@string/pref_start_page_label_add</item>
     </string-array>
 
-    <string-array name="pref_start_values">
-        <item>0</item>
-        <item>1</item>
+    <string-array name="pref_start_page_values">
+        <item>@string/pref_start_page_list</item>
+        <item>@string/pref_start_page_add</item>
     </string-array>
 </resources>

@@ -326,12 +326,13 @@ public class BookProvider extends ContentProvider {
         final int match = uriMatcher.match(uri);
         int rowsUpdated;
         switch (match) {
-            case BOOK:
+            case BOOK_ID:
                 Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK uri: " + uri);
+                String isbn = BookEntry.getIsbnFromBookUri(uri);
                 db.execSQL("update " + BookContract.BookEntry.TABLE_NAME + " set "
                                 + BookContract.BookEntry.COLUMN_FAVORITE + "=? where "
                                 + BookContract.BookEntry._ID + "=?",
-                        new String[]{BookContract.BookEntry.FAVORITE_ON_VALUE, selectionArgs[0]});
+                        new String[]{BookContract.BookEntry.FAVORITE_ON_VALUE, isbn});
                 rowsUpdated = 1;
                 break;
             default:

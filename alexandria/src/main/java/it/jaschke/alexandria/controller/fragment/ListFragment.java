@@ -29,6 +29,7 @@ import it.jaschke.alexandria.model.data.BookContract;
 public class ListFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String QUERY = "query";
     private BooksAdapter mBooksAdapter;
     private ListView mBookList;
     private int mPosition = ListView.INVALID_POSITION;
@@ -53,26 +54,23 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
 
         //Remove depreciated method onAttach
-        getActivity().setTitle(R.string.books);
+        getActivity().setTitle(R.string.title_activity_list);
 
-
-        //TODO 2.4 check that the query method is call in the background thread, but this request
-        // will be called again a few ms later. put null for better perf.
-        Cursor cursor = getActivity().getContentResolver().query(
-                BookContract.BookEntry.CONTENT_URI,
-                null, // leaving "columns" null just returns all the columns.
-                null, // cols for "where" clause
-                null, // values for "where" clause
-                null  // sort order
-        );
-
-        mBooksAdapter = new BooksAdapter(getActivity(), cursor, 0);
+        if (savedInstanceState == null) {
+            mUri = BookContract.BookEntry.CONTENT_URI;
+        }
+        else {
+            //TODO : 2.1 see if putting true orfalse affect the keyboard
+            mSearchView.setQuery(savedInstanceState.getString(QUERY), true);
+            mUri = savedInstanceState.getParcelable(URI);
+        }
+        mBooksAdapter = new BooksAdapter(getActivity(), null, 0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        View view = inflater.inflate(R.layout.my_main_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
         mSearchView = (SearchView) view.findViewById(R.id.searchView);
@@ -178,6 +176,7 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         String searchString = mSearchView.getQuery().toString();
 
         if (searchString.length() > 0) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             searchString = "%" + searchString + "%";
             areAllBooksDisplayed = false;
             return new CursorLoader(
@@ -190,6 +189,7 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
             );
         }
         areAllBooksDisplayed = true;
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "mUri"+mUri);
         return new CursorLoader(
                 getActivity(),
                 mUri,
@@ -230,7 +230,9 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         outState.putParcelable(MainFragment.URI, mUri);
+        outState.putString(QUERY, mSearchView.getQuery().toString());
         if (mPosition != GridView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }

@@ -49,6 +49,22 @@
                 android:value=".controller.activity.MainActivity"/>
         </activity>
         <activity
+            android:name=".controller.activity.ListActivity"
+            android:label="@string/title_activity_list"
+            android:parentActivityName=".controller.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controller.activity.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".controller.activity.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".controller.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controller.activity.MainActivity"/>
+        </activity>
+        <activity
             android:name=".controller.activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".controller.activity.MainActivity">

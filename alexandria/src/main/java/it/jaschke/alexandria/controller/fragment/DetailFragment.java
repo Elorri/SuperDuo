@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,12 +45,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         super.onCreate(savedInstanceState);
         //TODO :2.1 does this change something ?
         setHasOptionsMenu(true);
+
+        if (savedInstanceState != null)
+            mUri = savedInstanceState.getParcelable(URI);
     }
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.book_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_detail, container, false);
+        view.findViewById(R.id.dismiss_button).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,15 +160,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        outState.putParcelable(MainFragment.URI, mUri);
+        super.onSaveInstanceState(outState);
+    }
 
-    //TODO: 2.1 does removing this pause problems ?
-//    @Override
-//    public void onPause() {
-//        if (MainActivity.IS_TABLET && view.findViewById(R.id.right_container) == null) {
-//            getActivity().getSupportFragmentManager().popBackStack();
-//        }
-//        super.onPause();
-//    }
 
 
 }

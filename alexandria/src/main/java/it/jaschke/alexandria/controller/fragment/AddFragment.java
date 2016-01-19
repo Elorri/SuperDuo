@@ -28,6 +28,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.controller.activity.BarcodeCaptureActivity;
+import it.jaschke.alexandria.controller.activity.MainActivity;
+import it.jaschke.alexandria.controller.activity.ListActivity;
 import it.jaschke.alexandria.controller.extras.Status;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
@@ -63,7 +65,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
     private String mIsbn;
     private BroadcastReceiver internetReceiver;
-    private boolean isBookFound;
+
 
 
     public AddFragment() {    }
@@ -82,14 +84,19 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
         super.onCreate(savedInstanceState);
 
         //Remove depreciated method onAttach
-        getActivity().setTitle(R.string.scan);
+        getActivity().setTitle(R.string.title_activity_add);
+
+        if (savedInstanceState != null)
+            mIsbn = savedInstanceState.getParcelable(ISBN_CONTENT);
+
+
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
 
-        view = inflater.inflate(R.layout.my_layout, container, false);
+        view = inflater.inflate(R.layout.fragment_add, container, false);
         mEmptyTextView = (TextView) view.findViewById(R.id.noBookFound);
         mIsbnSearchView = (SearchView) view.findViewById(R.id.isbnSearchView);
         FloatingActionButton scanButton = (FloatingActionButton) view.findViewById(R.id.scan_button);
@@ -115,6 +122,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
             @Override
             public boolean onQueryTextChange(String query) {
+                if(query.equals(""))mIsbnSearchView.clearFocus();
                 refresh();
                 return true;
             }
@@ -144,7 +152,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
                 bookIntent.putExtra(BookService.ISBN, mIsbn);
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
-                getActivity().b
+                startListScreen();
             }
         });
 
@@ -156,6 +164,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
                 bookIntent.setAction(BookService.SAVE_AS_FAVORITE_BOOK);
                 getActivity().startService(bookIntent);
                 getActivity().getSupportFragmentManager().popBackStack();
+                startListScreen();
             }
         });
 
@@ -163,6 +172,23 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
             this.mIsbnSearchView.setQuery(savedInstanceState.getString(ISBN_CONTENT), false);
         }
         return view;
+    }
+
+    private void startListScreen() {
+        if(isFragmentOnFirstScreen()){
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+            getActivity().startActivity(new Intent(getActivity(), ListActivity.class));
+        }else{
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+            getActivity().finish();
+        }
+    }
+
+    private boolean isFragmentOnFirstScreen() {
+        String activityName=getActivity().getClass().getSimpleName();
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "activityName " +
+                activityName);
+        return activityName.equals(MainActivity.class.getSimpleName());
     }
 
 
@@ -210,8 +236,8 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
     private void refresh() {
         String isbnUserInput = mIsbnSearchView.getQuery().toString();
-        if(isBookFound)
-            mIsbnSearchView.clearFocus();
+        if(mBookTitleTextView.getText().length()>0){
+            mIsbnSearchView.clearFocus();}
         if (isbnUserInput.length() == 0) {
             mIsbnSearchView.clearFocus();
             mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
@@ -256,7 +282,6 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        isBookFound=(data.getCount()>0);
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "cursor.size:" + data.getCount());
         if (data.getCount() == 0) {
             updateEmptyView(data);

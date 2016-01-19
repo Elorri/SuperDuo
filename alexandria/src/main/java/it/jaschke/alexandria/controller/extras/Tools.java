@@ -46,6 +46,8 @@ public class Tools {
     }
 
 
+
+
     // is device ready for features
     static public boolean isDeviceReadyForGooglePlayMobileVisionApi() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
