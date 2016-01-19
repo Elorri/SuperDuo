@@ -14,6 +14,7 @@ import android.widget.RemoteViews;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -105,9 +106,9 @@ public class Utilities {
         }
     }
 
-    public static int getTeamCrestByTeamName(Context context, String teamName) {
+    public static Integer getTeamCrestByTeamName(Context context, String teamName) {
         if (teamName == null) {
-            return R.drawable.no_icon;
+            return null;
         }
 
         if (teamName.equals(context.getString(R.string.team_arsenal_london)))
@@ -130,17 +131,17 @@ public class Utilities {
             return R.drawable.sunderland;
         else if (teamName.equals(context.getString(R.string.team_stoke_city)))
             return R.drawable.stoke_city;
-        else        return R.drawable.no_icon;
+        else return null;
     }
 
-    public static Drawable getNoCrestImage(Context context,String teamName){
+    public static Drawable getNoCrestImage(Context context, String teamName) {
         ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
         int noImageColor = generator.getRandomColor();
         TextDrawable noImage = TextDrawable.builder()
                 .beginConfig()
                 .fontSize((int) context.getResources().getDimension(R.dimen.bookTextSizePx))
                 .textColor(Color.BLACK)
-                .endConfig().buildRect(teamName.substring(0, 1), //will display first letter title
+                .endConfig().buildRound(teamName.substring(0, 1), //will display first letter title
                         noImageColor);
         return noImage;
     }
@@ -176,38 +177,41 @@ public class Utilities {
     }
 
     public static void setImage(Context context, ImageView crest, String teamName) {
-        int crestImgRessource=getTeamCrestByTeamName(context, teamName);
-        if (crestImgRessource == R.drawable.no_icon)
-            //crest.setImageDrawable(Utilities.getNoCrestImage(context, teamName));
-        crest.setBackgroundDrawable(getNoCrestImage(context, teamName));
-        else
-            crest.setImageResource(crestImgRessource);
+        Integer crestImgRessource = getTeamCrestByTeamName(context, teamName);
+        final String NO_ICON = "no_icon";
+
+        Drawable noImage = Utilities.getNoCrestImage(context, teamName);
+        Glide.with(context)
+                .load(crestImgRessource == null ? NO_ICON : crestImgRessource)
+                .error(noImage)
+                .crossFade()
+                .into(crest);
     }
 
 
     public static void setWidgetImage(Context context, RemoteViews views, String teamName) {
-        int crestImgRessource=getTeamCrestByTeamName(context, teamName);
-        if (crestImgRessource == R.drawable.no_icon){
-            Drawable drawable=Utilities.getNoCrestImage(context, teamName);
-            Bitmap bitmap=drawableToBitmap(drawable);
+        Integer crestImgRessource = getTeamCrestByTeamName(context, teamName);
+
+        if (crestImgRessource == null) {
+            Drawable drawable = Utilities.getNoCrestImage(context, teamName);
+            Bitmap bitmap = drawableToBitmap(drawable);
             views.setImageViewBitmap(R.id.home_crest, bitmap);
-        }
-        else
+        } else
             views.setImageViewResource(R.id.away_crest, crestImgRessource);
     }
 
 
-    public static Bitmap drawableToBitmap (Drawable drawable) {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
+            if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
         }
 
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
