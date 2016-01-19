@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
@@ -190,19 +189,31 @@ public class Utilities {
     }
 
 
-    public static void setWidgetImage(Context context, RemoteViews views, String teamName) {
+    public static void setWidgetImage(Context context, RemoteViews views,
+                                      int viewId, String teamName) {
         Integer crestImgRessource = getTeamCrestByTeamName(context, teamName);
 
         if (crestImgRessource == null) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-            Drawable drawable = Utilities.getNoCrestImage(context, teamName);
+            Drawable drawable = Utilities.getNoWidgetCrestImage(context, teamName);
             Bitmap bitmap = drawableToBitmap(drawable);
-            //views.setImageViewBitmap(R.id.home_crest, bitmap);
-            views.setImageViewResource(R.id.away_crest, R.drawable.no_icon);
+            views.setImageViewBitmap(viewId, bitmap);
         } else {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-            views.setImageViewResource(R.id.away_crest, crestImgRessource);
+            views.setImageViewResource(viewId, crestImgRessource);
         }
+    }
+
+    private static Drawable getNoWidgetCrestImage(Context context, String teamName) {
+        ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
+        int noImageColor = generator.getRandomColor();
+        TextDrawable noImage = TextDrawable.builder()
+                .beginConfig()
+                .width(90)
+                .height(90)
+                .fontSize((int) context.getResources().getDimension(R.dimen.bookTextSizePx))
+                .textColor(Color.BLACK)
+                .endConfig().buildRound(teamName.substring(0, 1), //will display first letter title
+                        noImageColor);
+        return noImage;
     }
 
 

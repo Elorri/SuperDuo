@@ -6,7 +6,7 @@
     <dimen name="list_horizonal_matgin">120dp</dimen>
     <dimen name="share_button_margin">150dp</dimen>
     <dimen name="teamNames">17sp</dimen>
-    <dimen name="Score">30sp</dimen>
+    <dimen name="Score">20sp</dimen>
     <dimen name="League">15sp</dimen>
     <dimen name="tabsTopBottomPadding">15dp</dimen>
 

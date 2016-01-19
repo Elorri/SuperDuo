@@ -45,6 +45,7 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
                 // that calls use our process and permission
                 final long identityToken = Binder.clearCallingIdentity();
                 String now = Utilities.getToday();
+                //String now = "2016-01-17";
                 data = getContentResolver().query(
                         ScoresContract.ScoreEntry.buildScoreByDate(now),
                         ScoresFragment.MATCHES_COLUMNS,
@@ -87,8 +88,8 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
                 String time = data.getString(ScoresFragment.COL_MATCHTIME);
 
                 // Add the data to the RemoteViews
-                Utilities.setWidgetImage(context, views, homeCrest);
-                Utilities.setWidgetImage(context, views, awayCrest);
+                Utilities.setWidgetImage(context, views, R.id.home_crest,homeCrest);
+                Utilities.setWidgetImage(context, views, R.id.away_crest, awayCrest);
                 views.setTextViewText(R.id.score_textview, scores);
                 views.setTextViewText(R.id.time_textview, time);
 
