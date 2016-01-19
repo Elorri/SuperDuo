@@ -37,24 +37,31 @@ public class WidgetIntentService extends IntentService {
 
 
         // Get now's data from the ContentProvider
-        String now = Utilities.getNow();
+        //String now = Utilities.getNow();
+        String now = "2016-01-17";
         Cursor cursor = getContentResolver().query(
                 ScoresContract.ScoreEntry.buildScoreByDate(now),
                 ScoresFragment.MATCHES_COLUMNS,
                 null,
                 null,
                 null);
+
+        Context context = getApplicationContext();
+        RemoteViews views = new RemoteViews(context.getPackageName(),
+                R.layout.widget_one);
+        String empty_widget_list=context.getResources().getString(R.string.empty_widget_list);
         if (cursor == null) {
+            views.setTextViewText(R.id.widget_empty, empty_widget_list);
             return;
         }
         if (!cursor.moveToFirst()) {
             cursor.close();
+            views.setTextViewText(R.id.widget_empty, empty_widget_list);
             return;
         }
 
         //TODO :2.1 when no icons put the teams name instead
         // Extract the data from the Cursor
-        Context context = getApplicationContext();
         String homeCrest = cursor.getString(ScoresFragment.COL_HOME);
         String awayCrest = cursor.getString(ScoresFragment.COL_AWAY);
         String scores = Utilities.getScores(context,
@@ -63,11 +70,15 @@ public class WidgetIntentService extends IntentService {
         String time = cursor.getString(ScoresFragment.COL_MATCHTIME);
         cursor.close();
 
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
+                "homeCrest " + homeCrest +
+                " - awayCrest " + awayCrest +
+                " - scores " + scores +
+                " - time " + time);
 
         // Perform this loop procedure for each widget
         for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_one);
+
 
             //TODO: 2.3 set content description here
             // Add the data to the RemoteViews
@@ -75,6 +86,7 @@ public class WidgetIntentService extends IntentService {
             Utilities.setWidgetImage(context, views, awayCrest);
             views.setTextViewText(R.id.score_textview, scores);
             views.setTextViewText(R.id.time_textview, time);
+
 
             // Create an Intent to launch MainActivity
             Intent launchIntent = new Intent(context, MainActivity.class);

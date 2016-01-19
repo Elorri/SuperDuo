@@ -60,4 +60,13 @@
                 tools:src="@drawable/leicester_city_fc_hd_logo"/>
         </FrameLayout>
     </LinearLayout>
+    <!--TODO look at all textColor -->
+    <TextView
+        android:id="@+id/widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        tools:text="@string/empty_widget_list"
+        android:textColor="@color/grey"/>
 </FrameLayout>
