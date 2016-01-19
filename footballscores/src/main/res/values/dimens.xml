@@ -19,6 +19,7 @@
     <dimen name="widget_list_height">180dp</dimen>
     <dimen name="widget_list_width">250dp</dimen>
     <dimen name="widget_text_title">20sp</dimen>
+    <dimen name="bookTextSizePx">30sp</dimen>
 
 </resources>
 

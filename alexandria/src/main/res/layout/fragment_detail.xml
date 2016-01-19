@@ -18,6 +18,7 @@ android:layout_height="match_parent">
         android:layout_marginTop="@dimen/normal_padding"
         android:contentDescription="@string/book_cover"
         android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         tools:src="@android:color/darker_gray"/>
     <TextView
         android:id="@+id/noBookFound"

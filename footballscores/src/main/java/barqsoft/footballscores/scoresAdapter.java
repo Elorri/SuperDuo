@@ -23,7 +23,6 @@ public class ScoresAdapter extends CursorAdapter {
     private String FOOTBALL_SCORES_HASHTAG = "#Football_Scores";
 
 
-
     public ScoresAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, flags);
     }
@@ -62,23 +61,22 @@ public class ScoresAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.homeName.setText(cursor.getString(ScoresFragment.COL_HOME));
-        viewHolder.awayName.setText(cursor.getString(ScoresFragment.COL_AWAY));
+        String homeTeamName = cursor.getString(ScoresFragment.COL_HOME);
+        String awayTeamName = cursor.getString(ScoresFragment.COL_AWAY);
+        viewHolder.homeName.setText(homeTeamName);
+        viewHolder.awayName.setText(awayTeamName);
         viewHolder.date.setText(cursor.getString(ScoresFragment.COL_MATCHTIME));
-        viewHolder.score.setText(Utilities.getScores(context,cursor.getInt(ScoresFragment.COL_HOME_GOALS), cursor.getInt(ScoresFragment.COL_AWAY_GOALS)));
+        viewHolder.score.setText(Utilities.getScores(context, cursor.getInt(ScoresFragment.COL_HOME_GOALS), cursor.getInt(ScoresFragment.COL_AWAY_GOALS)));
         viewHolder.matchId = cursor.getDouble(ScoresFragment.COL_ID);
-        viewHolder.homeCrest.setImageResource(Utilities.getTeamCrestByTeamName(context,
-                cursor.getString(ScoresFragment.COL_HOME)));
-        viewHolder.awayCrest.setImageResource(Utilities.getTeamCrestByTeamName(context,
-                cursor.getString(ScoresFragment.COL_AWAY)
-        ));
+        Utilities.setImage(context, viewHolder.homeCrest,homeTeamName);
+        Utilities.setImage(context, viewHolder.awayCrest,awayTeamName);
 
 
 
         if (viewHolder.matchId == selectedMatchId) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getApplicationContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            LinearLayout detailView = (LinearLayout)layoutInflater.inflate(R.layout.item_score_detail, null);
+            LinearLayout detailView = (LinearLayout) layoutInflater.inflate(R.layout.item_score_detail, null);
 
             viewHolder.detailViewConainer.addView(detailView, 0,
                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,

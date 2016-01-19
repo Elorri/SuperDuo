@@ -1,9 +1,19 @@
 package barqsoft.footballscores;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.widget.ImageView;
+import android.widget.RemoteViews;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -123,6 +133,18 @@ public class Utilities {
         else        return R.drawable.no_icon;
     }
 
+    public static Drawable getNoCrestImage(Context context,String teamName){
+        ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
+        int noImageColor = generator.getRandomColor();
+        TextDrawable noImage = TextDrawable.builder()
+                .beginConfig()
+                .fontSize((int) context.getResources().getDimension(R.dimen.bookTextSizePx))
+                .textColor(Color.BLACK)
+                .endConfig().buildRect(teamName.substring(0, 1), //will display first letter title
+                        noImageColor);
+        return noImage;
+    }
+
 
     /**
      * Returns true if the network is available or about to become available.
@@ -152,4 +174,50 @@ public class Utilities {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
     }
+
+    public static void setImage(Context context, ImageView crest, String teamName) {
+        int crestImgRessource=getTeamCrestByTeamName(context, teamName);
+        if (crestImgRessource == R.drawable.no_icon)
+            //crest.setImageDrawable(Utilities.getNoCrestImage(context, teamName));
+        crest.setBackgroundDrawable(getNoCrestImage(context, teamName));
+        else
+            crest.setImageResource(crestImgRessource);
+    }
+
+
+    public static void setWidgetImage(Context context, RemoteViews views, String teamName) {
+        int crestImgRessource=getTeamCrestByTeamName(context, teamName);
+        if (crestImgRessource == R.drawable.no_icon){
+            Drawable drawable=Utilities.getNoCrestImage(context, teamName);
+            Bitmap bitmap=drawableToBitmap(drawable);
+            views.setImageViewBitmap(R.id.home_crest, bitmap);
+        }
+        else
+            views.setImageViewResource(R.id.away_crest, crestImgRessource);
+    }
+
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+
 }

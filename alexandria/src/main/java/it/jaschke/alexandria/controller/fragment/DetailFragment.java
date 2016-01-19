@@ -11,7 +11,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,9 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
-import it.jaschke.alexandria.model.services.DownloadImage;
 
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -131,11 +130,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             authorsTextView.setLines(authorsArr.length);
             authorsTextView.setText(authors.replace(",", "\n"));
         }
-        if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
-            ImageView bookCover = (ImageView) view.findViewById(R.id.bookCover);
-            new DownloadImage(bookCover).execute(imgUrl);
-            bookCover.setVisibility(View.VISIBLE);
-        }
+
+        ImageView bookCover = (ImageView) view.findViewById(R.id.bookCover);
+        bookCover.setVisibility(View.VISIBLE);
+        Tools.loadImage(getContext(), imgUrl, bookTitle, bookCover);
 
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);

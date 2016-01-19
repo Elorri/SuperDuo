@@ -10,4 +10,5 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="add_book_cover_size">112dp</dimen>
     <dimen name="normal_padding">16dp</dimen>
+    <dimen name="bookTextSizePx">30px</dimen>
 </resources>

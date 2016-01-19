@@ -54,27 +54,25 @@ public class WidgetIntentService extends IntentService {
 
         //TODO :2.1 when no icons put the teams name instead
         // Extract the data from the Cursor
-        Context context=getApplicationContext();
-        int homeCrest=Utilities.getTeamCrestByTeamName(context,
-                cursor.getString(ScoresFragment.COL_HOME));
-        int awayCrest=Utilities.getTeamCrestByTeamName(context,
-                cursor.getString(ScoresFragment.COL_AWAY));
-        String scores =Utilities.getScores(context,
+        Context context = getApplicationContext();
+        String homeCrest = cursor.getString(ScoresFragment.COL_HOME);
+        String awayCrest = cursor.getString(ScoresFragment.COL_AWAY);
+        String scores = Utilities.getScores(context,
                 cursor.getInt(ScoresFragment.COL_HOME_GOALS),
                 cursor.getInt(ScoresFragment.COL_AWAY_GOALS));
-        String time =cursor.getString(ScoresFragment.COL_MATCHTIME);
+        String time = cursor.getString(ScoresFragment.COL_MATCHTIME);
         cursor.close();
 
 
         // Perform this loop procedure for each widget
         for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(context.getPackageName(), 
+            RemoteViews views = new RemoteViews(context.getPackageName(),
                     R.layout.widget_one);
 
             //TODO: 2.3 set content description here
             // Add the data to the RemoteViews
-            views.setImageViewResource(R.id.home_crest, homeCrest);
-            views.setImageViewResource(R.id.away_crest, awayCrest);
+            Utilities.setWidgetImage(context, views, homeCrest);
+            Utilities.setWidgetImage(context, views, awayCrest);
             views.setTextViewText(R.id.score_textview, scores);
             views.setTextViewText(R.id.time_textview, time);
 

@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
-import it.jaschke.alexandria.model.services.DownloadImage;
 
 /**
  * Created by saj on 11/01/15.
@@ -41,14 +41,14 @@ public class BooksAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        String imgUrl = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry.COLUMN_IMAGE_URL));
-        new DownloadImage(viewHolder.bookCover).execute(imgUrl);
-
         String bookTitle = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry.COLUMN_TITLE));
         viewHolder.bookTitle.setText(bookTitle);
 
         String bookSubTitle = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry.COLUMN_SUBTITLE));
         viewHolder.bookSubTitle.setText(bookSubTitle);
+
+        String imgUrl = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry.COLUMN_IMAGE_URL));
+        Tools.loadImage(context, imgUrl, bookTitle, viewHolder.bookCover);
     }
 
     @Override

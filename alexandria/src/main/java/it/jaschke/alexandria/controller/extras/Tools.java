@@ -2,12 +2,18 @@ package it.jaschke.alexandria.controller.extras;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ImageView;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.bumptech.glide.Glide;
 
 import it.jaschke.alexandria.R;
 
@@ -64,6 +70,24 @@ public class Tools {
      */
     public static boolean compareUris(Uri uri1, Uri uri2) {
         return uri1.toString().equals(uri2.toString());
+    }
+
+
+    public static void loadImage(Context context,String imgUrl,String errorMsg, ImageView
+            imageView){
+        ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
+        int noImageColor = generator.getRandomColor();
+        TextDrawable noImage = TextDrawable.builder()
+                .beginConfig()
+                .fontSize((int) context.getResources().getDimension(R.dimen.bookTextSizePx))
+                .textColor(Color.BLACK)
+                .endConfig().buildRect(errorMsg.substring(0,1), //will display first letter title
+                        noImageColor);
+        Glide.with(context)
+                .load(imgUrl)
+                .error(noImage)
+                .crossFade()
+                .into(imageView);
     }
 
 

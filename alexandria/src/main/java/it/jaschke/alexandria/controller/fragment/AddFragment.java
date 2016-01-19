@@ -16,7 +16,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +27,12 @@ import com.google.android.gms.vision.barcode.Barcode;
 
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.controller.activity.BarcodeCaptureActivity;
-import it.jaschke.alexandria.controller.activity.MainActivity;
 import it.jaschke.alexandria.controller.activity.ListActivity;
+import it.jaschke.alexandria.controller.activity.MainActivity;
 import it.jaschke.alexandria.controller.extras.Status;
 import it.jaschke.alexandria.controller.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
-import it.jaschke.alexandria.model.services.DownloadImage;
 import it.jaschke.alexandria.zxing.FragmentIntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentResult;
@@ -327,13 +325,10 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
             mAuthorsTextView.setText(authors.replace(",", "\n"));
         }
 
-        //TODO 2.4 check this method
-        //TODO 2.4 also note that there is no image display if no internet + no cache not good
-        // experience
-        if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
-            new DownloadImage(mBookCover).execute(imgUrl);
-            mBookCover.setVisibility(View.VISIBLE);
-        }
+        mBookCover.setVisibility(View.VISIBLE);
+        Tools.loadImage(getContext(),imgUrl,bookTitle, mBookCover);
+
+
 
     }
 
