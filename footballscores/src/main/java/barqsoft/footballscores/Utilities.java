@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
@@ -193,11 +194,15 @@ public class Utilities {
         Integer crestImgRessource = getTeamCrestByTeamName(context, teamName);
 
         if (crestImgRessource == null) {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             Drawable drawable = Utilities.getNoCrestImage(context, teamName);
             Bitmap bitmap = drawableToBitmap(drawable);
-            views.setImageViewBitmap(R.id.home_crest, bitmap);
-        } else
+            //views.setImageViewBitmap(R.id.home_crest, bitmap);
+            views.setImageViewResource(R.id.away_crest, R.drawable.no_icon);
+        } else {
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             views.setImageViewResource(R.id.away_crest, crestImgRessource);
+        }
     }
 
 

@@ -2,8 +2,8 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="@dimen/widget_width"
+    android:layout_height="@dimen/widget_height"
     android:padding="@dimen/widget_margin">
     <LinearLayout
         android:id="@+id/widget_item"
@@ -18,8 +18,8 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/home_crest"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:scaleType="center"
                 tools:src="@drawable/aston_villa"/>
@@ -53,8 +53,8 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/away_crest"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:scaleType="center"
                 tools:src="@drawable/leicester_city_fc_hd_logo"/>
