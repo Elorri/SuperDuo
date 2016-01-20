@@ -3,6 +3,7 @@ package barqsoft.footballscores;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,8 +24,6 @@ public class MainActivity extends ActionBarActivity {
     public static int currentItem = 2;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
@@ -34,6 +33,11 @@ public class MainActivity extends ActionBarActivity {
         //syncDB();
         updateWidgets();
         //ScoresSyncAdapter.initializeSyncAdapter(this);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             mMainFragment = new MainFragment();

@@ -15,9 +15,10 @@ FootballScores :
 
 ## Libraries used
 
-| <  | Api level    | >= |
-| ------------- | :-----------: |:-------------: |
-| Zxing|18 |  Google Play Mobile Vision Api   |
+|  Api level |             <  | Api level     | >=             |
+| ------------- | ------------- | :-----------: |:-------------: |
+|    ?           | Zxing|18 |  Google Play Mobile Vision Api   |
+|    14           | Setting Holo ActionBar|21 |  Settings Material design ActionBar  |
 
 ## Libraries infos
 
