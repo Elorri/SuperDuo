@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@android:color/white"
+            android:textColor="@color/primary_light_text"
             android:textSize="@dimen/widget_text_title"
             android:text="@string/today"/>
     </FrameLayout>
@@ -39,6 +39,6 @@
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
             android:text="@string/empty_widget_list"
-            android:textColor="@color/grey"/>
+            android:textColor="@color/secondary_dark_text"/>
     </FrameLayout>
 </LinearLayout>

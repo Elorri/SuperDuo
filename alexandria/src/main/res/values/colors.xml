@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#ffffc107</color>
-    <color name="primary_dark">#ffffa000</color>
-    <color name="primary_light">#ffffd54f</color>
-    <color name="accent">#ffff1744</color>
+    <!-- textures -->
+    <color name="primary">@color/material_amber500</color>
+    <color name="primary_dark">@color/material_amber700</color>
+    <color name="primary_light">@color/material_amber300</color>
+    <color name="accent">@color/material_redA400</color>
+    <color name="secondary_light">@color/material_grey800</color>
+
+    <!-- texts -->
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
 
-    <color name="body_text_2">#8a000000</color>
 </resources>

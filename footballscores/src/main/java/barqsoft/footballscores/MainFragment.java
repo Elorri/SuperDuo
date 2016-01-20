@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -63,6 +64,11 @@ public class MainFragment extends Fragment {
         mViewPager.setAdapter(pageAdapter);
         //TODO : 2.1 use preferences
         mViewPager.setCurrentItem(MainActivity.currentItem);
+
+        PagerTabStrip pagerTabStrip = (PagerTabStrip) view.findViewById(R.id.pager_header);
+        pagerTabStrip.setDrawFullUnderline(true);
+        pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.accent));
+
         return view;
     }
 

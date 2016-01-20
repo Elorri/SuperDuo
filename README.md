@@ -24,6 +24,7 @@ FootballScores :
 
 * [Google Play Mobile Vision Api](https://github.com/googlesamples/android-vision/tree/master/visionSamples/barcode-reader)
 * [Zxing](https://github.com/zxing/zxing/wiki/Scanning-Via-Intent)
+* [TextDrawable](https://github.com/amulyakhare/TextDrawable)
 
 
 

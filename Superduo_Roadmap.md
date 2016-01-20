@@ -18,12 +18,10 @@ This the actual version of the app. The user can search for a book using the ISB
   - [x] handle cases when data returned from the serveur is null ex:no string, no authors, etc either display a white space, or don't add this in your db
   
 ##### 1.1_building_a_total_experience
-  - [ ] button "rechercher" se transforme en button "OK" when rotating the screen "list of book"
-  - [ ] button "scan" se transforme en button "OK" when rotating the screen "add a book"
-  - [ ] settings has no toolbar
-  - [ ] setting does not display current option
+  - [x] settings has no toolbar
+  - [x] setting does not display current option
   - [x] scan button display a toast
-  - [ ] add floating action button
+  - [x] add floating action button
 
 ### Release 2 
 The user can search for book without internet connection and the app does not crashes or when adding a book.
@@ -39,9 +37,9 @@ The user can search for book without internet connection and the app does not cr
 
 ##### 2.1_building_a_total_experience
   - [x] add barcode scanner functionnality
-  - [ ] put tablet layout in its own directory
+  - [ ] improve tablet layout
   - [ ] create a CustomView
-  - [ ] use a Library : scanning bar code integrated inside the screen
+  - [x] use a Library : scanning bar code integrated inside the screen
   - [ ] improve UI  
   - [ ] Not requiered : add a fixed sized widget
   - [ ] Not requiered : add a collection widget  
@@ -99,11 +97,10 @@ The user can see a message that there is no data shown because no internet conne
 
 
 ##### 2.1_building_a_total_experience
-  - [ ] today screen scroll doesn't match parent
-  - [ ] no nice icons
-  - [ ] improve tab layout implementation
+  - [x] no nice icons
+  - [x] improve tab layout 
   - [ ] create a CustomView
-  - [ ] use a Library
+  - [x] use a Library
   - [x] add a fixed sized widget
   - [x] add a collection widget  
 

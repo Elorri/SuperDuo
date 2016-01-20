@@ -34,7 +34,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="@dimen/Score"
+                android:textSize="@dimen/text_size_medium"
                 tools:text="@string/scores_tool"/>
             <TextView
                 android:id="@+id/time_textview"
@@ -43,6 +43,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_small"
                 tools:text="@string/time"/>
         </LinearLayout>
 
@@ -63,5 +64,5 @@
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
         android:text="@string/empty_widget_list"
-        android:textColor="@color/grey"/>
+        android:textColor="@color/secondary_dark_text"/>
 </FrameLayout>

@@ -18,13 +18,13 @@
         android:id="@+id/listBookTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_marginRight="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_medium"
         android:layout_toRightOf="@id/fullBookCover"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_size_medium"
         tools:text="Holy Bible"/>
 
 
@@ -35,10 +35,10 @@
         android:layout_below="@id/listBookTitle"
         android:layout_toRightOf="@id/fullBookCover"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="@integer/textview_max_line1"
         android:singleLine="true"
-        android:textSize="12sp"
-        android:layout_marginRight="8dp"
+        android:textSize="@dimen/text_size_small"
+        android:layout_marginRight="@dimen/spacing_small"
         tools:text="Authorized King James Version"/>
 
 

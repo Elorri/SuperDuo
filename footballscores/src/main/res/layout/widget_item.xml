@@ -14,8 +14,8 @@
         android:layout_weight="1">
         <ImageView
             android:id="@+id/home_crest"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/spacing_xxlarge"
+            android:layout_height="@dimen/spacing_xxlarge"
             android:layout_gravity="center"
             android:scaleType="center"
             tools:src="@drawable/aston_villa"/>
@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="@dimen/Score"
+            android:textSize="@dimen/text_size_medium"
             tools:text="@string/scores_tool"/>
         <TextView
             android:id="@+id/time_textview"
@@ -42,7 +42,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="@string/time"/>
+            tools:text="@string/time"
+            android:textSize="@dimen/text_size_small"/>
     </LinearLayout>
     <FrameLayout
         android:layout_width="0dp"
@@ -50,8 +51,8 @@
         android:layout_weight="1">
         <ImageView
             android:id="@+id/away_crest"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/spacing_xxlarge"
+            android:layout_height="@dimen/spacing_xxlarge"
             android:layout_gravity="center"
             android:scaleType="center"
             tools:src="@drawable/leicester_city_fc_hd_logo"/>

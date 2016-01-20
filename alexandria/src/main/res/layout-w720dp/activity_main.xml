@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"    >
 
     <include layout="@layout/toolbar"/>
 
@@ -12,7 +13,7 @@
         android:baselineAligned="false"
         android:divider="?android:attr/dividerHorizontal"
         android:orientation="horizontal"
-        tools:context="it.jaschke.alexandria.controller.activity.MainActivity">
+        tools:context=".activity.MainActivity">
 
         <!--
         This layout is a two-pane layout for the Items master/detail flow.

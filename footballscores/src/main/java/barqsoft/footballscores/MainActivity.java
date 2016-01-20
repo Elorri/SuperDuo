@@ -30,14 +30,14 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //syncDB();
-        updateWidgets();
-        //ScoresSyncAdapter.initializeSyncAdapter(this);
+//        syncDB();
+//        updateWidgets();
+//        ScoresSyncAdapter.initializeSyncAdapter(this);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         if (savedInstanceState == null) {
             mMainFragment = new MainFragment();

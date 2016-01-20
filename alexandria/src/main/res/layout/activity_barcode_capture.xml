@@ -10,16 +10,16 @@
 
     <include layout="@layout/toolbar" />
 
-    <it.jaschke.alexandria.controller.camera.CameraSourcePreview
+    <it.jaschke.alexandria.camera.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <it.jaschke.alexandria.controller.camera.GraphicOverlay
+        <it.jaschke.alexandria.camera.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </it.jaschke.alexandria.controller.camera.CameraSourcePreview>
+    </it.jaschke.alexandria.camera.CameraSourcePreview>
 
 </LinearLayout>

@@ -6,7 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,7 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="barqsoft.footballscores.AboutActivity"
-        android:padding="16dp"
         tools:ignore="MergeRootFrame"
         tools:layout="@layout/fragment_about"/>
 </LinearLayout>

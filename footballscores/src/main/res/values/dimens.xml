@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="list_horizonal_matgin">120dp</dimen>
-    <dimen name="share_button_margin">150dp</dimen>
-    <dimen name="teamNames">17sp</dimen>
-    <dimen name="Score">20sp</dimen>
-    <dimen name="League">15sp</dimen>
-    <dimen name="tabsTopBottomPadding">15dp</dimen>
 
 
+
+
+
+    <!-- Texts -->
+    <dimen name="text_size_xsmall">11sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+    <dimen name="text_size_xxlarge">24sp</dimen>
+
+    <!-- Margin and padding -->
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_normal">16dp</dimen>
+    <dimen name="spacing_medium">24dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+    <dimen name="spacing_xlarge">40dp</dimen>
+    <dimen name="spacing_xxlarge">60dp</dimen>
+    <dimen name="spacing_xxxlarge">90dp</dimen>
+    <dimen name="spacing_xxxxlarge">120dp</dimen>
+
+    <!-- UI elements -->
     <!-- Next Match Widget -->
     <dimen name="widget_height">40dp</dimen>
     <dimen name="widget_width">110dp</dimen>
@@ -20,6 +33,8 @@
     <dimen name="widget_list_width">250dp</dimen>
     <dimen name="widget_text_title">20sp</dimen>
     <dimen name="bookTextSizePx">30sp</dimen>
+
+
 
 </resources>
 
