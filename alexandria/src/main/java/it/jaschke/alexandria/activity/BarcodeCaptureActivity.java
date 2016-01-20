@@ -54,6 +54,7 @@ import it.jaschke.alexandria.camera.BarcodeGraphic;
 import it.jaschke.alexandria.camera.BarcodeTrackerFactory;
 import it.jaschke.alexandria.camera.CameraSource;
 import it.jaschke.alexandria.camera.CameraSourcePreview;
+import it.jaschke.alexandria.camera.GraphicOverlay;
 
 
 /**

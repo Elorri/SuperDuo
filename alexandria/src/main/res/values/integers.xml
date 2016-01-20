@@ -1,0 +1,8 @@
+<resources>
+    <!-- Integers -->
+    <integer name="ean_max_size">13</integer>
+    <integer name="ean_min_size">10</integer>
+    <integer name="ean_width">8</integer>
+    <integer name="textview_max_line">3</integer>
+    <integer name="textview_max_line1">1</integer>
+</resources>

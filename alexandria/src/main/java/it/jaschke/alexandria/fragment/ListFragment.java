@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.controller.fragment;
+package it.jaschke.alexandria.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.activity.AddActivity;
 import it.jaschke.alexandria.adapter.BooksAdapter;
+import it.jaschke.alexandria.controller.fragment.MainFragment;
 import it.jaschke.alexandria.model.data.BookContract;
 
 
@@ -235,7 +236,7 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        outState.putParcelable(MainFragment.URI, mUri);
+        outState.putParcelable(URI, mUri);
         outState.putString(QUERY, mSearchView.getQuery().toString());
         if (mPosition != GridView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);

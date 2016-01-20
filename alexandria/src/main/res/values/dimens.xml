@@ -23,9 +23,5 @@
     <dimen name="add_book_cover_size">112dp</dimen>
 
 
-    <!-- Integers -->
-    <integer name="ean_size">13</integer>
-    <integer name="ean_width">8</integer>
-    <integer name="textview_max_line">3</integer>
-    <integer name="textview_max_line1">1</integer>
+
 </resources>

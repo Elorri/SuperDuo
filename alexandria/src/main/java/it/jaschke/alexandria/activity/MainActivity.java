@@ -11,7 +11,7 @@ import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.extras.Tools;
 import it.jaschke.alexandria.controller.fragment.AddFragment;
 import it.jaschke.alexandria.controller.fragment.DetailFragment;
-import it.jaschke.alexandria.controller.fragment.ListFragment;
+import it.jaschke.alexandria.fragment.ListFragment;
 import it.jaschke.alexandria.controller.fragment.MainFragment;
 import it.jaschke.alexandria.model.data.BookContract;
 

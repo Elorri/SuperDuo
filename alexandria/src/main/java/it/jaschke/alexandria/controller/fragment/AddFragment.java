@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.fragment;
+package it.jaschke.alexandria.controller.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,7 +14,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,16 +28,17 @@ import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.activity.BarcodeCaptureActivity;
 import it.jaschke.alexandria.activity.ListActivity;
 import it.jaschke.alexandria.activity.MainActivity;
-import it.jaschke.alexandria.data.BookContract;
 import it.jaschke.alexandria.extras.Status;
 import it.jaschke.alexandria.extras.Tools;
-import it.jaschke.alexandria.services.BookService;
+import it.jaschke.alexandria.model.data.BookContract;
+import it.jaschke.alexandria.model.services.BookService;
+import it.jaschke.alexandria.views.IsbnSearchView;
 import it.jaschke.alexandria.zxing.FragmentIntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentResult;
 
 
-public class AddFragment extends it.jaschke.alexandria.fragment.MainFragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class AddFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int RC_BARCODE_CAPTURE = 0;
     private static final String LOG_TAG = AddFragment.class.getSimpleName();
@@ -50,7 +50,7 @@ public class AddFragment extends it.jaschke.alexandria.fragment.MainFragment imp
 
 
     private TextView mEmptyTextView;
-    private SearchView mIsbnSearchView;
+    private IsbnSearchView mIsbnSearchView;
     private TextView mBookTitleTextView;
     private TextView mBookSubTitleTextView;
     private TextView mAuthorsTextView;
@@ -96,7 +96,7 @@ public class AddFragment extends it.jaschke.alexandria.fragment.MainFragment imp
 
         view = inflater.inflate(R.layout.fragment_add, container, false);
         mEmptyTextView = (TextView) view.findViewById(R.id.noBookFound);
-        mIsbnSearchView = (SearchView) view.findViewById(R.id.isbnSearchView);
+        mIsbnSearchView = (IsbnSearchView) view.findViewById(R.id.isbnSearchView);
         FloatingActionButton scanButton = (FloatingActionButton) view.findViewById(R.id.scan_button);
         mBookTitleTextView = ((TextView) view.findViewById(R.id.bookTitle));
         mBookSubTitleTextView = ((TextView) view.findViewById(R.id.bookSubTitle));
@@ -112,15 +112,19 @@ public class AddFragment extends it.jaschke.alexandria.fragment.MainFragment imp
         mIsbnSearchView.setIconified(false);
         mIsbnSearchView.clearFocus();
         mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
-        mIsbnSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mIsbnSearchView.setOnQueryTextListener(new IsbnSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                if(query.equals(""))mIsbnSearchView.clearFocus();
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+                if((query.length()==0)||(query.length()>13)){
+                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+                    mIsbnSearchView.clearFocus();}
                 refresh();
                 return true;
             }

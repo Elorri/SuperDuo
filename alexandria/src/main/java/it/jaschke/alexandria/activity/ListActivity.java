@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.controller.fragment.ListFragment;
+import it.jaschke.alexandria.fragment.ListFragment;
 import it.jaschke.alexandria.model.data.BookContract;
 
 /**

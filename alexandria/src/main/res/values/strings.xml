@@ -45,9 +45,9 @@
     <string name="share_text">A must read book: </string>
 
 <!-- TODO: 2.1 Remove or change this placeholder text -->
-    <string name="about_text">This application gets book information from a Google API. \n All titles, cover images, and author information come from there. \n
+    <string name="about_text">This application gets book information from a Google API.\n All titles, cover images, and author information come from there.\n
     The original version of this app was built by Sascha Jaschke, and this the modified version
-        I've made for the Udacity Android Nanodegree program. </string>
+        I have made for the Udacity Android Nanodegree program. </string>
 
     <string name="book_detail">Book Detail</string>
 

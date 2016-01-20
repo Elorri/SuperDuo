@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="LocationEditTextPreference">
+    <declare-styleable name="IsbnSearchViewPreference">
         <attr name="minLength" format="integer"/>
         <attr name="maxLength" format="integer"/>
     </declare-styleable>
