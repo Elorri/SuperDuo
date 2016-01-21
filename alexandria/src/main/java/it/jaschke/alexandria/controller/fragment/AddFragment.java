@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,6 @@ import it.jaschke.alexandria.extras.Status;
 import it.jaschke.alexandria.extras.Tools;
 import it.jaschke.alexandria.model.data.BookContract;
 import it.jaschke.alexandria.model.services.BookService;
-import it.jaschke.alexandria.views.IsbnSearchView;
 import it.jaschke.alexandria.zxing.FragmentIntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentResult;
@@ -50,7 +50,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
 
     private TextView mEmptyTextView;
-    private IsbnSearchView mIsbnSearchView;
+    private SearchView mIsbnSearchView;
     private TextView mBookTitleTextView;
     private TextView mBookSubTitleTextView;
     private TextView mAuthorsTextView;
@@ -96,7 +96,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
 
         view = inflater.inflate(R.layout.fragment_add, container, false);
         mEmptyTextView = (TextView) view.findViewById(R.id.noBookFound);
-        mIsbnSearchView = (IsbnSearchView) view.findViewById(R.id.isbnSearchView);
+        mIsbnSearchView = (SearchView) view.findViewById(R.id.isbnSearchView);
         FloatingActionButton scanButton = (FloatingActionButton) view.findViewById(R.id.scan_button);
         mBookTitleTextView = ((TextView) view.findViewById(R.id.bookTitle));
         mBookSubTitleTextView = ((TextView) view.findViewById(R.id.bookSubTitle));
@@ -112,7 +112,7 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
         mIsbnSearchView.setIconified(false);
         mIsbnSearchView.clearFocus();
         mIsbnSearchView.setQueryHint(getResources().getString(R.string.input_hint));
-        mIsbnSearchView.setOnQueryTextListener(new IsbnSearchView.OnQueryTextListener() {
+        mIsbnSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");

@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -59,15 +58,8 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
 
         if (savedInstanceState == null) {
             mUri = BookContract.BookEntry.CONTENT_URI;
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         } else {
-            //TODO : 2.1 see if putting true orfalse affect the keyboard
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "savedInstanceState" +
-                    ".getString(QUERY)" + savedInstanceState.getString(QUERY));
-            mQuery = savedInstanceState.getString(QUERY);
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             mUri = savedInstanceState.getParcelable(URI);
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         }
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         mBooksAdapter = new BooksAdapter(getActivity(), null, 0);
@@ -123,7 +115,10 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
-
+        //TODO :2.1 this does not work
+        if (savedInstanceState != null&& savedInstanceState.containsKey(QUERY)) {
+            mQuery = savedInstanceState.getString(QUERY);
+        }
         return view;
     }
 
@@ -238,7 +233,7 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         outState.putParcelable(URI, mUri);
         outState.putString(QUERY, mSearchView.getQuery().toString());
-        if (mPosition != GridView.INVALID_POSITION) {
+        if (mPosition != ListView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);

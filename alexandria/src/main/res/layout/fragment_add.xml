@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/apk/lib/it.jaschke.alexandria.views.IsbnSearchView"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,15 +17,13 @@
             android:layout_height="@dimen/spacing_xxxxlarge"
             android:background="@color/primary">
 
-            <it.jaschke.alexandria.views.IsbnSearchView
+            <android.support.v7.widget.SearchView
                 android:id="@+id/isbnSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:hint="@string/input_hint"
                 android:inputType="number"
-                custom:minLength="@integer/ean_min_size"
-                custom:maxLength="@integer/ean_max_size"
                 android:saveEnabled="true"
                 android:layout_margin="@dimen/spacing_normal"/>
         </RelativeLayout>
