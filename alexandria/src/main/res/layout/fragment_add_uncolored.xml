@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_xxxxlarge"
+            android:background="@color/secondary_light">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/isbnSearchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:hint="@string/input_hint"
+                android:inputType="number"
+                android:saveEnabled="true"
+                android:layout_margin="@dimen/spacing_normal"/>
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/header">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"    >
+
+                <ImageView
+                    android:id="@+id/bookCover"
+                    android:layout_width="@dimen/add_book_cover_size"
+                    android:layout_height="@dimen/add_book_cover_size"
+                    android:layout_marginLeft="@dimen/spacing_normal"
+                    android:layout_marginRight="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:contentDescription="@string/book_cover"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    tools:src="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/noBookFound"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:textIsSelectable="true"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="@dimen/text_size_xlarge"
+                    tools:text="@string/no_books"/>
+
+                <TextView
+                    android:id="@+id/bookTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_toRightOf="@id/bookCover"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    tools:text="Holy Bible"/>
+
+                <TextView
+                    android:id="@+id/bookSubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/bookTitle"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_toRightOf="@id/bookCover"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/textview_max_line"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/secondary_text"
+                    tools:text="Authorized King James Version"
+                    />
+
+                <TextView
+                    android:id="@+id/authors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/bookSubTitle"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_toRightOf="@id/bookCover"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/secondary_text"
+                    tools:text="Zondervan Bibles"
+                    />
+
+
+                <TextView
+                    android:id="@+id/categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bookCover"
+                    android:layout_marginLeft="@dimen/spacing_normal"
+                    android:textSize="@dimen/text_size_small"
+                    tools:text="in Bibles"/>
+
+                <TextView
+                    android:id="@+id/bookDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/categories"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:padding="@dimen/spacing_normal"
+                    tools:text="@string/lorem_ipsum"/>
+
+                <Button
+                    android:id="@+id/dismiss_button"
+                    style="?attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/bookDesc"
+                    android:layout_margin="@dimen/spacing_normal"
+                    android:text="@string/dismiss_button"
+                    android:visibility="invisible"
+                    android:textColor="@color/secondary_text"/>
+
+                <Button
+                    android:id="@+id/save_button"
+                    style="?attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/bookDesc"
+                    android:layout_margin="@dimen/spacing_normal"
+                    android:text="@string/save_button"
+                    android:visibility="invisible"/>
+
+                <Button
+                    android:id="@+id/delete_button"
+                    style="?attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/bookDesc"
+                    android:layout_margin="@dimen/spacing_normal"
+                    android:text="@string/delete_button"
+                    android:visibility="invisible"/>
+            </RelativeLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/scan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_local_see_white_24dp"
+        app:layout_anchor="@id/header"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -16,7 +16,7 @@ public class ListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -28,7 +28,7 @@ public class ListActivity extends BaseActivity {
             fragment.setUri(BookContract.BookEntry.CONTENT_URI);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.add_fragment_container, fragment)
+                    .add(R.id.main_container, fragment)
                     .commit();
         }
     }

@@ -1,0 +1,4 @@
+<resources>
+    <item name="fragment_add" type="layout">@layout/fragment_add_uncolored</item>
+    <item name="fragment_detail" type="layout">@layout/fragment_detail_uncolored</item>
+</resources>

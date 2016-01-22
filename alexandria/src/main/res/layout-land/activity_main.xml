@@ -10,11 +10,21 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+    <View android:layout_width="match_parent"
+          android:layout_height="150dp"
+        android:background="@color/primary"/>
 
     <FrameLayout
         android:id="@+id/main_container"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_add"/>
+        android:layout_centerInParent="true"
+        tools:layout="@layout/fragment_add"
+        android:background="@color/secondary_light"/>
+    </RelativeLayout>
 </LinearLayout>
