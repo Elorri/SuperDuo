@@ -42,6 +42,7 @@ public class ListActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        if (null != menu) menu.clear();
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;

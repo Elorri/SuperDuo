@@ -38,35 +38,41 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private Uri mUri;
 
-    private ShareActionProvider mShareActionProvider;
+    private ShareActionProvider mActivityShareProvider;
     private boolean isUseActivityShareButtonOn;
     private Intent mShareIntent;
+    private MenuItem mActivityMenuItem;
+    private MenuItem mFragmentMenuItem;
 
     public DetailFragment() {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null)
             mUri = savedInstanceState.getParcelable(URI);
 
-        //TODO :2.1 does this change something ?
-        setHasOptionsMenu(true);
     }
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         view = inflater.inflate(R.layout.fragment_detail, container, false);
         mToolbarView = (Toolbar) view.findViewById(R.id.toolbar);
 
         if (mToolbarView != null)
-            isUseActivityShareButtonOn = false;
-        else
-            isUseActivityShareButtonOn = true;
+            inflateFragmentMenuItem();
+        else {
+            setHasOptionsMenu(true);
+        }
 
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
+                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " + mFragmentMenuItem);
 
         view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,37 +89,40 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (isUseActivityShareButtonOn) {
-            inflater.inflate(R.menu.fragment_detail, menu);
-            MenuItem menuItem = menu.findItem(R.id.action_share);
-            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        }
+        inflateActivityMenuItem( menu,  inflater);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
+                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " + mFragmentMenuItem);
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-//        int id = item.getItemId();
-//        if (id == R.id.action_share) {
-//            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-//            if ((mShareActionProvider != null) || (mShareIntent != null)) {
-//                mShareActionProvider.setShareIntent(mShareIntent);
-//            }
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    private void inflateFragmentMenuItem() {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        Menu menu = mToolbarView.getMenu();
+        if (null != menu) menu.clear();
+        mToolbarView.inflateMenu(R.menu.fragment_detail);
+        mFragmentMenuItem = menu.findItem(R.id.action_share);
+
+    }
+
+    private void inflateActivityMenuItem(Menu menu, MenuInflater inflater) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        inflater.inflate(R.menu.fragment_detail, menu);
+        mActivityMenuItem = menu.findItem(R.id.action_share);
+    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         CursorLoader cursorLoader = null;
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -133,6 +142,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor
             data) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         if (!data.moveToFirst()) {
             return;
         }
@@ -165,26 +175,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
 
         mShareIntent = createShareIntent(bookTitle);
-
-        if ((mShareActionProvider != null) && (mShareIntent != null)) {
-            mShareActionProvider.setShareIntent(mShareIntent);
+        if (mActivityMenuItem != null) {
+            mActivityShareProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(mActivityMenuItem);
+            mActivityShareProvider.setShareIntent(mShareIntent);
         }
-
-
-        if (!isUseActivityShareButtonOn) {
-//            AppCompatActivity activity = ((AppCompatActivity) getActivity());
-//            activity.setSupportActionBar(mToolbarView);
-//            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-            Menu menu = mToolbarView.getMenu();
-            if (null != menu) menu.clear();
-            mToolbarView.inflateMenu(R.menu.fragment_detail);
-            // Retrieve the share menu item
-            MenuItem menuItem = menu.findItem(R.id.action_share);
-            menuItem.setIntent(mShareIntent);
+        if (mFragmentMenuItem != null) {
+            mFragmentMenuItem.setIntent(mShareIntent);
         }
-
     }
 
     private Intent createShareIntent(String bookTitle) {

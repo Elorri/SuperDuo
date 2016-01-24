@@ -36,7 +36,6 @@
         <activity
             android:name=".activity.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:launchMode="singleTop"
             android:parentActivityName=".activity.ListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
