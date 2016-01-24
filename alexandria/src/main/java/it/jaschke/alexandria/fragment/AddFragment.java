@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -29,16 +30,16 @@ import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.activity.BarcodeCaptureActivity;
 import it.jaschke.alexandria.activity.ListActivity;
 import it.jaschke.alexandria.activity.MainActivity;
+import it.jaschke.alexandria.data.BookContract;
 import it.jaschke.alexandria.extras.Status;
 import it.jaschke.alexandria.extras.Tools;
-import it.jaschke.alexandria.data.BookContract;
 import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.zxing.FragmentIntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentResult;
 
 
-public class AddFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class AddFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int RC_BARCODE_CAPTURE = 0;
     private static final String LOG_TAG = AddFragment.class.getSimpleName();

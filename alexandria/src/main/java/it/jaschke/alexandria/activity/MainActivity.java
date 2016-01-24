@@ -9,7 +9,7 @@ import it.jaschke.alexandria.extras.Tools;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean isAddFirstScreen;
+   public static boolean isAddFirstScreen;
 
 
     @Override

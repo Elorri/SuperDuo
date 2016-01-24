@@ -30,12 +30,12 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String QUERY = "query";
+    private static final String SELECTED_KEY = "selected_position";
     private CharSequence mQuery;
+    private int mPosition = ListView.INVALID_POSITION;
 
     private BooksAdapter mBooksAdapter;
     private ListView mBookList;
-    private int mPosition = ListView.INVALID_POSITION;
-    private static final String SELECTED_KEY = "selected_position";
     private SearchView mSearchView;
 
     private final int LOADER_ID = 10;
@@ -164,6 +164,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        Uri uri = BookContract.BookEntry.CONTENT_URI;
 
         final String selection = BookContract.BookEntry.COLUMN_TITLE + " LIKE ? OR " + BookContract.BookEntry.COLUMN_SUBTITLE + " LIKE ? ";
         String searchString = mSearchView.getQuery().toString();
@@ -173,17 +174,17 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
             searchString = "%" + searchString + "%";
             return new CursorLoader(
                     getActivity(),
-                    mUri,
+                    uri,
                     null,
                     selection,
                     new String[]{searchString, searchString},
                     null
             );
         }
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "mUri" + mUri);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "mUri" + uri);
         return new CursorLoader(
                 getActivity(),
-                mUri,
+                uri,
                 null,
                 null,
                 null,

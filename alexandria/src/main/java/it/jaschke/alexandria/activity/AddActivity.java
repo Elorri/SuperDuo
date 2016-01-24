@@ -22,7 +22,9 @@ public class AddActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (!MainActivity.isAddFirstScreen){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         if (savedInstanceState == null) {
             AddFragment fragment = new AddFragment();

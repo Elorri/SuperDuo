@@ -30,19 +30,17 @@ import it.jaschke.alexandria.services.BookService;
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String URI = "uri";
+    private Uri mUri;
+
+
     private final int LOADER_ID = 10;
-    private View view;
 
 
     private Toolbar mToolbarView;
 
-    private Uri mUri;
 
     private ShareActionProvider mActivityShareProvider;
-    private boolean isUseActivityShareButtonOn;
-    private Intent mShareIntent;
-    private MenuItem mActivityMenuItem;
-    private MenuItem mFragmentMenuItem;
+    private ShareActionProvider mFragmentShareProvider;
 
     public DetailFragment() {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
@@ -62,7 +60,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        view = inflater.inflate(R.layout.fragment_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
         mToolbarView = (Toolbar) view.findViewById(R.id.toolbar);
 
         if (mToolbarView != null)
@@ -72,7 +70,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
-                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " + mFragmentMenuItem);
+                "mActivityShareProvider " + mActivityShareProvider + " mFragmentShareProvider " +
+                mFragmentShareProvider);
 
         view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,12 +88,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflateActivityMenuItem( menu,  inflater);
+        inflateActivityMenuItem(menu, inflater);
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
-                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " + mFragmentMenuItem);
+                "mActivityShareProvider " + mActivityShareProvider + " mFragmentShareProvider " +
+                mFragmentShareProvider);
     }
 
     private void inflateFragmentMenuItem() {
@@ -102,14 +101,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Menu menu = mToolbarView.getMenu();
         if (null != menu) menu.clear();
         mToolbarView.inflateMenu(R.menu.fragment_detail);
-        mFragmentMenuItem = menu.findItem(R.id.action_share);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        mFragmentShareProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
     }
 
     private void inflateActivityMenuItem(Menu menu, MenuInflater inflater) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         inflater.inflate(R.menu.fragment_detail, menu);
-        mActivityMenuItem = menu.findItem(R.id.action_share);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        mActivityShareProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
     }
 
 
@@ -154,7 +155,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         String imgUrl = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_IMAGE_URL));
         String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.COLUMN_CATEGORY));
 
-
+        View view = getView();
         ((TextView) view.findViewById(R.id.bookTitle)).setText(bookTitle);
         ((TextView) view.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
         ((TextView) view.findViewById(R.id.bookDesc)).setText(desc);
@@ -174,13 +175,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Tools.loadImage(getContext(), imgUrl, bookTitle, bookCover);
 
 
-        mShareIntent = createShareIntent(bookTitle);
-        if (mActivityMenuItem != null) {
-            mActivityShareProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(mActivityMenuItem);
-            mActivityShareProvider.setShareIntent(mShareIntent);
+       Intent shareIntent = createShareIntent(bookTitle);
+        if (mActivityShareProvider != null) {
+            mActivityShareProvider.setShareIntent(shareIntent);
         }
-        if (mFragmentMenuItem != null) {
-            mFragmentMenuItem.setIntent(mShareIntent);
+        if (mFragmentShareProvider != null) {
+            mFragmentShareProvider.setShareIntent(shareIntent);
         }
     }
 
@@ -197,16 +197,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     }
 
-    public void onMainUriChange() {
-        if (mUri != null) {
-            getLoaderManager().restartLoader(LOADER_ID, null, this);
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        outState.putParcelable(MainFragment.URI, mUri);
+        outState.putParcelable(URI, mUri);
         super.onSaveInstanceState(outState);
     }
 

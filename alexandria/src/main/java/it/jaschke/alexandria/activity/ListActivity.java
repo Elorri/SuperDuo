@@ -29,7 +29,8 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (MainActivity.isAddFirstScreen)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ListFragment listFragment = new ListFragment();
         getSupportFragmentManager().beginTransaction()
