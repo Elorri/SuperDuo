@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -25,10 +26,12 @@ import it.jaschke.alexandria.adapter.BooksAdapter;
 import it.jaschke.alexandria.data.BookContract;
 
 
-public class ListFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+public class ListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String QUERY = "query";
+    private CharSequence mQuery;
+
     private BooksAdapter mBooksAdapter;
     private ListView mBookList;
     private int mPosition = ListView.INVALID_POSITION;
@@ -36,7 +39,7 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
     private SearchView mSearchView;
 
     private final int LOADER_ID = 10;
-    private CharSequence mQuery;
+
 
 
     public interface Callback {
@@ -55,10 +58,8 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
 //        //Remove depreciated method onAttach
 //        getActivity().setTitle(R.string.title_activity_list);
 
-        if (savedInstanceState == null) {
-            mUri = BookContract.BookEntry.CONTENT_URI;
-        } else {
-            mUri = savedInstanceState.getParcelable(URI);
+        if (savedInstanceState != null) {
+            mQuery = savedInstanceState.getCharSequence(QUERY);
         }
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         mBooksAdapter = new BooksAdapter(getActivity(), null, 0);
@@ -69,7 +70,6 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        // Get a reference to the ListView, and attach this adapter to it.
         mSearchView = (SearchView) view.findViewById(R.id.searchView);
         mBookList = (ListView) view.findViewById(R.id.bookList);
         FloatingActionButton addButton = (FloatingActionButton) view.findViewById(R.id
@@ -114,10 +114,6 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
-        //TODO :2.1 this does not work
-        if (savedInstanceState != null&& savedInstanceState.containsKey(QUERY)) {
-            mQuery = savedInstanceState.getString(QUERY);
-        }
         return view;
     }
 
@@ -131,10 +127,6 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         }
     }
 
-    @Override
-    public void setUri(Uri mMainUri) {
-        mUri = BookContract.BookEntry.CONTENT_URI;
-    }
 
     public void setPosition(int position) {
         mPosition = position;
@@ -230,11 +222,10 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        outState.putParcelable(URI, mUri);
-        outState.putString(QUERY, mSearchView.getQuery().toString());
+        outState.putCharSequence(QUERY, mSearchView.getQuery());
         if (mPosition != ListView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }
-        super.onSaveInstanceState(outState);
+
     }
 }

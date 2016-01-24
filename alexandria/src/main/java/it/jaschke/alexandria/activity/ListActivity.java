@@ -1,21 +1,26 @@
 package it.jaschke.alexandria.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.fragment.DetailFragment;
 import it.jaschke.alexandria.fragment.ListFragment;
-import it.jaschke.alexandria.data.BookContract;
 
 /**
  * Created by Elorri on 19/01/2016.
  */
-public class ListActivity extends BaseActivity {
+public class ListActivity extends AppCompatActivity implements ListFragment.Callback {
 
+    public static final String DETAILFRAGMENT_TAG = "detail_fragment";
+    private boolean mTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +31,25 @@ public class ListActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ListFragment listFragment = new ListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.main_container, listFragment)
+                .commit();
 
-        if (savedInstanceState == null) {
-            ListFragment fragment = new ListFragment();
-            fragment.setUri(BookContract.BookEntry.CONTENT_URI);
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.main_container, fragment)
-                    .commit();
+        if (findViewById(R.id.detail_fragment_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState != null) {
+                Fragment detailFragment = getSupportFragmentManager().findFragmentByTag
+                        (DETAILFRAGMENT_TAG);
+                if (detailFragment != null) {
+                    getSupportFragmentManager().beginTransaction().replace(
+                            R.id.detail_fragment_container,
+                            new DetailFragment(), DETAILFRAGMENT_TAG)
+                            .commit();
+                }
+            }
         }
     }
-
 
 
     @Override
@@ -68,6 +81,23 @@ public class ListActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemSelected(Uri uri) {
+        if (mTwoPane) {
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(DetailFragment.URI, uri);
 
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(arguments);
 
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container, fragment,
+                            DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.setData(uri);
+            startActivity(intent);
+        }
+    }
 }
