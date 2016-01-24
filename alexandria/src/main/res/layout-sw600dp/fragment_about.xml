@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_about"
+        android:layout_width="match_parent"
+              android:layout_height="@dimen/two_toolbar_height"
+        android:textSize="@dimen/text_size_xxxlarge"
+        android:text="About"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@color/secondary_light"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_xxlarge"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/secondary_text"
+        android:lineSpacingExtra="@dimen/text_size_normal"
+        android:gravity="center"
+        android:text="@string/about_text"
+        android:background="@android:color/transparent"/>
+
+</LinearLayout>

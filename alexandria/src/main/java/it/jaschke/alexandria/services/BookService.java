@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.model.services;
+package it.jaschke.alexandria.services;
 
 import android.app.IntentService;
 import android.content.ContentValues;
@@ -22,7 +22,7 @@ import java.net.URL;
 
 import it.jaschke.alexandria.extras.Status;
 import it.jaschke.alexandria.extras.Tools;
-import it.jaschke.alexandria.model.data.BookContract;
+import it.jaschke.alexandria.data.BookContract;
 
 // I made the decision to keep the IntentService class and not changing using a SyncAdapter. With
 // a SyncAdapter we could have offer the user a selection of most read book and let him choose

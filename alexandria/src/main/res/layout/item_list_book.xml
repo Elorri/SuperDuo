@@ -6,11 +6,11 @@
 
     <ImageView
         android:id="@+id/fullBookCover"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="16dp"
+        android:layout_width="@dimen/list_book_cover_width"
+        android:layout_height="@dimen/list_book_cover_height"
+        android:layout_margin="@dimen/spacing_medium"
         android:contentDescription="@string/book_cover"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:adjustViewBounds="true"
         tools:src="@android:color/darker_gray"/>
 

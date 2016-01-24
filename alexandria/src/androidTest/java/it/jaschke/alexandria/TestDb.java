@@ -8,7 +8,7 @@ import android.test.AndroidTestCase;
 import java.util.Map;
 import java.util.Set;
 
-import it.jaschke.alexandria.model.data.BookContract;
+import it.jaschke.alexandria.data.BookContract;
 import it.jaschke.alexandria.model.data.BookDbHelper;
 
 /**

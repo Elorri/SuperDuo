@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.controller.fragment;
+package it.jaschke.alexandria.fragment;
 
 import android.net.Uri;
 import android.support.v4.app.Fragment;

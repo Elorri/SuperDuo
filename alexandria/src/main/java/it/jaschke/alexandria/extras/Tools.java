@@ -1,7 +1,9 @@
 package it.jaschke.alexandria.extras;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Display;
 import android.widget.ImageView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -35,7 +38,7 @@ public class Tools {
      * @param c Context used to get the ConnectivityManager
      * @return true if the network is available
      */
-    //Should be called on activity_main thread
+    //Should be called on activity_list thread
     static public boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -90,5 +93,36 @@ public class Tools {
                 .into(imageView);
     }
 
+
+
+    private boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public static int getScreenOrientation(Activity activity)
+    {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int orientation = Configuration.ORIENTATION_UNDEFINED;
+        if(display.getWidth()==display.getHeight()){
+            orientation = Configuration.ORIENTATION_SQUARE;
+        } else{
+            if(display.getWidth() < display.getHeight()){
+                orientation = Configuration.ORIENTATION_PORTRAIT;
+            }else {
+                orientation = Configuration.ORIENTATION_LANDSCAPE;
+            }
+        }
+        return orientation;
+    }
+
+    public static boolean isPortrait(Activity activity){
+        return getScreenOrientation(activity)== Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    public static boolean isLandscape(Activity activity){
+        return getScreenOrientation(activity)== Configuration.ORIENTATION_LANDSCAPE;
+    }
 
 }

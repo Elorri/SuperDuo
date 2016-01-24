@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.extras.Tools;
-import it.jaschke.alexandria.model.data.BookContract;
+import it.jaschke.alexandria.data.BookContract;
 
 /**
  * Created by saj on 11/01/15.

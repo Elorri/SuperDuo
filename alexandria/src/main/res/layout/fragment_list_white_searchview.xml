@@ -12,8 +12,8 @@
         <RelativeLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xxxxlarge"
-            android:background="@color/primary">
+            android:layout_height="@dimen/two_toolbar_height"
+            android:background="@color/secondary_light">
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/searchView"
@@ -33,7 +33,8 @@
 
             <ListView android:id="@+id/bookList"
                       android:layout_width="match_parent"
-                      android:layout_height="match_parent"/>
+                      android:layout_height="match_parent"
+                android:background="@android:color/transparent"/>
 
             <TextView android:id="@+id/emptyListView"
                       android:layout_width="match_parent"

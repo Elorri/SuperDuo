@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import it.jaschke.alexandria.R;
-import it.jaschke.alexandria.controller.fragment.DetailFragment;
+import it.jaschke.alexandria.fragment.DetailFragment;
 import it.jaschke.alexandria.fragment.ListFragment;
 
 /**

@@ -36,10 +36,11 @@
         <activity
             android:name=".activity.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".activity.MainActivity">
+            android:launchMode="singleTop"
+            android:parentActivityName=".activity.ListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity"/>
+                android:value=".activity.ListActivity"/>
         </activity>
         <activity
             android:name=".activity.AddActivity"
@@ -79,16 +80,16 @@
         <activity
             android:name=".activity.BarcodeCaptureActivity"
             android:label="@string/title_activity_scan"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName=".activity.AddActivity">
         </activity>
 
 
         <provider
-            android:name=".model.data.BookProvider"
+            android:name=".data.BookProvider"
             android:authorities="it.jaschke.alexandria"
             android:exported="false"/>
         <service
-            android:name=".model.services.BookService"
+            android:name=".services.BookService"
             android:exported="false">
         </service>
 

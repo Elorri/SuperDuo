@@ -39,13 +39,13 @@
 
                 <ImageView
                     android:id="@+id/bookCover"
-                    android:layout_width="@dimen/add_book_cover_size"
-                    android:layout_height="@dimen/add_book_cover_size"
+                    android:layout_width="@dimen/add_book_cover_width"
+                    android:layout_height="@dimen/add_book_cover_height"
                     android:layout_marginLeft="@dimen/spacing_normal"
                     android:layout_marginRight="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:contentDescription="@string/book_cover"
-                    android:scaleType="centerCrop"
+                    android:scaleType="center"
                     android:adjustViewBounds="true"
                     tools:src="@android:color/darker_gray"/>
                 <TextView
@@ -137,17 +137,6 @@
                     android:text="@string/save_button"
                     android:visibility="invisible"/>
 
-                <Button
-                    android:id="@+id/delete_button"
-                    style="?attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/bookDesc"
-                    android:layout_margin="@dimen/spacing_normal"
-                    android:text="@string/delete_button"
-                    android:visibility="invisible"/>
             </RelativeLayout>
         </ScrollView>
 

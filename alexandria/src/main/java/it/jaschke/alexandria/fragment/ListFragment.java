@@ -22,8 +22,7 @@ import android.widget.TextView;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.activity.AddActivity;
 import it.jaschke.alexandria.adapter.BooksAdapter;
-import it.jaschke.alexandria.controller.fragment.MainFragment;
-import it.jaschke.alexandria.model.data.BookContract;
+import it.jaschke.alexandria.data.BookContract;
 
 
 public class ListFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -53,8 +52,8 @@ public class ListFragment extends MainFragment implements LoaderManager.LoaderCa
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
 
-        //Remove depreciated method onAttach
-        getActivity().setTitle(R.string.title_activity_list);
+//        //Remove depreciated method onAttach
+//        getActivity().setTitle(R.string.title_activity_list);
 
         if (savedInstanceState == null) {
             mUri = BookContract.BookEntry.CONTENT_URI;

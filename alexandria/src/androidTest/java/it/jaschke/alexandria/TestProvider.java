@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.test.AndroidTestCase;
 
-import it.jaschke.alexandria.model.data.BookContract;
+import it.jaschke.alexandria.data.BookContract;
 
 /**
  * Created by saj on 23/12/14.

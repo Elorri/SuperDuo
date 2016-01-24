@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.controller.fragment;
+package it.jaschke.alexandria.fragment;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,9 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.data.BookContract;
 import it.jaschke.alexandria.extras.Tools;
-import it.jaschke.alexandria.model.data.BookContract;
-import it.jaschke.alexandria.model.services.BookService;
+import it.jaschke.alexandria.services.BookService;
 
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -32,9 +33,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private final int LOADER_ID = 10;
     private View view;
 
+
+    private Toolbar mToolbarView;
+
     private Uri mUri;
 
     private ShareActionProvider mShareActionProvider;
+    private boolean isUseActivityShareButtonOn;
+    private Intent mShareIntent;
 
     public DetailFragment() {
     }
@@ -42,19 +48,26 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO :2.1 does this change something ?
-        setHasOptionsMenu(true);
 
         if (savedInstanceState != null)
             mUri = savedInstanceState.getParcelable(URI);
+
+        //TODO :2.1 does this change something ?
+        setHasOptionsMenu(true);
     }
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_detail, container, false);
-        view.findViewById(R.id.dismiss_button).setVisibility(View.INVISIBLE);
-        view.findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
+        mToolbarView = (Toolbar) view.findViewById(R.id.toolbar);
+
+        if (mToolbarView != null)
+            isUseActivityShareButtonOn = false;
+        else
+            isUseActivityShareButtonOn = true;
+
+
         view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,11 +85,26 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.book_detail, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        if (isUseActivityShareButtonOn) {
+            inflater.inflate(R.menu.fragment_detail, menu);
+            MenuItem menuItem = menu.findItem(R.id.action_share);
+            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        }
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+//        int id = item.getItemId();
+//        if (id == R.id.action_share) {
+//            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+//            if ((mShareActionProvider != null) || (mShareIntent != null)) {
+//                mShareActionProvider.setShareIntent(mShareIntent);
+//            }
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -136,15 +164,35 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Tools.loadImage(getContext(), imgUrl, bookTitle, bookCover);
 
 
+        mShareIntent = createShareIntent(bookTitle);
+
+        if ((mShareActionProvider != null) && (mShareIntent != null)) {
+            mShareActionProvider.setShareIntent(mShareIntent);
+        }
+
+
+        if (!isUseActivityShareButtonOn) {
+//            AppCompatActivity activity = ((AppCompatActivity) getActivity());
+//            activity.setSupportActionBar(mToolbarView);
+//            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+            Menu menu = mToolbarView.getMenu();
+            if (null != menu) menu.clear();
+            mToolbarView.inflateMenu(R.menu.fragment_detail);
+            // Retrieve the share menu item
+            MenuItem menuItem = menu.findItem(R.id.action_share);
+            menuItem.setIntent(mShareIntent);
+        }
+
+    }
+
+    private Intent createShareIntent(String bookTitle) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
-
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
-
+        return shareIntent;
     }
 
     @Override
@@ -164,7 +212,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         outState.putParcelable(MainFragment.URI, mUri);
         super.onSaveInstanceState(outState);
     }
-
 
 
 }

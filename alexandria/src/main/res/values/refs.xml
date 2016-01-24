@@ -1,0 +1,6 @@
+<resources>
+    <item name="activity_about" type="layout">@layout/activity_toolbar_normal</item>
+    <item name="activity_add" type="layout">@layout/activity_toolbar_normal</item>
+    <item name="activity_detail" type="layout">@layout/activity_toolbar_normal</item>
+    <item name="activity_list" type="layout">@layout/activity_toolbar_normal</item>
+</resources>

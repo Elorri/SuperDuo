@@ -1,4 +1,4 @@
-package it.jaschke.alexandria.controller.fragment;
+package it.jaschke.alexandria.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,8 +31,8 @@ import it.jaschke.alexandria.activity.ListActivity;
 import it.jaschke.alexandria.activity.MainActivity;
 import it.jaschke.alexandria.extras.Status;
 import it.jaschke.alexandria.extras.Tools;
-import it.jaschke.alexandria.model.data.BookContract;
-import it.jaschke.alexandria.model.services.BookService;
+import it.jaschke.alexandria.data.BookContract;
+import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.zxing.FragmentIntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentResult;
@@ -58,7 +58,6 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
     private ImageView mBookCover;
     private TextView mDesc;
     private Button mDismiss;
-    private Button mDelete;
     private Button mSave;
 
     private String mIsbn;
@@ -105,7 +104,6 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
         mBookCover = (ImageView) view.findViewById(R.id.bookCover);
         mDesc=(TextView) view.findViewById(R.id.bookDesc);
         mDismiss=(Button) view.findViewById(R.id.dismiss_button);
-        mDelete=(Button) view.findViewById(R.id.delete_button);
         mSave=(Button) view.findViewById(R.id.save_button);
 
 
@@ -381,7 +379,6 @@ public class AddFragment extends MainFragment implements LoaderManager.LoaderCal
         mAuthorsTextView.setVisibility(View.INVISIBLE);
         mCategoriesTextView.setVisibility(View.INVISIBLE);
         mDismiss.setVisibility(View.INVISIBLE);
-        mDelete.setVisibility(View.INVISIBLE);
         mSave.setVisibility(View.INVISIBLE);
         mDesc.setVisibility(View.INVISIBLE);
         mBookTitleTextView.setText("");

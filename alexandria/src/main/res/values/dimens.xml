@@ -7,6 +7,7 @@
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_xlarge">20sp</dimen>
     <dimen name="text_size_xxlarge">24sp</dimen>
+    <dimen name="text_size_xxxlarge">40sp</dimen>
 
     <!-- Margin and padding -->
     <dimen name="spacing_small">8dp</dimen>
@@ -20,8 +21,11 @@
 
     <!-- UI elements -->
     <dimen name="bookTextSizePx">30sp</dimen>
-    <dimen name="add_book_cover_size">112dp</dimen>
-
+    <dimen name="two_toolbar_height">112dp</dimen>
+    <dimen name="add_book_cover_width">110dp</dimen>
+    <dimen name="add_book_cover_height">140dp</dimen>
+    <dimen name="list_book_cover_width">60dp</dimen>
+    <dimen name="list_book_cover_height">70dp</dimen>
 
 
 </resources>

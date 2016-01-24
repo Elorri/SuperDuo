@@ -1,5 +1,8 @@
 <resources>
-    <item name="fragment_list" type="layout">@layout/fragment_list_uncolored</item>
-    <item name="fragment_add" type="layout">@layout/fragment_add_uncolored</item>
-    <item name="fragment_detail" type="layout">@layout/fragment_detail_uncolored</item>
+    <item name="activity_add" type="layout">@layout/activity_toolbar_ushape</item>
+    <item name="activity_detail" type="layout">@layout/activity_toolbar_ushape</item>
+    <item name="activity_list" type="layout">@layout/activity_toolbar_ushape</item>
+    <item name="fragment_list" type="layout">@layout/fragment_list_white_searchview</item>
+    <item name="fragment_add" type="layout">@layout/fragment_add_white</item>
+    <item name="fragment_detail" type="layout">@layout/fragment_detail_white_title</item>
 </resources>
