@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.activity.DetailActivity;
 import it.jaschke.alexandria.data.BookContract;
 import it.jaschke.alexandria.extras.Tools;
 import it.jaschke.alexandria.services.BookService;
@@ -39,8 +38,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private Toolbar mToolbarView;
 
 
-    private ShareActionProvider mActivityShareProvider;
-    private ShareActionProvider mFragmentShareProvider;
+    private MenuItem mActivityMenuItem;
+    private MenuItem mFragmentMenuItem;
 
     public DetailFragment() {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
@@ -70,8 +69,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
-                "mActivityShareProvider " + mActivityShareProvider + " mFragmentShareProvider " +
-                mFragmentShareProvider);
+                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " +
+                mFragmentMenuItem);
 
         view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +89,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflateActivityMenuItem(menu, inflater);
+        if (getActivity() instanceof DetailActivity)
+            inflateActivityMenuItem(menu, inflater);
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
-                "mActivityShareProvider " + mActivityShareProvider + " mFragmentShareProvider " +
-                mFragmentShareProvider);
+                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " +
+                mFragmentMenuItem);
     }
 
     private void inflateFragmentMenuItem() {
@@ -101,16 +101,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Menu menu = mToolbarView.getMenu();
         if (null != menu) menu.clear();
         mToolbarView.inflateMenu(R.menu.fragment_detail);
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-        mFragmentShareProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-
+        mFragmentMenuItem = menu.findItem(R.id.action_share);
     }
 
     private void inflateActivityMenuItem(Menu menu, MenuInflater inflater) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         inflater.inflate(R.menu.fragment_detail, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-        mActivityShareProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        mActivityMenuItem = menu.findItem(R.id.action_share);
     }
 
 
@@ -175,12 +172,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Tools.loadImage(getContext(), imgUrl, bookTitle, bookCover);
 
 
-       Intent shareIntent = createShareIntent(bookTitle);
-        if (mActivityShareProvider != null) {
-            mActivityShareProvider.setShareIntent(shareIntent);
+        Intent shareIntent = createShareIntent(bookTitle);
+        if (mActivityMenuItem != null) {
+            mActivityMenuItem.setIntent(shareIntent);
         }
-        if (mFragmentShareProvider != null) {
-            mFragmentShareProvider.setShareIntent(shareIntent);
+        if (mFragmentMenuItem != null) {
+            mFragmentMenuItem.setIntent(shareIntent);
         }
     }
 
