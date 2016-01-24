@@ -1,6 +1,7 @@
 package it.jaschke.alexandria.fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +42,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private MenuItem mActivityMenuItem;
     private MenuItem mFragmentMenuItem;
+
+
+    private TextView mBookTitleTextView;
+    private TextView mBookSubTitleTextView;
+    private TextView mAuthorsTextView;
+    private TextView mCategoriesTextView;
+    private ImageView mBookCover;
+    private TextView mDesc;
+    private Button mDelete;
+
 
     public DetailFragment() {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
@@ -72,17 +84,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " +
                 mFragmentMenuItem);
 
-        view.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                String isbn = BookContract.BookEntry.getIsbnFromFullBookUri(mUri);
-                bookIntent.putExtra(BookService.ISBN, isbn);
-                bookIntent.setAction(BookService.DELETE_BOOK);
-                getActivity().startService(bookIntent);
-                getActivity().finish();
-            }
-        });
+
         return view;
     }
 
@@ -102,6 +104,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (null != menu) menu.clear();
         mToolbarView.inflateMenu(R.menu.fragment_detail);
         mFragmentMenuItem = menu.findItem(R.id.action_share);
+        mFragmentMenuItem.setVisible(false);
     }
 
     private void inflateActivityMenuItem(Menu menu, MenuInflater inflater) {
@@ -138,13 +141,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor
+    public void onLoadFinished(Loader<Cursor> loader, Cursor
             data) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         if (!data.moveToFirst()) {
             return;
         }
-
         String bookTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_TITLE));
         String bookSubTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_SUBTITLE));
         String desc = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_DESC));
@@ -153,23 +155,56 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         String categories = data.getString(data.getColumnIndex(BookContract.CategoryEntry.COLUMN_CATEGORY));
 
         View view = getView();
-        ((TextView) view.findViewById(R.id.bookTitle)).setText(bookTitle);
-        ((TextView) view.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
-        ((TextView) view.findViewById(R.id.bookDesc)).setText(desc);
-        ((TextView) view.findViewById(R.id.categories)).setText(categories);
-        TextView authorsTextView = ((TextView) view.findViewById(R.id.authors));
+        mBookTitleTextView = (TextView) view.findViewById(R.id.bookTitle);
+        mBookSubTitleTextView = (TextView) view.findViewById(R.id.bookSubTitle);
+        mDesc = (TextView) view.findViewById(R.id.bookDesc);
+        mCategoriesTextView = (TextView) view.findViewById(R.id.categories);
+        mDelete = (Button) view.findViewById(R.id.delete_button);
+        mBookCover = (ImageView) view.findViewById(R.id.bookCover);
+
+
+        mBookTitleTextView.setVisibility(View.VISIBLE);
+        mBookSubTitleTextView.setVisibility(View.VISIBLE);
+        mCategoriesTextView.setVisibility(View.VISIBLE);
+        mDesc.setVisibility(View.VISIBLE);
+        mDelete.setVisibility(View.VISIBLE);
+        mBookCover.setVisibility(View.VISIBLE);
+
+
+        mBookTitleTextView.setText(bookTitle);
+        mBookSubTitleTextView.setText(bookSubTitle);
+        mDesc.setText(desc);
+        mCategoriesTextView.setText(categories);
+        mAuthorsTextView = ((TextView) view.findViewById(R.id.authors));
+
         //String[] authorsArr = authors.split(","); //could cause NullPointerException
         if (authors == null)
-            authorsTextView.setText("");
+            mAuthorsTextView.setText("");
         else {
             String[] authorsArr = authors.split(",");
-            authorsTextView.setLines(authorsArr.length);
-            authorsTextView.setText(authors.replace(",", "\n"));
+            mAuthorsTextView.setLines(authorsArr.length);
+            mAuthorsTextView.setText(authors.replace(",", "\n"));
         }
 
-        ImageView bookCover = (ImageView) view.findViewById(R.id.bookCover);
-        bookCover.setVisibility(View.VISIBLE);
-        Tools.loadImage(getContext(), imgUrl, bookTitle, bookCover);
+
+
+        Tools.loadImage(getContext(), imgUrl, bookTitle, mBookCover);
+
+        mDelete.setVisibility(View.VISIBLE);
+        mDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent bookIntent = new Intent(getActivity(), BookService.class);
+                String isbn = BookContract.BookEntry.getIsbnFromFullBookUri(mUri);
+                bookIntent.putExtra(BookService.ISBN, isbn);
+                bookIntent.setAction(BookService.DELETE_BOOK);
+                getActivity().startService(bookIntent);
+                if (getActivity() instanceof DetailActivity) {
+                    getActivity().finish();
+                }
+                clearFields();
+            }
+        });
 
 
         Intent shareIntent = createShareIntent(bookTitle);
@@ -177,8 +212,20 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mActivityMenuItem.setIntent(shareIntent);
         }
         if (mFragmentMenuItem != null) {
+            mFragmentMenuItem.setVisible(true);
             mFragmentMenuItem.setIntent(shareIntent);
         }
+    }
+
+    private void clearFields() {
+        mBookTitleTextView.setVisibility(View.INVISIBLE);
+        mBookSubTitleTextView.setVisibility(View.INVISIBLE);
+        mAuthorsTextView.setVisibility(View.INVISIBLE);
+        mCategoriesTextView.setVisibility(View.INVISIBLE);
+        mDelete.setVisibility(View.INVISIBLE);
+        mDesc.setVisibility(View.INVISIBLE);
+        mBookCover.setVisibility(View.INVISIBLE);
+        mFragmentMenuItem.setVisible(false);
     }
 
     private Intent createShareIntent(String bookTitle) {
@@ -202,5 +249,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         super.onSaveInstanceState(outState);
     }
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+        super.onConfigurationChanged(newConfig);
+        if (Tools.isTablet(newConfig) && (Tools.isLandscape(newConfig)))
+            getActivity().finish();
+    }
 }

@@ -29,9 +29,9 @@ import it.jaschke.alexandria.data.BookContract;
 public class ListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-   // private static final String QUERY = "query";
+    private static final String QUERY = "query";
     private static final String SELECTED_KEY = "selected_position";
-   // private CharSequence mQuery;
+    private String mQuery;
     private int mPosition = ListView.INVALID_POSITION;
 
     private BooksAdapter mBooksAdapter;
@@ -54,12 +54,6 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreate(Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
-
-//        //Remove depreciated method onAttach
-//        getActivity().setTitle(R.string.title_activity_list);
-
-
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         mBooksAdapter = new BooksAdapter(getActivity(), null, 0);
     }
 
@@ -75,7 +69,15 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mBookList.setAdapter(mBooksAdapter);
         mSearchView.setIconified(false);
-        mSearchView.clearFocus();
+        //mSearchView.clearFocus();
+
+        if (savedInstanceState != null) {
+            mQuery = savedInstanceState.getString(QUERY);
+            mSearchView.setQuery(mQuery, true);
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "mQuery " + mQuery);
+            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2]
+                    + "mQuery " +mQuery+"mSearchView.getQuery()"+mSearchView.getQuery());
+        }
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -85,7 +87,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
             @Override
             public boolean onQueryTextChange(String query) {
-                if (query.equals("")) mSearchView.clearFocus();
+                //if (query.equals("")) mSearchView.clearFocus();
                 restartLoader();
                 return true;
             }
@@ -112,13 +114,6 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
-//        if (savedInstanceState != null) {
-//            mQuery = savedInstanceState.getCharSequence(QUERY);
-//            mSearchView.setQuery(mQuery, true);
-//            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "mQuery" +mQuery);
-//        }
-
-
         return view;
     }
 
@@ -228,7 +223,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-       // outState.putCharSequence(QUERY, mSearchView.getQuery());
+        outState.putString(QUERY, mSearchView.getQuery().toString());
         if (mPosition != ListView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }

@@ -1,6 +1,5 @@
 package it.jaschke.alexandria.extras;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Display;
 import android.widget.ImageView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -95,34 +93,19 @@ public class Tools {
 
 
 
-    private boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
+    public static  boolean isTablet(Configuration configuration) {
+        return (configuration.screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    public static int getScreenOrientation(Activity activity)
-    {
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int orientation = Configuration.ORIENTATION_UNDEFINED;
-        if(display.getWidth()==display.getHeight()){
-            orientation = Configuration.ORIENTATION_SQUARE;
-        } else{
-            if(display.getWidth() < display.getHeight()){
-                orientation = Configuration.ORIENTATION_PORTRAIT;
-            }else {
-                orientation = Configuration.ORIENTATION_LANDSCAPE;
-            }
-        }
-        return orientation;
+
+    public static boolean isPortrait(Configuration configuration){
+        return configuration.orientation== Configuration.ORIENTATION_PORTRAIT;
     }
 
-    public static boolean isPortrait(Activity activity){
-        return getScreenOrientation(activity)== Configuration.ORIENTATION_PORTRAIT;
-    }
-
-    public static boolean isLandscape(Activity activity){
-        return getScreenOrientation(activity)== Configuration.ORIENTATION_LANDSCAPE;
+    public static boolean isLandscape(Configuration configuration){
+        return configuration.orientation==Configuration.ORIENTATION_LANDSCAPE;
     }
 
 }

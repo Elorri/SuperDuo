@@ -5,8 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/bookTitle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/two_toolbar_height"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:background="@color/secondary_light"
+        tools:text="Holy Bible"/>
+
 <!-- TODO put scroll under title -->
     <ScrollView
+        android:layout_below="@id/bookTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -16,7 +26,6 @@
 
             <ImageView
                 android:id="@+id/bookCover"
-                android:layout_below="@id/bookTitle"
                 android:layout_width="@dimen/add_book_cover_width"
                 android:layout_height="@dimen/add_book_cover_height"
                 android:layout_marginLeft="@dimen/spacing_normal"
@@ -27,20 +36,12 @@
                 android:scaleType="center"
                 tools:src="@android:color/darker_gray"/>
 
-            <TextView
-                android:id="@+id/bookTitle"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/two_toolbar_height"
-                android:gravity="center"
-                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:background="@color/secondary_light"
-                tools:text="Holy Bible"/>
+
 
             <TextView
                 android:id="@+id/bookSubTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/bookTitle"
                 android:layout_marginTop="@dimen/spacing_medium"
                 android:layout_toRightOf="@id/bookCover"
                 android:ellipsize="end"
@@ -88,8 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/bookDesc"
+                android:layout_alignParentRight="true"                                                 android:layout_below="@id/bookDesc"
                 android:layout_margin="@dimen/spacing_normal"
                 android:text="@string/delete_button"/>
 

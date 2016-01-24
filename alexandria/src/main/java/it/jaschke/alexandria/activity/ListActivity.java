@@ -32,17 +32,19 @@ public class ListActivity extends AppCompatActivity implements ListFragment.Call
         if (MainActivity.isAddFirstScreen)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ListFragment listFragment = new ListFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_container, listFragment)
-                .commit();
+        if (savedInstanceState == null) {
+            ListFragment listFragment = new ListFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.main_container, listFragment)
+                    .commit();
+        }
 
         if (findViewById(R.id.detail_fragment_container) != null) {
             mTwoPane = true;
             if (savedInstanceState != null) {
                 Fragment detailFragment = getSupportFragmentManager().findFragmentByTag
                         (DETAILFRAGMENT_TAG);
-                if (detailFragment != null) {
+                if (detailFragment == null) {
                     getSupportFragmentManager().beginTransaction().replace(
                             R.id.detail_fragment_container,
                             new DetailFragment(), DETAILFRAGMENT_TAG)

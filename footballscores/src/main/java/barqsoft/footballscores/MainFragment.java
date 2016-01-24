@@ -65,9 +65,12 @@ public class MainFragment extends Fragment {
         //TODO : 2.1 use preferences
         mViewPager.setCurrentItem(MainActivity.currentItem);
 
+
+
         PagerTabStrip pagerTabStrip = (PagerTabStrip) view.findViewById(R.id.pager_header);
         pagerTabStrip.setDrawFullUnderline(true);
         pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.accent));
+
 
         return view;
     }

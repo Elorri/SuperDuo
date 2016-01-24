@@ -37,6 +37,7 @@
             android:name=".activity.DetailActivity"
             android:label="@string/title_activity_detail"
             android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation|screenSize"
             android:parentActivityName=".activity.ListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

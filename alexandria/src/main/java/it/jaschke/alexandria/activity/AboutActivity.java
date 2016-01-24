@@ -20,14 +20,12 @@ public class AboutActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        //TODO 2.1 I have remove the if does it create pbs ?
-        // if (savedInstanceState == null) {
+         if (savedInstanceState == null) {
         AboutFragment fragment = new AboutFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.main_container, fragment)
                 .commit();
-        //}
+        }
     }
 
 
