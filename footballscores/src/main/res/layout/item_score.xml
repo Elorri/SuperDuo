@@ -22,6 +22,8 @@
                 android:layout_height="@dimen/spacing_xxlarge"
                 android:scaleType="center"
                 android:layout_gravity="center"
+                android:focusable="true"
+                android:contentDescription="@string/home_team_crest"
                 tools:src="@drawable/everton_fc_logo1"/>
             <TextView
                 android:id="@+id/home_name"
@@ -68,6 +70,8 @@
                 android:layout_width="@dimen/spacing_xxlarge"
                 android:layout_height="@dimen/spacing_xxlarge"
                 android:scaleType="center"
+                android:focusable="true"
+                android:contentDescription="@string/away_team_crest"
                 android:layout_gravity="center"
                 tools:src="@drawable/burney_fc_hd_logo"/>
             <TextView

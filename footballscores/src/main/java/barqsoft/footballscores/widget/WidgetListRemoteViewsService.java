@@ -93,6 +93,12 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
                 views.setTextViewText(R.id.score_textview, scores);
                 views.setTextViewText(R.id.time_textview, time);
 
+                //Add content description for images
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                    Utilities.setRemoteContentDescription(views, R.id.home_crest, homeCrest);
+                    Utilities.setRemoteContentDescription(views, R.id.away_crest, awayCrest);
+                }
+
 
                 // Create an Intent to launch DetailActivity
                 final Intent fillInIntent = new Intent();

@@ -35,7 +35,7 @@
 
     <string name="scan_button">Scan</string>
     <string name="input_hint">ex: 9780310941781</string>
-    <string name="book_cover">Bookcover</string>
+    <string name="book_cover">Book cover</string>
     
     <string name="not_found">No Book found</string>
 

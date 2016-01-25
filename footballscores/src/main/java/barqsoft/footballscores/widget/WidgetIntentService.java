@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -73,14 +74,18 @@ public class WidgetIntentService extends IntentService {
                     R.layout.widget_one);
 
 
-
-            //TODO: 2.3 set content description here
             // Add the data to the RemoteViews
             Utilities.setWidgetImage(context, views, R.id.home_crest, homeCrest);
             Utilities.setWidgetImage(context, views, R.id.away_crest, awayCrest);
             views.setTextViewText(R.id.score_textview, scores);
             views.setTextViewText(R.id.time_textview, time);
             views.setTextViewText(R.id.widget_empty, "");
+
+            //Add content description for images
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                Utilities.setRemoteContentDescription(views, R.id.home_crest, homeCrest);
+                Utilities.setRemoteContentDescription(views, R.id.away_crest, awayCrest);
+            }
 
 
             // Create an Intent to launch MainActivity

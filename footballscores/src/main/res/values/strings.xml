@@ -104,5 +104,9 @@
     <string name="empty_widget_list">No matches today</string>
     <string name="title_widget_list">Today matches</string>
 
+    <!-- Talkback content description -->
+    <string name="home_team_crest">home team crest</string>
+    <string name="away_team_crest">away team crest</string>
+
 
 </resources>

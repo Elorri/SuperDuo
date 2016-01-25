@@ -164,7 +164,6 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
                 bookIntent.putExtra(BookService.ISBN, mIsbn);
                 bookIntent.setAction(BookService.SAVE_AS_FAVORITE_BOOK);
                 getActivity().startService(bookIntent);
-                getActivity().getSupportFragmentManager().popBackStack();
                 startListScreen();
             }
         });
@@ -176,20 +175,13 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
     }
 
     private void startListScreen() {
-        if(isFragmentOnFirstScreen()){
+        if(MainActivity.isAddFirstScreen){
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             getActivity().startActivity(new Intent(getActivity(), ListActivity.class));
         }else{
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             getActivity().finish();
         }
-    }
-
-    private boolean isFragmentOnFirstScreen() {
-        String activityName=getActivity().getClass().getSimpleName();
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "activityName " +
-                activityName);
-        return activityName.equals(MainActivity.class.getSimpleName());
     }
 
 

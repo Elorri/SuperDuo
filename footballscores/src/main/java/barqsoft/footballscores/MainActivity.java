@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
 //        syncDB();
-//        updateWidgets();
+        updateWidgets();
 //        ScoresSyncAdapter.initializeSyncAdapter(this);
 
 

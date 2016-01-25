@@ -5,6 +5,10 @@ It is subdivided into 2 apps Alexandria and FootballScores.
 
 ## Min Android Api supported
 
+Alexandria : 15
+FootballScores : 14
+
+
 ## Features
 
 Alexandria : 
@@ -15,10 +19,12 @@ FootballScores :
 
 ## Libraries used
 
-|  Api level |             <  | Api level     | >=             |
-| ------------- | ------------- | :-----------: |:-------------: |
-|    ?           | Zxing|18 |  Google Play Mobile Vision Api   |
-|    14           | Setting Holo ActionBar|21 |  Settings Material design ActionBar  |
+|             <  | Api level     | >=             |
+| ------------- | :-----------: |:-------------: |
+| Zxing|18 |  Google Play Mobile Vision Api   |
+| Setting Holo ActionBar|21 |  Settings Material design ActionBar  |
+| Not supported |15 |  Talback content description for widgets  |
+
 
 ## Libraries infos
 

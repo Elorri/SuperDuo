@@ -1,5 +1,6 @@
 package barqsoft.footballscores;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -237,6 +238,13 @@ public class Utilities {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+    public static void setRemoteContentDescription(
+            RemoteViews views, int ressource_image, String description) {
+        views.setContentDescription(ressource_image, description);
     }
 
 
