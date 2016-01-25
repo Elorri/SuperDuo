@@ -37,10 +37,10 @@ The user can search for book without internet connection and the app does not cr
 
 ##### 2.1_building_a_total_experience
   - [x] add barcode scanner functionnality
-  - [ ] improve tablet layout
+  - [x] improve tablet layout
   - [ ] create a CustomView
   - [x] use a Library : scanning bar code integrated inside the screen
-  - [ ] improve UI  
+  - [x] improve UI  
   - [ ] Not requiered : add a fixed sized widget
   - [ ] Not requiered : add a collection widget  
 
@@ -126,8 +126,8 @@ The user can see a message that there is no data shown because no internet conne
 
 | Branches  | LOC    | Hours |
 | ------------- | :-----------: |:-------------: |
-| 2.0_errors_and_guidance_messages|851 |  29   |
-| 2.1_building_a_total_experience|12997|2,5|
+| 2.0_errors_and_guidance_messages|851   |  29   |
+| 2.1_building_a_total_experience|13871  |34     |
 | 2.2_accessibility|0|0|
 | 2.3_localisation|0|0|
 | 2.4_performance|0|0|
@@ -138,9 +138,9 @@ The user can see a message that there is no data shown because no internet conne
 ##General Statistics
 
 
-| LOC    | Hours | Days | 
-| :------: | :-----: |:-----: |
-| 13768  |  31,5  |  |
+| LOC    | Hours | 
+| :------: | :-----: 
+|13871  |34     | 
 
-Last number of LOC : 21892
+Last number of LOC : 22766
 Starting Code number of LOC : 8124

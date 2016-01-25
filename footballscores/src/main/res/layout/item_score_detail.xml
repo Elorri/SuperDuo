@@ -31,19 +31,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
         android:paddingBottom="@dimen/spacing_normal"        >
-
-
-        <!--<Button-->
-            <!--style="?attr/buttonBarButtonStyle"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:gravity="center"-->
-            <!--android:text="@string/share_text"-->
-            <!--android:id="@+id/share_button"-->
-            <!--android:drawableLeft="@android:drawable/ic_menu_share"-->
-            <!--android:paddingLeft="@dimen/spacing_xxxxlarge"-->
-            <!--android:paddingRight="@dimen/spacing_xxxxlarge"/>-->
+        
 
 
         <Button
