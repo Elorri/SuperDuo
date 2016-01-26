@@ -25,7 +25,7 @@ public class ScoresProvider extends ContentProvider {
 
     private static final String SCORES_BY_LEAGUE = ScoresContract.ScoreEntry.LEAGUE_COL + " = ?";
     private static final String SCORES_BY_DATE = ScoresContract.ScoreEntry.DATE_TIME_COL
-            +"between ? and ?";
+            +" between ? and ?";
     private static final String SCORES_BY_ID = ScoresContract.ScoreEntry.MATCH_ID + " = ?";
 
 

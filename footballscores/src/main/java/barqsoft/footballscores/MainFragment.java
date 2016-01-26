@@ -31,7 +31,7 @@ public class MainFragment extends Fragment {
 
         for (int i = 0; i < NUM_PAGES; i++) {
             long dateTime=Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis());
-            
+            tabs[i] = new ScoresFragment();
             tabs[i].setDate(dateTime);
         }
 
@@ -73,7 +73,8 @@ public class MainFragment extends Fragment {
         // Returns the page title for the top indicator
         @Override
         public CharSequence getPageTitle(int position) {
-            return getDayName(getActivity(), Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis()));
+            return getDayName(getActivity(), Utilities.addDay(position-2, Calendar.getInstance()
+                    .getTimeInMillis()));
         }
 
         public String getDayName(Context context, long dateInMillis) {

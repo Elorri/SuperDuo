@@ -28,7 +28,7 @@ public class ScoresContract {
 
         public static final String TABLE_NAME = "scores";
         public static final String LEAGUE_COL = "league";
-        public static final String DATE_TIME_COL = "date";
+        public static final String DATE_TIME_COL = "date_time";
         public static final String HOME_COL = "home";
         public static final String AWAY_COL = "away";
         public static final String HOME_GOALS_COL = "home_goals";
