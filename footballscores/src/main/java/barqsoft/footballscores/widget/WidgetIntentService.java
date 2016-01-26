@@ -56,7 +56,6 @@ public class WidgetIntentService extends IntentService {
             return;
         }
 
-        //TODO :2.1 when no icons put the teams name instead
         // Extract the data from the Cursor
         Context context = getApplicationContext();
         String homeCrest = cursor.getString(ScoresFragment.COL_HOME);
@@ -64,7 +63,7 @@ public class WidgetIntentService extends IntentService {
         String scores = Utilities.getScores(context,
                 cursor.getInt(ScoresFragment.COL_HOME_GOALS),
                 cursor.getInt(ScoresFragment.COL_AWAY_GOALS));
-        String time = cursor.getString(ScoresFragment.COL_MATCHTIME);
+        String dateTime=cursor.getString(ScoresFragment.COL_DATE_TIME);
         cursor.close();
 
 
@@ -78,7 +77,7 @@ public class WidgetIntentService extends IntentService {
             Utilities.setWidgetImage(context, views, R.id.home_crest, homeCrest);
             Utilities.setWidgetImage(context, views, R.id.away_crest, awayCrest);
             views.setTextViewText(R.id.score_textview, scores);
-            views.setTextViewText(R.id.time_textview, time);
+            views.setTextViewText(R.id.time_textview, Utilities.convertDateTimeToTime(Long.valueOf(dateTime), context));
             views.setTextViewText(R.id.widget_empty, "");
 
             //Add content description for images

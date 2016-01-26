@@ -23,8 +23,7 @@ public class ScoresDBHelper extends SQLiteOpenHelper
     {
         final String CreateScoresTable = "CREATE TABLE " + ScoreEntry.TABLE_NAME + " ("
                 + ScoreEntry._ID + " INTEGER PRIMARY KEY,"
-                + ScoreEntry.DATE_COL + " TEXT NOT NULL,"
-                + ScoreEntry.TIME_COL + " INTEGER NOT NULL,"
+                + ScoreEntry.DATE_TIME_COL + " TEXT NOT NULL,"
                 + ScoreEntry.HOME_COL + " TEXT NOT NULL,"
                 + ScoreEntry.AWAY_COL + " TEXT NOT NULL,"
                 + ScoreEntry.LEAGUE_COL + " INTEGER NOT NULL,"

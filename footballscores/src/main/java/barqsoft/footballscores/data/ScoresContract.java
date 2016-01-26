@@ -19,14 +19,16 @@ public class ScoresContract {
     public static final String PATH_DATE = "date";
 
 
+
+
+
     public static final class ScoreEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MATCHES).build();
 
         public static final String TABLE_NAME = "scores";
         public static final String LEAGUE_COL = "league";
-        public static final String DATE_COL = "date";
-        public static final String TIME_COL = "time";
+        public static final String DATE_TIME_COL = "date";
         public static final String HOME_COL = "home";
         public static final String AWAY_COL = "away";
         public static final String HOME_GOALS_COL = "home_goals";
@@ -55,11 +57,12 @@ public class ScoresContract {
                     .build();
         }
 
-        public static Uri buildScoreByDate(String date) {
+        //will match MATCHES_BY_DATE
+        public static Uri buildScoreByDate(String dateTime) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(PATH_MATCHES)
                     .appendPath(PATH_DATE)
-                    .appendPath(date)
+                    .appendPath(dateTime)
                     .build();
         }
 

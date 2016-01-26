@@ -85,13 +85,15 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
                 String scores = Utilities.getScores(context,
                         data.getInt(ScoresFragment.COL_HOME_GOALS),
                         data.getInt(ScoresFragment.COL_AWAY_GOALS));
-                String time = data.getString(ScoresFragment.COL_MATCHTIME);
+                String dateTime=data.getString(ScoresFragment.COL_DATE_TIME);
+
 
                 // Add the data to the RemoteViews
                 Utilities.setWidgetImage(context, views, R.id.home_crest,homeCrest);
                 Utilities.setWidgetImage(context, views, R.id.away_crest, awayCrest);
                 views.setTextViewText(R.id.score_textview, scores);
-                views.setTextViewText(R.id.time_textview, time);
+                views.setTextViewText(R.id.time_textview, Utilities.convertDateTimeToTime(Long.valueOf(dateTime), context));
+
 
                 //Add content description for images
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {

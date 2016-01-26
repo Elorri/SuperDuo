@@ -65,7 +65,8 @@ public class ScoresAdapter extends CursorAdapter {
         String awayTeamName = cursor.getString(ScoresFragment.COL_AWAY);
         viewHolder.homeName.setText(homeTeamName);
         viewHolder.awayName.setText(awayTeamName);
-        viewHolder.date.setText(cursor.getString(ScoresFragment.COL_MATCHTIME));
+        String dateTime=cursor.getString(ScoresFragment.COL_DATE_TIME);
+        viewHolder.date.setText(Utilities.convertDateTimeToTime(Long.valueOf(dateTime), context));
         viewHolder.score.setText(Utilities.getScores(context, cursor.getInt(ScoresFragment.COL_HOME_GOALS), cursor.getInt(ScoresFragment.COL_AWAY_GOALS)));
         viewHolder.matchId = cursor.getDouble(ScoresFragment.COL_ID);
         Utilities.setImage(context, viewHolder.homeCrest,homeTeamName);

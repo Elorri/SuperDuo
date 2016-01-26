@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
+import barqsoft.footballscores.Utilities;
+
 /**
  * Created by yehya khaled on 2/25/2015.
  */
@@ -22,7 +24,8 @@ public class ScoresProvider extends ContentProvider {
     public static final int MATCHES_BY_DATE = 103;
 
     private static final String SCORES_BY_LEAGUE = ScoresContract.ScoreEntry.LEAGUE_COL + " = ?";
-    private static final String SCORES_BY_DATE = ScoresContract.ScoreEntry.DATE_COL + " = ?";
+    private static final String SCORES_BY_DATE = ScoresContract.ScoreEntry.DATE_TIME_COL
+            +"between ? and ?";
     private static final String SCORES_BY_ID = ScoresContract.ScoreEntry.MATCH_ID + " = ?";
 
 
@@ -34,7 +37,8 @@ public class ScoresProvider extends ContentProvider {
         matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_LEAGUE + "/*", MATCHES_BY_LEAGUE);
         matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_ID + "/#", MATCHES_BY_ID);
         //TODO : 2.2 change date * by date # if millis
-        matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_DATE + "/*", MATCHES_BY_DATE);
+        matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_DATE +
+                "/#", MATCHES_BY_DATE);
         return matcher;
     }
 
@@ -78,10 +82,18 @@ public class ScoresProvider extends ContentProvider {
                         projection, null, null, null, null, sortOrder);
                 break;
             case MATCHES_BY_DATE:
-                String date=ScoresContract.ScoreEntry.getDateFromScoresByDateUri(uri);
+                String dateTime=ScoresContract.ScoreEntry.getDateFromScoresByDateUri(uri);
+
+                //Convert this instant into a range representing a day
+                long dateStart=Utilities.setZero(Long.valueOf(dateTime));
+                long dateEnd=Utilities.addDay(1,dateStart);
+
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         ScoresContract.ScoreEntry.TABLE_NAME,
-                        projection, SCORES_BY_DATE, new String[]{date}, null, null, sortOrder);
+                        projection, SCORES_BY_DATE, new String[]{String.valueOf(dateStart),
+                                String.valueOf(dateEnd)},
+                        null, null,
+                        sortOrder);
                 break;
             case MATCHES_BY_ID:
                 retCursor = mOpenHelper.getReadableDatabase().query(

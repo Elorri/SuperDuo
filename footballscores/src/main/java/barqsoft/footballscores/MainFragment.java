@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by yehya khaled on 2/27/2015.
@@ -30,33 +30,9 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pager, container, false);
 
         for (int i = 0; i < NUM_PAGES; i++) {
-            //TODO : 2.3 should be converted in julianday dig into the below
-//            Time dayTime = new Time();
-//            dayTime.setToNow();
-//            // we start at the day returned by local time. Otherwise this is a mess.
-//            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);  //gmtoff should be called utcoff it's the numbers of offset to reach //universal time = utc time
-//            // now we work exclusively in UTC
-//            dayTime = new Time();
-//            // Cheating to convert this to UTC time, which is what we want anyhow
-//            long dateTime = dayTime.setJulianDay(julianStartDay + i); // i is the number of days 0 for today, 1 for tomorrow
-//            long todayInMillisUTC = dayTime.setJulianDay(julianStartDay + 0); // today in millis
-//            long tomorrowInMillisUTC = dayTime.setJulianDay(julianStartDay + 1); // tomorrow in millis
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, dateTime);
-
-
-//            //This works too
-//            Time t = new Time();
-//            t.setToNow();
-//            int julianDay = Time.getJulianDay(dateInMillis, t.gmtoff);
-//            int currentJulianDay = Time.getJulianDay(System.currentTimeMillis(), t.gmtoff);
-
-            //TODO : 2.3 format with locale
-            Date date = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString=dateFormat.format(date);
-            tabs[i] = new ScoresFragment();
-            //TODO :2.1 check by rotation screen or use getArguments or ask on forums
-            tabs[i].setDate(dateString);
+            long dateTime=Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis());
+            
+            tabs[i].setDate(dateTime);
         }
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
@@ -97,8 +73,7 @@ public class MainFragment extends Fragment {
         // Returns the page title for the top indicator
         @Override
         public CharSequence getPageTitle(int position) {
-            //TODO : 2.3 use your localisation function
-            return getDayName(getActivity(), System.currentTimeMillis() + ((position - 2) * 86400000));
+            return getDayName(getActivity(), Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis()));
         }
 
         public String getDayName(Context context, long dateInMillis) {
@@ -119,7 +94,8 @@ public class MainFragment extends Fragment {
                 Time time = new Time();
                 time.setToNow();
                 // Otherwise, the format is just the day of the week (e.g "Wednesday".
-                SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
+                SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Utilities
+                        .getMostSuitableLocale(getContext()));
                 return dayFormat.format(dateInMillis);
             }
         }

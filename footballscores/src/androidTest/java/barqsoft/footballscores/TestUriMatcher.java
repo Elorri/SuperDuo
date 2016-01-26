@@ -28,7 +28,7 @@ public class TestUriMatcher extends AndroidTestCase {
         Log.e("SuperDuo", uri.toString());
         assertEquals("Error:", testMatcher.match(uri), ScoresProvider.MATCHES_BY_ID);
 
-        uri = ScoresContract.ScoreEntry.buildScoreByDate("2016-01-14");
+        uri = ScoresContract.ScoreEntry.buildScoreByDate("235788987l");
         Log.e("SuperDuo", uri.toString());
         assertEquals("Error:", testMatcher.match(uri), ScoresProvider.MATCHES_BY_DATE);
     }

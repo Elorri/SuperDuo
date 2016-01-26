@@ -26,13 +26,12 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     public ScoresAdapter mAdapter;
     public static final int SCORES_LOADER = 0;
-    private String mDate;
+    private long mTimeDate;
     private ListView mScoreList;
 
     public static final String[] MATCHES_COLUMNS = {
                      ScoresContract.ScoreEntry._ID   ,
-                     ScoresContract.ScoreEntry.DATE_COL  ,
-                     ScoresContract.ScoreEntry.TIME_COL  ,
+                     ScoresContract.ScoreEntry.DATE_TIME_COL,
                      ScoresContract.ScoreEntry.HOME_COL  ,
                      ScoresContract.ScoreEntry.AWAY_COL  ,
                      ScoresContract.ScoreEntry.LEAGUE_COL  ,
@@ -45,15 +44,14 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     // These indices are tied to MATCHES_COLUMNS.  If MATCHES_COLUMNS changes, these
     // must change.
     public static final int COL_MATCH_ID = 0;
-    public static final int COL_DATE = 1;
-    public static final int COL_MATCHTIME = 2;
-    public static final int COL_HOME = 3;
-    public static final int COL_AWAY = 4;
-    public static final int COL_LEAGUE = 5;
-    public static final int COL_HOME_GOALS = 6;
-    public static final int COL_AWAY_GOALS = 7;
-    public static final int COL_ID = 8;
-    public static final int COL_MATCHDAY = 9;
+    public static final int COL_DATE_TIME = 1;
+    public static final int COL_HOME = 2;
+    public static final int COL_AWAY = 3;
+    public static final int COL_LEAGUE = 4;
+    public static final int COL_HOME_GOALS = 5;
+    public static final int COL_AWAY_GOALS = 6;
+    public static final int COL_ID = 7;
+    public static final int COL_MATCHDAY = 8;
 
 
 
@@ -94,9 +92,9 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:"
-                + mDate);
+                + mTimeDate);
         return new CursorLoader(getActivity(),
-                ScoresContract.ScoreEntry.buildScoreByDate(mDate),
+                ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(mTimeDate)),
                 MATCHES_COLUMNS,
                 null,
                 null,
@@ -117,8 +115,8 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
 
 
-    public void setDate(String date) {
-        this.mDate = date;
+    public void setDate(long timeDate) {
+        this.mTimeDate = timeDate;
     }
 
     @Override

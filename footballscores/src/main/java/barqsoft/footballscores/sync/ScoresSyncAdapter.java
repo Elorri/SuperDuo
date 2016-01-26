@@ -26,9 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.Calendar;
 import java.util.Vector;
 
 import barqsoft.footballscores.R;
@@ -158,6 +156,8 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         BufferedReader reader = null;
         String jsonData = null;
 
+
+
         try {
             URL fetch = new URL(uri.toString());
             UrlConnection = (HttpURLConnection) fetch.openConnection();
@@ -244,7 +244,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         final String SEGUNDA_DIVISION = "400";
         final String SERIE_A = "401";
         final String PRIMERA_LIGA = "402";
-        final String Bundesliga3 = "403";
+        final String BUNDESLIGA3 = "403";
         final String EREDIVISIE = "404";
 
 
@@ -254,7 +254,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         final String LINKS = "_links";
         final String SOCCER_SEASON = "soccerseason";
         final String SELF = "self";
-        final String MATCH_DATE = "date";
+        final String MATCH_DATE = "timestamp";
         final String HOME_TEAM = "homeTeamName";
         final String AWAY_TEAM = "awayTeamName";
         final String RESULT = "result";
@@ -264,7 +264,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
 
         //Match data
         String league;
-        String date;
+        String timestamp;
         String time;
         String home;
         String away;
@@ -292,9 +292,15 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                 // If it doesn't, that can cause an empty DB, bypassing the dummy data routine.
                 if (league.equals(DUMMY_LEAGUE) ||
                         league.equals(PREMIER_LEAGUE) ||
+                        league.equals(LIGUE1) ||
+                        league.equals(LIGUE2) ||
                         league.equals(SERIE_A) ||
+                        league.equals(SEGUNDA_DIVISION) ||
+                        league.equals(PRIMERA_LIGA) ||
+                        league.equals(BUNDESLIGA3) ||
                         league.equals(BUNDESLIGA1) ||
                         league.equals(BUNDESLIGA2) ||
+                        league.equals(EREDIVISIE) ||
                         league.equals(PRIMERA_DIVISION)) {
                     //Exple : http://api.football-data.org/alpha/fixtures/146892 -> 146892
                     matchId = matchData.getJSONObject(LINKS).getJSONObject(SELF).getString("href");
@@ -302,49 +308,23 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                     if (!isReal) {
                         //This if statement changes the match ID of the dummy data so that it all goes into the database
                         //This is useful because the mock data has always the same matchId 000000,
-                        // and matchId should be unique in db, concatanating i value
+                        // and matchId should be unique in db, concatenating i value
                         // will solve the pb
                         matchId = matchId + Integer.toString(i);
                     }
 
+                    // TODO delete all match > j-2 ou -3?
                     //TODO 2.4 make sure you get time and datefrom timestamp
-                    date = matchData.getString(MATCH_DATE); //get timestamp ex:2016-01-13T19:45:00Z
+                    timestamp = matchData.getString(MATCH_DATE); //get timestamp ex:2016-01-13T19:45:00Z
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp from" +
-                            " serveur: " + date);
+                            " serveur: " + timestamp);
 
 
-                    time = date.substring(date.indexOf("T") + 1, date.indexOf("Z"));
-                    date = date.substring(0, date.indexOf("T"));
-                    SimpleDateFormat match_date = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
-                    match_date.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "match_date:"
-                            + match_date);
-
-
-                    Date parseddate = match_date.parse(date + time);
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "parseDate:"
-                            + parseddate);
-                    SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd:HH:mm");
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "new_date:"
-                            + new_date);
-                    new_date.setTimeZone(TimeZone.getDefault());
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "new_date:"
-                            + new_date);
-                    date = new_date.format(parseddate);
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:"
-                            + date);
-                    time = date.substring(date.indexOf(":") + 1);
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "time:"
-                            + time);
-                    date = date.substring(0, date.indexOf(":"));
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:"
-                            + date);
+                    long dateTime=Utilities.getLongDate(timestamp);
 
                     if (!isReal) {
-                        //This if statement changes the dummy data's date to match our current date range.
-                        Date fragmentdate = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
-                        SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
-                        date = mformat.format(fragmentdate);
+                        //This if statement changes the dummy data's timestamp to match our current timestamp range.
+                        dateTime=Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis());
                     }
 
                     home = matchData.getString(HOME_TEAM);
@@ -352,24 +332,16 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                     homeGoals = matchData.getJSONObject(RESULT).getString(HOME_GOALS);
                     awayGoals = matchData.getJSONObject(RESULT).getString(AWAY_GOALS);
                     matchDay = matchData.getString(MATCH_DAY);
+
                     ContentValues match_values = new ContentValues();
                     match_values.put(ScoresContract.ScoreEntry.MATCH_ID, matchId);
-                    match_values.put(ScoresContract.ScoreEntry.DATE_COL, date);
-                    match_values.put(ScoresContract.ScoreEntry.TIME_COL, time);
+                    match_values.put(ScoresContract.ScoreEntry.DATE_TIME_COL, dateTime);
                     match_values.put(ScoresContract.ScoreEntry.HOME_COL, home);
                     match_values.put(ScoresContract.ScoreEntry.AWAY_COL, away);
                     match_values.put(ScoresContract.ScoreEntry.HOME_GOALS_COL, homeGoals);
                     match_values.put(ScoresContract.ScoreEntry.AWAY_GOALS_COL, awayGoals);
                     match_values.put(ScoresContract.ScoreEntry.LEAGUE_COL, league);
                     match_values.put(ScoresContract.ScoreEntry.MATCH_DAY, matchDay);
-                    //Log.v(LOG_TAG,matchId);
-                    //Log.v(LOG_TAG,mDate);
-                    //Log.v(LOG_TAG,time);
-                    //Log.v(LOG_TAG,home);
-                    //Log.v(LOG_TAG,away);
-                    //Log.v(LOG_TAG,homeGoals);
-                    //Log.v(LOG_TAG,awayGoals);
-
                     values.add(match_values);
                 }
             }
@@ -378,7 +350,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             values.toArray(insertData);
             insertedData = mContext.getContentResolver().bulkInsert(
                     ScoresContract.ScoreEntry.CONTENT_URI, insertData);
-            //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(insertedData));
+            Log.v(LOG_TAG,"Succesfully Inserted : " + insertedData);
         } catch (ParseException e) {
             Log.d(LOG_TAG, e.getMessage());
         } catch (JSONException e) {

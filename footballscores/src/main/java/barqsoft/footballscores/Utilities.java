@@ -17,7 +17,9 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -291,5 +293,47 @@ public class Utilities {
         return false;
     }
 
+    /**
+     * This function take a timestamp in the form of '2016-01-25T19:00:00Z', remove the 'Z'
+     * corresponding to the GMT+00:00 and gives it to the standard java 6 function to parse it.
+     * Note :java 8 should be able to handle the case without this trick.
+     * @param timestamp
+     * @return the number of milliseconds since Jan. 1, 1970 for the given timestamp
+     * @throws ParseException
+     */
+    public static long getLongDate(String timestamp) throws ParseException {
+        timestamp=timestamp.substring(0,timestamp.length());
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SS");
+        return df.parse(timestamp).getTime();
+    }
 
+
+    public static long addDay(int nbDays, long startDateInMillis) {
+        Calendar endDate = Calendar.getInstance();
+        endDate.setTime(new Date(startDateInMillis));
+        endDate.add(Calendar.DATE, nbDays);
+        return endDate.getTime().getTime();
+    }
+
+    /**
+     * This method convert a long representing an instant ex 2016-01-25 19:00:00 to the beginning
+     * of the day ex:2016-01-25 00:00:00
+     * @param dateInMillis
+     * @return long representing the start of the day
+     */
+    public static long setZero(long dateInMillis) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateInMillis);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        return calendar.getTimeInMillis();
+    }
+
+    public static String convertDateTimeToTime(long dateTime, Context context) {
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm", getMostSuitableLocale(context));
+        return df.format(new Date(dateTime));
+    }
 }
