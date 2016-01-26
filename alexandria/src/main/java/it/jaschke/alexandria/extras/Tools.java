@@ -16,6 +16,8 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 
+import java.util.Locale;
+
 import it.jaschke.alexandria.R;
 
 /**
@@ -53,18 +55,15 @@ public class Tools {
     }
 
 
-
-
     // is device ready for features
     static public boolean isDeviceReadyForGooglePlayMobileVisionApi() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
     }
 
 
-
-
     /**
      * Compare the second Uri to the first and return true if equals, false if not
+     *
      * @param uri1 first uri
      * @param uri2 second uri to compare to the first
      * @return true if the 2 uris are equals, false otherwise
@@ -74,15 +73,15 @@ public class Tools {
     }
 
 
-    public static void loadImage(Context context,String imgUrl,String errorMsg, ImageView
-            imageView){
+    public static void loadImage(Context context, String imgUrl, String errorMsg, ImageView
+            imageView) {
         ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
         int noImageColor = generator.getRandomColor();
         TextDrawable noImage = TextDrawable.builder()
                 .beginConfig()
                 .fontSize((int) context.getResources().getDimension(R.dimen.bookTextSizePx))
                 .textColor(Color.BLACK)
-                .endConfig().buildRect(errorMsg.substring(0,1), //will display first letter title
+                .endConfig().buildRect(errorMsg.substring(0, 1), //will display first letter title
                         noImageColor);
         Glide.with(context)
                 .load(imgUrl)
@@ -92,20 +91,63 @@ public class Tools {
     }
 
 
-
-    public static  boolean isTablet(Configuration configuration) {
+    public static boolean isTablet(Configuration configuration) {
         return (configuration.screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 
-    public static boolean isPortrait(Configuration configuration){
-        return configuration.orientation== Configuration.ORIENTATION_PORTRAIT;
+    public static boolean isPortrait(Configuration configuration) {
+        return configuration.orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
-    public static boolean isLandscape(Configuration configuration){
-        return configuration.orientation==Configuration.ORIENTATION_LANDSCAPE;
+    public static boolean isLandscape(Configuration configuration) {
+        return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
+
+
+    public static Locale getMostSuitableLocale(Context context) {
+        String usLocale = context.getResources().getString(R.string.us_locale);
+        String frLocale = context.getResources().getString(R.string.fr_locale);
+        String chLocale = context.getResources().getString(R.string.ch_locale);
+
+        String usLocaleLang = usLocale.split("_")[0];
+        String frLocaleLang = frLocale.split("_")[0];
+        String chLocaleLang = chLocale.split("_")[0];
+
+        String usLocaleCountry = usLocale.split("_")[1];
+        String frLocaleCountry = frLocale.split("_")[1];
+        String chLocaleCountry = chLocale.split("_")[1];
+
+        if ((Locale.getDefault().getLanguage().equals(usLocaleLang)) && (Locale.getDefault()
+                .getCountry().equals(usLocaleCountry)))
+            return Locale.getDefault(); //The user Locale is the Locale we want, no further search
+
+        if ((Locale.getDefault().getLanguage().equals(frLocaleLang)) && (Locale.getDefault().getCountry().equals(frLocaleCountry)))
+            return Locale.getDefault(); //The user Locale is the Locale we want, no further search
+
+        if (Locale.getDefault().getLanguage().equals(frLocaleLang)
+                && isLocaleAvailable(frLocaleLang, frLocaleCountry))
+            return new Locale(frLocaleLang, frLocaleCountry);
+
+        if (Locale.getDefault().getLanguage().equals(chLocaleLang)
+                && isLocaleAvailable(chLocaleLang, frLocaleCountry))
+            return new Locale(chLocaleLang, chLocaleCountry);
+
+        //us_US only locale Java guarantees is always available.
+        return new Locale(usLocaleLang, usLocaleCountry);
+    }
+
+    public static boolean isLocaleAvailable(String language, String country) {
+        Locale[] locales = Locale.getAvailableLocales();
+        for (Locale locale : locales) {
+            if ((locale.getLanguage().equals(language))
+                    && (locale.getCountry().equals(country)))
+                return true;
+        }
+        return false;
+    }
+
 
 }

@@ -12,10 +12,10 @@ FootballScores : 14
 ## Features
 
 Alexandria : 
-- ?
+- Locale support : en_US, fr_FR
 
 FootballScores : 
-- ?
+- Locale support : en_US, fr_FR, zh_CN
 
 ## Libraries used
 

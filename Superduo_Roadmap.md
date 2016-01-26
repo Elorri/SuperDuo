@@ -46,7 +46,7 @@ The user can search for book without internet connection and the app does not cr
 
 ##### 2.2_accessibility
   - [x] Add navigation drawer description for accessibility in the new ActionBarDrawerToggle()
-  - [ ] Not requiered : add content description for talkback use by sight-impaired users
+  - [x] Not requiered : add content description for talkback use by sight-impaired users
   - [ ] Not requiered : implement accessibility interfaces for CustomView
  
 ##### 2.3_localisation
@@ -105,7 +105,7 @@ The user can see a message that there is no data shown because no internet conne
   - [x] add a collection widget  
 
 ##### 2.2_accessibility
-  - [ ] add content description for talkback use by sight-impaired users
+  - [x] add content description for talkback use by sight-impaired users
   - [ ] implement accessibility interfaces for CustomView
  
 ##### 2.3_localisation
@@ -128,7 +128,7 @@ The user can see a message that there is no data shown because no internet conne
 | ------------- | :-----------: |:-------------: |
 | 2.0_errors_and_guidance_messages|851   |  29   |
 | 2.1_building_a_total_experience|13871  |34     |
-| 2.2_accessibility|0|0|
+| 2.2_accessibility|38|0,5|
 | 2.3_localisation|0|0|
 | 2.4_performance|0|0|
 
@@ -142,5 +142,5 @@ The user can see a message that there is no data shown because no internet conne
 | :------: | :-----: 
 |13871  |34     | 
 
-Last number of LOC : 22766
+Last number of LOC :  22804
 Starting Code number of LOC : 8124

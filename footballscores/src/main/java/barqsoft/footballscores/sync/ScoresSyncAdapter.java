@@ -65,7 +65,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                               ContentProviderClient provider, SyncResult syncResult) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         syncDb();
-
     }
 
 
@@ -312,6 +311,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                     date = matchData.getString(MATCH_DATE); //get timestamp ex:2016-01-13T19:45:00Z
                     Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp from" +
                             " serveur: " + date);
+
 
                     time = date.substring(date.indexOf("T") + 1, date.indexOf("Z"));
                     date = date.substring(0, date.indexOf("T"));

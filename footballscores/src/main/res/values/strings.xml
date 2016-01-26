@@ -109,4 +109,9 @@
     <string name="away_team_crest">away team crest</string>
 
 
+    <!-- Localisation related -->
+    <string name="us_locale">en_US</string>
+    <string name="fr_locale">fr_FR</string>
+    <string name="ch_locale">zh_CN</string>
+
 </resources>

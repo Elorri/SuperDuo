@@ -85,6 +85,10 @@
     <string name="save_button">save</string>
     <string name="delete_button">delete</string>
 
+    <!-- Localisation related -->
+    <string name="us_locale">en_US</string>
+    <string name="fr_locale">fr_FR</string>
+    <string name="ch_locale">zh_CN</string>
 
 
 </resources>

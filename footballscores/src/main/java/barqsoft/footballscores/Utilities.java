@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by yehya khaled on 3/3/2015.
@@ -245,6 +246,49 @@ public class Utilities {
     public static void setRemoteContentDescription(
             RemoteViews views, int ressource_image, String description) {
         views.setContentDescription(ressource_image, description);
+    }
+
+
+    public static Locale getMostSuitableLocale(Context context) {
+        String usLocale = context.getResources().getString(R.string.us_locale);
+        String frLocale = context.getResources().getString(R.string.fr_locale);
+        String chLocale = context.getResources().getString(R.string.ch_locale);
+
+        String usLocaleLang = usLocale.split("_")[0];
+        String frLocaleLang = frLocale.split("_")[0];
+        String chLocaleLang = chLocale.split("_")[0];
+
+        String usLocaleCountry = usLocale.split("_")[1];
+        String frLocaleCountry = frLocale.split("_")[1];
+        String chLocaleCountry = chLocale.split("_")[1];
+
+        if ((Locale.getDefault().getLanguage().equals(usLocaleLang)) && (Locale.getDefault()
+                .getCountry().equals(usLocaleCountry)))
+            return Locale.getDefault(); //The user Locale is the Locale we want, no further search
+
+        if ((Locale.getDefault().getLanguage().equals(frLocaleLang)) && (Locale.getDefault().getCountry().equals(frLocaleCountry)))
+            return Locale.getDefault(); //The user Locale is the Locale we want, no further search
+
+        if (Locale.getDefault().getLanguage().equals(frLocaleLang)
+                && isLocaleAvailable(frLocaleLang, frLocaleCountry))
+            return new Locale(frLocaleLang, frLocaleCountry);
+
+        if (Locale.getDefault().getLanguage().equals(chLocaleLang)
+                && isLocaleAvailable(chLocaleLang, frLocaleCountry))
+            return new Locale(chLocaleLang, chLocaleCountry);
+
+        //us_US only locale Java guarantees is always available.
+        return new Locale(usLocaleLang, usLocaleCountry);
+    }
+
+    public static boolean isLocaleAvailable(String language, String country) {
+        Locale[] locales = Locale.getAvailableLocales();
+        for (Locale locale : locales) {
+            if ((locale.getLanguage().equals(language))
+                    && (locale.getCountry().equals(country)))
+                return true;
+        }
+        return false;
     }
 
 

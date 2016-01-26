@@ -31,8 +31,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
 //        syncDB();
-        updateWidgets();
-//        ScoresSyncAdapter.initializeSyncAdapter(this);
+//        updateWidgets();
+        ScoresSyncAdapter.initializeSyncAdapter(this);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
