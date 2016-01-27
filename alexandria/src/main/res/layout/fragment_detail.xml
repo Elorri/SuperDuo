@@ -27,6 +27,7 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_medium"
         android:layout_toRightOf="@id/bookCover"
+        android:layout_toEndOf="@id/bookCover"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         tools:text="Holy Bible"/>
 
@@ -37,6 +38,7 @@ android:layout_height="match_parent">
         android:layout_below="@+id/bookTitle"
         android:layout_marginTop="@dimen/spacing_small"
         android:layout_toRightOf="@id/bookCover"
+        android:layout_toEndOf="@id/bookCover"
         android:ellipsize="end"
         android:maxLines="@integer/textview_max_line"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
@@ -51,6 +53,7 @@ android:layout_height="match_parent">
         android:layout_below="@+id/bookSubTitle"
         android:layout_marginTop="@dimen/spacing_small"
         android:layout_toRightOf="@id/bookCover"
+        android:layout_toEndOf="@id/bookCover"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/secondary_text"
         tools:text="Zondervan Bibles"
@@ -63,6 +66,7 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:layout_below="@id/bookCover"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:textSize="@dimen/text_size_small"
         tools:text="in Bibles"/>
 
@@ -73,7 +77,7 @@ android:layout_height="match_parent">
         android:layout_below="@id/categories"
         android:layout_marginTop="@dimen/spacing_small"
         android:padding="@dimen/spacing_normal"
-        tools:text="@string/lorem_ipsum"/>
+        tools:text="@string/lorem_ipsum_tool"/>
 
 
     <Button
@@ -83,6 +87,7 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_below="@id/bookDesc"
         android:layout_margin="@dimen/spacing_normal"
         android:text="@string/delete_button"/>

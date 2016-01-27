@@ -94,7 +94,8 @@ public class MainFragment extends Fragment {
             } else {
                 Time time = new Time();
                 time.setToNow();
-                // Otherwise, the format is just the day of the week (e.g "Wednesday".
+                // Otherwise, the format is just the day of the week (e.g "Wednesday",
+                // "Mercredi") in the user language
                 SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Utilities
                         .getMostSuitableLocale(getContext()));
                 return dayFormat.format(dateInMillis);

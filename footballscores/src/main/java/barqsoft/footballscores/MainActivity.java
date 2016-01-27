@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import barqsoft.footballscores.service.FootballService;
 import barqsoft.footballscores.sync.ScoresSyncAdapter;
 
 public class MainActivity extends ActionBarActivity {
@@ -55,11 +54,7 @@ public class MainActivity extends ActionBarActivity {
         sendBroadcast(dataUpdatedIntent);
     }
 
-    //TODO : 2.2 delete old db data
-    private void syncDB() {
-        Intent serviceStart = new Intent(this, FootballService.class);
-        startService(serviceStart);
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

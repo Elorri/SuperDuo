@@ -1,10 +1,8 @@
-package it.jaschke.alexandria.model.data;
+package it.jaschke.alexandria.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import it.jaschke.alexandria.data.BookContract;
 
 /**
  * Created by saj on 22/12/14.

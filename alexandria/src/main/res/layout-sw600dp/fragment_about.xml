@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
               android:layout_height="@dimen/two_toolbar_height"
         android:textSize="@dimen/text_size_xxxlarge"
-        android:text="About"
+        android:text="@string/title_activity_about"
         android:textStyle="bold"
         android:gravity="center"
         android:background="@color/secondary_light"/>

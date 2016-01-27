@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <!-- the app name -->
-    <string name="app_name" translatable="true">Football Scores</string>
-
+    <string name="app_name" translatable="true">Zúqiú bǐfēn</string>
     <!-- actions of the app -->
-    <string name="action_settings" translatable="true">Settings</string>
-
+    <string name="action_settings" translatable="true">shèzhì</string>
     <!-- strings diplayed on the UI -->
     <!-- activities -->
-    <string name="title_activity_about" translatable="true">About</string>
-    
+    <string name="title_activity_about" translatable="true">guānyú</string>
     <!-- tabs titles -->
-    <string name="today" translatable="true">Today</string>
-    <string name="yesterday" translatable="true">Yesterday</string>
-    <string name="tomorrow" translatable="true">Tomorrow</string>
-    
-
-    
+    <string name="today" translatable="true">jīntiān</string>
+    <string name="yesterday" translatable="true">zuótiān</string>
+    <string name="tomorrow" translatable="true">míngtiān</string>
     <!-- string used only for developpement -->
     <string name="home_team_tool" translatable="false">Stoke City FC</string>
     <string name="away_team_tool" translatable="false">Norwish City FC</string>
     <string name="time_tool" translatable="false">20:45</string>
     <string name="matchday_tool" translatable="false">Matchday : 21</string>
-    <string name="scores_tool" translatable="false">3 - 1</string>
-
-    
+    <string name="scores_tool" translatable="false">03-janv</string>
     <!-- Teams -->
     <string name="team_arsenal_london" translatable="false">Arsenal London FC</string>
     <string name="team_manshester" translatable="false">Manchester United FC</string>
@@ -36,7 +28,6 @@
     <string name="team_west_bromwich" translatable="false">West Bromwich Albion</string>
     <string name="team_sunderland" translatable="false">Sunderland AFC</string>
     <string name="team_stoke_city" translatable="false">Stoke City FC</string>
-
     <!-- League names -->
     <string name="league_bundesliga1" translatable="false">Bundesliga 1</string>
     <string name="league_bundesliga2" translatable="false">Bundesliga 2</string>
@@ -50,80 +41,63 @@
     <string name="league_primeira_liga" translatable="false">Primeira Liga</string>
     <string name="league_eredivisie" translatable="false">Eredivisie</string>
     <string name="league_champions" translatable="false">UEFA Champions League</string>
-    
-    <string name="league_unknown" translatable="true">League not found.</string>
-
+    <string name="league_unknown" translatable="true">liánsài méiyǒu zhǎodào.</string>
     <!-- Match day strings -->
     <string name="match_default">Matchday: <xliff:g id="num">%1$s</xliff:g></string>
-    <string name="match_champions_gs" translatable="true">Group Stages, Matchday: 6</string>
-    <string name="match_champions_fkr" translatable="true">First knockout round</string>
-    <string name="match_champions_qf" translatable="true">Quarterfinals</string>
-    <string name="match_champions_sf" translatable="true">Semifinals</string>
-    <string name="match_champiions_f" translatable="true">Finals</string>
-
+    <string name="match_champions_gs" translatable="true">Xiǎozǔ sài jiēduàn, bǐsài rì:6</string>
+    <string name="match_champions_fkr" translatable="true">Dì yī lún táotàisài</string>
+    <string name="match_champions_qf" translatable="true">sì fēn zhī yī juésài</string>
+    <string name="match_champions_sf" translatable="true">bàn juésài</string>
+    <string name="match_champiions_f" translatable="true">juésài</string>
     <!-- Widget related -->
-    <string name="title_widget_next_match" translatable="true">Next match</string>
-    <string name="empty_widget_list" translatable="true">No matches today</string>
-    <string name="title_widget_list" translatable="true">Today matches</string>
-
-
+    <string name="title_widget_next_match" translatable="true">xià yī chǎng bǐsài</string>
+    <string name="empty_widget_list" translatable="true">jīnrì wú sàishì</string>
+    <string name="title_widget_list" translatable="true">jīntiān de bǐsài</string>
     <!-- Others -->
     <string name="scores">%1$s - %2$s</string>
-    <string name="share_text" translatable="true">Share</string>
-    <string name="about_text" translatable="true">
-        This Application get Football Matches Score for the Premier League, Ligue1-2,
-        Seria A,Bundesliga 1-2-3, Primera division, Segunda division,
-        and the Eredivisie League.\n\n
-        All Matches data are acquired from football-data.org free API. \n\n
-        All team Logos are acquired from http://hdlogo.wordpress.com/ upon requesting permission
-        from the owner.\n\n
-        The original version of this app was created by Yahia Khalid Ibn El Walid Ahmed, and this is the modified version I have made for the Udacity Android Nanodegree program.\n
+    <string name="share_text" translatable="true">fēnxiǎng</string>
+    <string name="about_text" translatable="true">cǐ yìngyòng chéngxù huòdé zúqiú bǐsài bǐfēn wéi yīngchāo,Ligue1-2,
+        shī lǐ yǎ A, déjiǎ 1-2-3, xījiǎ, yǐ jí liánsài,
+        ér hé jiǎ liánsài.\Ñ\ñ
+        suǒyǒu bǐsài shùjù cóng football-data.Org miǎnfèi de API huòdé. \Ñ\ñ
+        suǒyǒu de duì huī shì cóng http://Hdlogo.Wordpress.Com/zài qǐngqiú yǔnxǔ shōugòu
+        cóng suǒyǒu zhě.\Ñ\ñ
+        zhège yìngyòng chéngxù de zuìchū bǎnběn shì yóu yè hǎi yà·hā lì dé·běn·wǎ lì dé·āi ěr·ài hā mài dé·chuàngjiàn de, zhè shì wǒ zuòle Udacity nàmǐ jí de Android chéngxù xiūgǎi hòu de bǎnběn.\Ñ
     </string>
-
 
     <!-- strings used by the app but not displayed as is-->
     <!-- Key name for status stored in SharedPreferences -->
     <string name="pref_network_status_key" translatable="false">network_status</string>
     <string name="pref_football_api_status_key" translatable="false">football_api_status</string>
     <string name="pref_score_table_status_key" translatable="false">score_table_status</string>
-
     <!-- SyncAdapter related -->
     <!-- that the account is specific to our OpenBeeLabApp-->
     <string name="sync_account_type" translatable="false">footballscores.barqsoft</string>
     <!-- Uri authority for our content provider-->
     <string name="content_authority" translatable="false">barqsoft.footballscores</string>
-
     <!-- api key -->
     <string name="api_key" translatable="false">498ae24a6ec1435db75bbd8ec5ede1ae</string>
-    
     <!-- dummy data -->
     <string name="dummy_data" translatable="false">{\"timeFrameStart\":\"2015-06-18\",\"timeFrameEnd\":\"2015-06-19\",\"count\":1,\"fixtures\":[{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}}]}</string>
 
-    
-
-
-
     <!-- Empty scores listview -->
-    <string name="no_scores_internet_off" translatable="true">Network error. Please check your connection.</string>
-    <string name="no_scores_serveur_down" translatable="true">No scores information available. The server is
-        not returning valid data.</string>
-    <string name="no_scores_wrong_url_app_input" translatable="true">No scores information available. The server is not returning valid data. Please check for an updated version of FootballScores.</string>
-    <string name="no_scores_table_status_unknown" translatable="true">Loading scores...</string>
-    <string name="no_scores" translatable="true">No match found this day</string>
+    <string name="no_scores_internet_off" translatable="true">Wǎngluò cuòwù. Qǐng jiǎnchá liánjiē.</string>
+    <string name="no_scores_serveur_down" translatable="true">Wú fēnshù xìnxī. Fúwùqì wèi fǎnhuí yǒuxiào shùjù.</string>
 
-    
-
+    <string name="no_scores_wrong_url_app_input" translatable="true">Wú fēnshù xìnxī. Fúwùqì wèi fǎnhuí yǒuxiào shùjù. Qǐng jiǎnchá FootballScores de gēngxīn bǎnběn.</string>
+    <string name="no_scores_table_status_unknown" translatable="true">Zài rù zhōng gōng rù</string>
+    <string name="no_scores" translatable="true">wèi zhǎodào pǐpèi zhè yītiān</string>
     <!-- Talkback content description -->
-    <string name="home_team_crest" translatable="true">home team crest</string>
-    <string name="away_team_crest" translatable="true">away team crest</string>
-
-
+    <string name="home_team_crest" translatable="true">zhǔduì guān</string>
+    <string name="away_team_crest" translatable="true">kèduì guān</string>
     <!-- Localisation related -->
     <string name="us_locale" translatable="false">en_US</string>
     <string name="fr_locale" translatable="false">fr_FR</string>
     <string name="ch_locale" translatable="false">zh_CN</string>
-
-
-
-
 </resources>
+
+
+
+
+
+

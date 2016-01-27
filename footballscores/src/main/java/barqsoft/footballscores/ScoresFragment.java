@@ -30,15 +30,15 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     private ListView mScoreList;
 
     public static final String[] MATCHES_COLUMNS = {
-                     ScoresContract.ScoreEntry._ID   ,
-                     ScoresContract.ScoreEntry.DATE_TIME_COL,
-                     ScoresContract.ScoreEntry.HOME_COL  ,
-                     ScoresContract.ScoreEntry.AWAY_COL  ,
-                     ScoresContract.ScoreEntry.LEAGUE_COL  ,
-                     ScoresContract.ScoreEntry.HOME_GOALS_COL  ,
-                     ScoresContract.ScoreEntry.AWAY_GOALS_COL  ,
-                     ScoresContract.ScoreEntry.MATCH_ID  ,
-                     ScoresContract.ScoreEntry.MATCH_DAY  ,
+            ScoresContract.ScoreEntry._ID,
+            ScoresContract.ScoreEntry.DATE_TIME_COL,
+            ScoresContract.ScoreEntry.HOME_COL,
+            ScoresContract.ScoreEntry.AWAY_COL,
+            ScoresContract.ScoreEntry.LEAGUE_COL,
+            ScoresContract.ScoreEntry.HOME_GOALS_COL,
+            ScoresContract.ScoreEntry.AWAY_GOALS_COL,
+            ScoresContract.ScoreEntry.MATCH_ID,
+            ScoresContract.ScoreEntry.MATCH_DAY,
     };
 
     // These indices are tied to MATCHES_COLUMNS.  If MATCHES_COLUMNS changes, these
@@ -54,8 +54,6 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_MATCHDAY = 8;
 
 
-
-
     public ScoresFragment() {
     }
 
@@ -65,24 +63,27 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
                              final Bundle savedInstanceState) {
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.fragment_scores, container, false);
-         mScoreList = (ListView) view.findViewById(R.id.scores_list);
+        mScoreList = (ListView) view.findViewById(R.id.scores_list);
         mAdapter = new ScoresAdapter(getActivity(), null, 0);
         mScoreList.setAdapter(mAdapter);
-
-
         mAdapter.selectedMatchId = MainActivity.selectedMatchId;
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "before setOnItemClickListener");
         mScoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "onItemClick ");
                 ScoresAdapter.ViewHolder selected = (ScoresAdapter.ViewHolder) view.getTag();
                 mAdapter.selectedMatchId = selected.matchId;
                 MainActivity.selectedMatchId = (int) selected.matchId;
                 mAdapter.notifyDataSetChanged();
             }
         });
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "after " +
+                "setOnItemClickListener");
         return view;
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -92,8 +93,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:"
-                + mTimeDate);
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:" + mTimeDate);
         return new CursorLoader(getActivity(),
                 ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(mTimeDate)),
                 MATCHES_COLUMNS,
@@ -104,7 +104,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-       mAdapter.swapCursor(cursor);
+        mAdapter.swapCursor(cursor);
         updateEmptyView();
     }
 
@@ -112,8 +112,6 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mAdapter.swapCursor(null);
     }
-
-
 
 
     public void setDate(long timeDate) {
@@ -145,26 +143,26 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     private void updateEmptyView() {
         if (mAdapter.getCount() != 0)
             return;
-        @Status.NetworkStatus int networkStatus=Status.getNetworkStatus(getContext());
+        @Status.NetworkStatus int networkStatus = Status.getNetworkStatus(getContext());
         TextView emptyTextView = (TextView) getView().findViewById(R.id.emptyListView);
         emptyTextView.setVisibility(View.VISIBLE);
         mScoreList.setEmptyView(emptyTextView);
-        if(networkStatus==Status.INTERNET_OFF) {
+        if (networkStatus == Status.INTERNET_OFF) {
             emptyTextView.setText(R.string.no_scores_internet_off);
             return;
         }
-        @Status.FootballApiStatus int footballApiStatus=Status.getFootballApiStatus(getContext());
-        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_DOWN)) {
+        @Status.FootballApiStatus int footballApiStatus = Status.getFootballApiStatus(getContext());
+        if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_DOWN)) {
             emptyTextView.setText(R.string.no_scores_serveur_down);
             return;
         }
-        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_WRONG_URL_APP_INPUT)) {
+        if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_WRONG_URL_APP_INPUT)) {
             emptyTextView.setText(R.string.no_scores_wrong_url_app_input);
             return;
         }
-        @Status.ScoreTableStatus int scoreTableStatus=Status.getScoreTableStatus(getContext());
-        if((networkStatus==Status.INTERNET_ON)&&(footballApiStatus==Status.SERVEUR_OK)&&
-                (scoreTableStatus==Status.TABLE_STATUS_UNKNOWN)) {
+        @Status.ScoreTableStatus int scoreTableStatus = Status.getScoreTableStatus(getContext());
+        if ((networkStatus == Status.INTERNET_ON) && (footballApiStatus == Status.SERVEUR_OK) &&
+                (scoreTableStatus == Status.TABLE_STATUS_UNKNOWN)) {
             emptyTextView.setText(R.string.no_scores_table_status_unknown);
             return;
         }

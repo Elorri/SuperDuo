@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- the app name -->
+    <string name="app_name" translatable="true">Alexandria</string>
+
+    <!-- actions of the app -->
+    <string name="action_settings" translatable="true">Paramètres</string>
+    <string name="action_about" translatable="true">A propos</string>
+    <string name="action_share" translatable="true">Partager</string>
+
+    <!-- titles of the different activities of the app -->
+    <string name="title_activity_list" translatable="true">Tous les livres</string>
+    <string name="title_activity_add" translatable="true">Ajouter un livre</string>
+    <string name="title_activity_detail" translatable="true">Livre détail</string>
+    <string name="title_activity_about" translatable="true">A propos</string>
+    <string name="title_activity_settings" translatable="true">Paramètres</string>
+    <string name="title_activity_scan" translatable="true">Scanner un livre</string>
+
+    <!-- first page stored in SharedPreference file : label, key, values -->
+    <!-- labels diplayed on the UI -->
+    <string name="pref_start_page_label" translatable="true">Page de démarrage</string>
+    <string name="pref_start_page_label_list" translatable="true">Tous les livres</string>
+    <string name="pref_start_page_label_add" translatable="true">Ajouter un livre</string>
+    <!-- keys -->
+    <string name="pref_start_page_key" translatable="false">startPage</string>
+    <!-- values -->
+    <string name="pref_start_page_list" translatable="false">list</string>
+    <string name="pref_start_page_add" translatable="false">add</string>
+    
+    <!-- status stored SharedPreferences -->
+    <string name="pref_network_status_key" translatable="false">network_status</string>
+    <string name="pref_google_book_api_status_key" translatable="false">google_book_api_status</string>
+    <string name="pref_book_table_status_key" translatable="false">book_table_status</string>
+
+
+    <!-- strings diplayed on the UI -->
+    <string name="scan_button" translatable="true">Scanner</string>
+    <string name="input_hint" translatable="false">ex: 9780310941781</string>
+    <string name="share_text" translatable="true">Un livre à connaitre :</string>
+    <string name="about_text" translatable="true">Cette application retrouve l\'info des livres sur Google API.\n Tous les titres, images de couvertures, et auteurs viennent de là.\n
+        La version originale de cette application a été écrite par Sascha Jaschke, et cette version est la version modifiée que j\'ai faite pour la Udacity Android Nanodegree certification. </string>
+    <string name="dismiss_button" translatable="true">annuler</string>
+    <string name="save_button" translatable="true">sauver</string>
+    <string name="delete_button" translatable="true">supprimer</string>
+
+    <!-- Empty scores listview -->
+    <string name="no_books_internet_off" translatable="true">Erreur de Network. Verifiez votre connection s\'il vous plaît.</string>
+    <string name="no_books_serveur_down" translatable="true">Aucune info disponible sur les livres. Le serveur ne retourne pas de données valides.</string>
+    <string name="no_books_wrong_url_app_input" translatable="true">Aucune info disponible sur les livres. Le serveur ne retourne pas de données valides. Cherchez une version plusrécente d\'Alexndria.</string>
+    <string name="no_books_table_status_unknown" translatable="true">Nous recherchons le livre...</string>
+    <string name="no_books" translatable="true">Pas de livres trouvé.</string>
+    <string name="no_books_in_your_library" translatable="true">Ajoutez des livres dans votre ibrairie pour commencer</string>
+    <string name="add_book_isbn" translatable="true">Ajouter l\'isbn du livre que vous
+        voulez</string>
+
+    
+    <!-- strings used for developpement only -->
+    <string name="lorem_ipsum_tool" translatable="false">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,...</string>
+
+    
+    <!-- talkback related -->
+    <string name="book_cover" translatable="true">Couverture du livre</string>
+
+    <!-- Localisation related -->
+    <string name="us_locale" translatable="false">en_US</string>
+    <string name="fr_locale" translatable="false">fr_FR</string>
+    <string name="ch_locale" translatable="false">zh_CN</string>
+
+
+    <!--Google Play services 7.8 Mobile Vision API-->
+    <string name="permission_camera_rationale" translatable="true">L\'access à la camera est necessaire pour commencer la détection</string>
+    <string name="ok" translatable="true">OK</string>
+    <string name="low_storage_error" translatable="true">Les dépendences du détecteurde face ne peuvent être téléchargées par manque de mémoire materiel</string>
+    <string name="no_camera_permission" translatable="true">Cette application ne peut travailler car la caméra n\'a pas de permission.  Cette application va s\'arrêter tout de suite.</string>
+
+</resources>

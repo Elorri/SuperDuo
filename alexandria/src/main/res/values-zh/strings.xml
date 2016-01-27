@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- the app name -->
+    <string name="app_name" translatable="true">Yà lì shān délǐ yǎ</string>
+    <!-- actions of the app -->
+    <string name="action_settings" translatable="true">shèzhì</string>
+    <string name="action_about" translatable="true">guānyú</string>
+    <string name="action_share" translatable="true">fēnxiǎng</string>
+    <!-- titles of the different activities of the app -->
+    <string name="title_activity_list" translatable="true">suǒyǒu de shū</string>
+    <string name="title_activity_add" translatable="true">tiānjiā yī běn shū</string>
+    <string name="title_activity_detail" translatable="true">běn shū xiángxì</string>
+    <string name="title_activity_about" translatable="true">guānyú</string>
+    <string name="title_activity_settings" translatable="true">shèzhì</string>
+    <string name="title_activity_scan" translatable="true">sǎomiáo shūjí tiáoxíngmǎ</string>
+    <!-- first page stored in SharedPreference file : label, key, values -->
+    <!-- labels diplayed on the UI -->
+    <string name="pref_start_page_label" translatable="true">shǒuyè</string>
+    <string name="pref_start_page_label_list" translatable="true">qīngdān shū</string>
+    <string name="pref_start_page_label_add" translatable="true">tiānjiā yī běn shū</string>
+    <!-- keys -->
+    <string name="pref_start_page_key" translatable="false">startPage</string>
+    <!-- values -->
+    <string name="pref_start_page_list" translatable="false">list</string>
+    <string name="pref_start_page_add" translatable="false">add</string>
+    <!-- status stored SharedPreferences -->
+    <string name="pref_network_status_key" translatable="false">network_status</string>
+    <string name="pref_google_book_api_status_key" translatable="false">google_book_api_status
+    </string>
+    <string name="pref_book_table_status_key" translatable="false">book_table_status</string>
+    <!-- strings diplayed on the UI -->
+    <string name="scan_button" translatable="true">sǎomiáo</string>
+    <string name="input_hint" translatable="false">ex: 9780310941781</string>
+    <string name="share_text" translatable="true">A bìxū dú de shū:</string>
+    <string name="about_text" translatable="true">Cǐ yìngyòng chéngxù cóng gǔgē API de túshū xìnxī.\
+        N shàng de suǒyǒu biāotí, fēngmiàn túpiàn, bìng cóng nàlǐ lái de zuòzhě xìnxī.\Ñ
+
+    </string>
+    <string name="dismiss_button" translatable="true">jiěgù</string>
+    <string name="save_button" translatable="true">bǎocún</string>
+    <string name="delete_button" translatable="true">shānchú</string>
+    <!-- Empty scores listview -->
+    <string name="no_books_internet_off" translatable="true">wǎngluò cuòwù. Qǐng jiǎnchá liánjiē.
+    </string>
+    <string name="no_books_serveur_down" translatable="true">Méiyǒu kěyòng de túshū xìnxī. Fúwùqì
+        shì
+    </string>
+    <string name="no_books_wrong_url_app_input" translatable="true">méiyǒu kěyòng de túshū xìnxī.
+        Fúwùqì wèi fǎnhuí yǒuxiào shùjù. Qǐng jiǎnchá Alexndria de gēngxīn bǎnběn.
+    </string>
+    <string name="no_books_table_status_unknown" translatable="true">Xúnzhǎo shū...</string>
+    <string name="no_books" translatable="true">Méiyǒu yī běn shū zhōng.</string>
+    <string name="no_books_in_your_library" translatable="true">Tiānjiā túshū kù zhōng de kāishǐ
+    </string>
+    <string name="add_book_isbn" translatable="true">jiārù guójì biāozhǔn shūhào de shū, nǐ xiǎng
+    </string>
+    <!-- strings used for developpement only -->
+    <string name="lorem_ipsum_tool" translatable="false">Lorem Ipsum is simply dummy text of the
+        printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text
+        ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
+        a type specimen book. It has survived not only five centuries,...
+    </string>
+    <!-- talkback related -->
+    <string name="book_cover" translatable="true">shūpí</string>
+    <!-- Localisation related -->
+    <string name="us_locale" translatable="false">en_US</string>
+    <string name="fr_locale" translatable="false">fr_FR</string>
+    <string name="ch_locale" translatable="false">zh_CN</string>
+    <!--Google Play services 7.8 Mobile Vision API-->
+    <string name="permission_camera_rationale" translatable="true">fǎngwèn shèxiàngjī shì xūyào
+        jiǎncè
+    </string>
+    <string name="ok" translatable="true">hǎo</string>
+    <string name="low_storage_error" translatable="true">rén liǎn jiǎncè qì de yīlài xìng, bùnéng
+        yīn dī shèbèi cúnchú xiàzài
+    </string>
+    <string name="no_camera_permission" translatable="true">zhège yìngyòng chéngxù bùnéng yùnxíng,
+        yīnwèi tā bù jùyǒu xiàngjī quánxiàn. Gāi yìngyòng chéngxù xiànzài jiāng tuìchū.
+    </string>
+</resources>
+
+

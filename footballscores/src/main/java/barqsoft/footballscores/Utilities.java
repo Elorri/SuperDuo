@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
@@ -23,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by yehya khaled on 3/3/2015.
@@ -284,19 +284,10 @@ public class Utilities {
         return false;
     }
 
-    /**
-     * This function take a timestamp in the form of '2016-01-25T19:00:00Z', remove the 'Z'
-     * corresponding to the GMT+00:00 and gives it to the standard java 6 function to parse it.
-     * Note :java 8 should be able to handle the case without this trick.
-     * @param timestamp
-     * @return the number of milliseconds since Jan. 1, 1970 for the given timestamp
-     * @throws ParseException
-     */
+
     public static long getLongDate(String timestamp) throws ParseException {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp " + timestamp);
-        timestamp=timestamp.substring(0,timestamp.length());
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp " + timestamp);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
         return df.parse(timestamp).getTime();
     }
 
@@ -325,8 +316,10 @@ public class Utilities {
         return calendar.getTimeInMillis();
     }
 
+    //This will be displayed to the user, that's why we need to format in its locale and timezone
     public static String convertDateTimeToTime(long dateTime, Context context) {
-        SimpleDateFormat df = new SimpleDateFormat("hh:mm", getMostSuitableLocale(context));
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm", getMostSuitableLocale(context));
+       // df.setTimeZone(TimeZone.getDefault());
         return df.format(new Date(dateTime));
     }
 }

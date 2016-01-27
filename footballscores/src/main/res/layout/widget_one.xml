@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="@dimen/text_size_small"
-                tools:text="@string/time"/>
+                tools:text="@string/time_tool"/>
         </LinearLayout>
 
             <ImageView

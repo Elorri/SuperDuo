@@ -12,7 +12,7 @@ FootballScores : 14
 ## Features
 
 Alexandria : 
-- Locale support : en_US, fr_FR
+- Locale support : en_US, fr_FR, zh_CN
 
 FootballScores : 
 - Locale support : en_US, fr_FR, zh_CN
