@@ -74,6 +74,7 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
         mScoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                 ScoresAdapter.ViewHolder selected = (ScoresAdapter.ViewHolder) view.getTag();
                 mAdapter.selectedMatchId = selected.matchId;
                 MainActivity.selectedMatchId = (int) selected.matchId;

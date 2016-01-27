@@ -19,14 +19,10 @@ public class ScoresProvider extends ContentProvider {
     private ScoresDBHelper mOpenHelper;
 
     public static final int MATCHES = 100;
-    public static final int MATCHES_BY_LEAGUE = 101;
-    public static final int MATCHES_BY_ID = 102;
     public static final int MATCHES_BY_DATE = 103;
 
-    private static final String SCORES_BY_LEAGUE = ScoresContract.ScoreEntry.LEAGUE_COL + " = ?";
     private static final String SCORES_BY_DATE = ScoresContract.ScoreEntry.DATE_TIME_COL
             +" between ? and ?";
-    private static final String SCORES_BY_ID = ScoresContract.ScoreEntry.MATCH_ID + " = ?";
 
 
     public static UriMatcher buildUriMatcher() {
@@ -34,9 +30,6 @@ public class ScoresProvider extends ContentProvider {
         final String authority = ScoresContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, ScoresContract.PATH_MATCHES, MATCHES);
-        matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_LEAGUE + "/*", MATCHES_BY_LEAGUE);
-        matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_ID + "/#", MATCHES_BY_ID);
-        //TODO : 2.2 change date * by date # if millis
         matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_DATE +
                 "/#", MATCHES_BY_DATE);
         return matcher;
@@ -60,10 +53,6 @@ public class ScoresProvider extends ContentProvider {
         switch (match) {
             case MATCHES:
                 return ScoresContract.ScoreEntry.CONTENT_TYPE;
-            case MATCHES_BY_LEAGUE:
-                return ScoresContract.ScoreEntry.CONTENT_TYPE;
-            case MATCHES_BY_ID:
-                return ScoresContract.ScoreEntry.CONTENT_ITEM_TYPE;
             case MATCHES_BY_DATE:
                 return ScoresContract.ScoreEntry.CONTENT_TYPE;
             default:
@@ -88,22 +77,15 @@ public class ScoresProvider extends ContentProvider {
                 long dateStart=Utilities.setZero(Long.valueOf(dateTime));
                 long dateEnd=Utilities.addDay(1,dateStart);
 
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "dateStart " + dateStart);
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "dateEnd " + dateEnd);
+
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         ScoresContract.ScoreEntry.TABLE_NAME,
                         projection, SCORES_BY_DATE, new String[]{String.valueOf(dateStart),
                                 String.valueOf(dateEnd)},
                         null, null,
                         sortOrder);
-                break;
-            case MATCHES_BY_ID:
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        ScoresContract.ScoreEntry.TABLE_NAME,
-                        projection, SCORES_BY_ID, selectionArgs, null, null, sortOrder);
-                break;
-            case MATCHES_BY_LEAGUE:
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        ScoresContract.ScoreEntry.TABLE_NAME,
-                        projection, SCORES_BY_LEAGUE, selectionArgs, null, null, sortOrder);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown Uri " + uri);

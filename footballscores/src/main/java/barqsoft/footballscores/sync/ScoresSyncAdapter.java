@@ -50,7 +50,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
     private String LOG_TAG = ScoresSyncAdapter.class.getSimpleName();
 
 
-    public static final String ACTION_DATA_UPDATED ="footballscores.barqsoft.ACTION_DATA_UPDATED";
+    public static final String ACTION_DATA_UPDATED = "footballscores.barqsoft.ACTION_DATA_UPDATED";
 
 
     public ScoresSyncAdapter(Context context, boolean autoInitialize) {
@@ -157,7 +157,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         String jsonData = null;
 
 
-
         try {
             URL fetch = new URL(uri.toString());
             UrlConnection = (HttpURLConnection) fetch.openConnection();
@@ -254,7 +253,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         final String LINKS = "_links";
         final String SOCCER_SEASON = "soccerseason";
         final String SELF = "self";
-        final String MATCH_DATE = "timestamp";
+        final String MATCH_DATE = "date";
         final String HOME_TEAM = "homeTeamName";
         final String AWAY_TEAM = "awayTeamName";
         final String RESULT = "result";
@@ -265,7 +264,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         //Match data
         String league;
         String timestamp;
-        String time;
         String home;
         String away;
         String homeGoals;
@@ -311,6 +309,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                         // and matchId should be unique in db, concatenating i value
                         // will solve the pb
                         matchId = matchId + Integer.toString(i);
+                        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                     }
 
                     // TODO delete all match > j-2 ou -3?
@@ -320,11 +319,11 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                             " serveur: " + timestamp);
 
 
-                    long dateTime=Utilities.getLongDate(timestamp);
+                    long dateTime = Utilities.getLongDate(timestamp);
 
                     if (!isReal) {
                         //This if statement changes the dummy data's timestamp to match our current timestamp range.
-                        dateTime=Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis());
+                        dateTime = Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis());
                     }
 
                     home = matchData.getString(HOME_TEAM);
@@ -332,6 +331,13 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                     homeGoals = matchData.getJSONObject(RESULT).getString(HOME_GOALS);
                     awayGoals = matchData.getJSONObject(RESULT).getString(AWAY_GOALS);
                     matchDay = matchData.getString(MATCH_DAY);
+
+                    Log.e("SupperDuo", "" + dateTime);
+                    Log.e("SupperDuo", "" + home);
+                    Log.e("SupperDuo", "" + away);
+                    Log.e("SupperDuo", "" + homeGoals);
+                    Log.e("SupperDuo", "" + awayGoals);
+                    Log.e("SupperDuo", "" + matchDay);
 
                     ContentValues match_values = new ContentValues();
                     match_values.put(ScoresContract.ScoreEntry.MATCH_ID, matchId);
@@ -350,11 +356,16 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             values.toArray(insertData);
             insertedData = mContext.getContentResolver().bulkInsert(
                     ScoresContract.ScoreEntry.CONTENT_URI, insertData);
-            Log.v(LOG_TAG,"Succesfully Inserted : " + insertedData);
+            Log.v(LOG_TAG, "Succesfully Inserted : " + insertedData);
         } catch (ParseException e) {
-            Log.d(LOG_TAG, e.getMessage());
-        } catch (JSONException e) {
+            //TODO should be log.d
             Log.e(LOG_TAG, e.getMessage());
+            e.printStackTrace();
+        }catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage());
+            e.printStackTrace();
+            Log.e(LOG_TAG, e.getStackTrace().toString());
+
         }
 
     }
@@ -391,7 +402,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
 
         Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "(null == accountManager" +
-                ".getPassword(newAccount))"+(null == accountManager.getPassword(newAccount)));
+                ".getPassword(newAccount))" + (null == accountManager.getPassword(newAccount)));
         // If the password doesn't exist, the account doesn't exist
         if (null == accountManager.getPassword(newAccount)) {
             Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");

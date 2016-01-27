@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
 
 //        syncDB();
 //        updateWidgets();
-        ScoresSyncAdapter.initializeSyncAdapter(this);
+//        ScoresSyncAdapter.initializeSyncAdapter(this);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

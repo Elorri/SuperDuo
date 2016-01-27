@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
@@ -168,17 +169,7 @@ public class Utilities {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
-    public static String getNow() {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(date);
-    }
 
-    public static String getToday() {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(date);
-    }
 
     public static void setImage(Context context, ImageView crest, String teamName) {
         Integer crestImgRessource = getTeamCrestByTeamName(context, teamName);
@@ -302,8 +293,10 @@ public class Utilities {
      * @throws ParseException
      */
     public static long getLongDate(String timestamp) throws ParseException {
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp " + timestamp);
         timestamp=timestamp.substring(0,timestamp.length());
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SS");
+        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp " + timestamp);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         return df.parse(timestamp).getTime();
     }
 

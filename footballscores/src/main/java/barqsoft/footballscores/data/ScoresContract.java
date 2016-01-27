@@ -14,8 +14,6 @@ public class ScoresContract {
 
     public static Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_MATCHES = "matches";
-    public static final String PATH_LEAGUE = "league";
-    public static final String PATH_ID = "id";
     public static final String PATH_DATE = "date";
 
 
@@ -41,21 +39,7 @@ public class ScoresContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MATCHES;
 
-        public static Uri buildScoreByLeague(String leagueId) {
-            return BASE_CONTENT_URI.buildUpon()
-                    .appendPath(PATH_MATCHES)
-                    .appendPath(PATH_LEAGUE)
-                    .appendPath(leagueId)
-                    .build();
-        }
 
-        public static Uri buildScoreById(String scoreId) {
-            return BASE_CONTENT_URI.buildUpon()
-                    .appendPath(PATH_MATCHES)
-                    .appendPath(PATH_ID)
-                    .appendPath(scoreId)
-                    .build();
-        }
 
         //will match MATCHES_BY_DATE
         public static Uri buildScoreByDate(String dateTime) {

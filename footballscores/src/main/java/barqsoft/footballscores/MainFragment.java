@@ -30,7 +30,7 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pager, container, false);
 
         for (int i = 0; i < NUM_PAGES; i++) {
-            long dateTime=Utilities.addDay(-2, Calendar.getInstance().getTimeInMillis());
+            long dateTime=Utilities.addDay(i-2, Calendar.getInstance().getTimeInMillis());
             tabs[i] = new ScoresFragment();
             tabs[i].setDate(dateTime);
         }

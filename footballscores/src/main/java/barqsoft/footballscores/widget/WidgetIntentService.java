@@ -38,10 +38,9 @@ public class WidgetIntentService extends IntentService {
 
 
         // Get now's data from the ContentProvider
-        String now = Utilities.getNow();
-        //String now = "2016-01-17";
+        long now = System.currentTimeMillis();
         Cursor cursor = getContentResolver().query(
-                ScoresContract.ScoreEntry.buildScoreByDate(now),
+                ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(now)),
                 ScoresFragment.MATCHES_COLUMNS,
                 null,
                 null,

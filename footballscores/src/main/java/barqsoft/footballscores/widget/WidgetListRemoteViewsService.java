@@ -44,10 +44,9 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
                 // data. Therefore we need to clear (and finally restore) the calling identity so
                 // that calls use our process and permission
                 final long identityToken = Binder.clearCallingIdentity();
-                String now = Utilities.getToday();
-                //String now = "2016-01-17";
+                long now=System.currentTimeMillis();
                 data = getContentResolver().query(
-                        ScoresContract.ScoreEntry.buildScoreByDate(now),
+                        ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(now)),
                         ScoresFragment.MATCHES_COLUMNS,
                         null,
                         null,
@@ -104,7 +103,8 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
 
                 // Create an Intent to launch DetailActivity
                 final Intent fillInIntent = new Intent();
-                Uri detailUri = ScoresContract.ScoreEntry.buildScoreByDate(Utilities.getToday());
+                Uri detailUri = ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(System
+                        .currentTimeMillis()));
                 fillInIntent.setData(detailUri);
                 views.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
                 return views;

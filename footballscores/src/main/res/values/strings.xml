@@ -45,13 +45,15 @@
 
 
     <string name="about_text">
-        This Application get Football Matches Score for the Premier League,Seria A,Bundesliga,Primera Division
-        and the Uefa Champions League.\n\n
+        This Application get Football Matches Score for the Premier League, Ligue1-2,
+        Seria A,Bundesliga 1-2-3, Primera division, Segunda division,
+        and the Eredivisie League.\n\n
         All Matches data are acquired from football-data.org free API. \n\n
         All team Logos are acquired from http://hdlogo.wordpress.com/ upon requesting permission
-        form the owner.\n\n
+        from the owner.\n\n
         The original version of this app was created by Yahia Khalid Ibn El Walid Ahmed, and this is the modified version I have made for the Udacity Android Nanodegree program.\n
     </string>
+
 
     <string name="widget_text">This is a widget probably.</string>
 
