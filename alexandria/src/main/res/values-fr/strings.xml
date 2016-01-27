@@ -22,21 +22,10 @@
     <string name="pref_start_page_label" translatable="true">Page de démarrage</string>
     <string name="pref_start_page_label_list" translatable="true">Tous les livres</string>
     <string name="pref_start_page_label_add" translatable="true">Ajouter un livre</string>
-    <!-- keys -->
-    <string name="pref_start_page_key" translatable="false">startPage</string>
-    <!-- values -->
-    <string name="pref_start_page_list" translatable="false">list</string>
-    <string name="pref_start_page_add" translatable="false">add</string>
-    
-    <!-- status stored SharedPreferences -->
-    <string name="pref_network_status_key" translatable="false">network_status</string>
-    <string name="pref_google_book_api_status_key" translatable="false">google_book_api_status</string>
-    <string name="pref_book_table_status_key" translatable="false">book_table_status</string>
 
 
     <!-- strings diplayed on the UI -->
     <string name="scan_button" translatable="true">Scanner</string>
-    <string name="input_hint" translatable="false">ex: 9780310941781</string>
     <string name="share_text" translatable="true">Un livre à connaitre :</string>
     <string name="about_text" translatable="true">Cette application retrouve l\'info des livres sur Google API.\n Tous les titres, images de couvertures, et auteurs viennent de là.\n
         La version originale de cette application a été écrite par Sascha Jaschke, et cette version est la version modifiée que j\'ai faite pour la Udacity Android Nanodegree certification. </string>
@@ -50,22 +39,14 @@
     <string name="no_books_wrong_url_app_input" translatable="true">Aucune info disponible sur les livres. Le serveur ne retourne pas de données valides. Cherchez une version plusrécente d\'Alexndria.</string>
     <string name="no_books_table_status_unknown" translatable="true">Nous recherchons le livre...</string>
     <string name="no_books" translatable="true">Pas de livres trouvé.</string>
-    <string name="no_books_in_your_library" translatable="true">Ajoutez des livres dans votre ibrairie pour commencer</string>
-    <string name="add_book_isbn" translatable="true">Ajouter l\'isbn du livre que vous
+    <string name="no_books_in_your_library" translatable="true">Ajoutez des livres dans votre
+        librairie pour commencer</string>
+    <string name="add_book_isbn" translatable="true">Ajoutez l\'isbn du livre que vous
         voulez</string>
-
-    
-    <!-- strings used for developpement only -->
-    <string name="lorem_ipsum_tool" translatable="false">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,...</string>
 
     
     <!-- talkback related -->
     <string name="book_cover" translatable="true">Couverture du livre</string>
-
-    <!-- Localisation related -->
-    <string name="us_locale" translatable="false">en_US</string>
-    <string name="fr_locale" translatable="false">fr_FR</string>
-    <string name="ch_locale" translatable="false">zh_CN</string>
 
 
     <!--Google Play services 7.8 Mobile Vision API-->

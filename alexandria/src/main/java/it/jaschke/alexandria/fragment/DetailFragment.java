@@ -187,7 +187,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
 
-
         Tools.loadImage(getContext(), imgUrl, bookTitle, mBookCover);
 
         mDelete.setVisibility(View.VISIBLE);
@@ -225,7 +224,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mDelete.setVisibility(View.INVISIBLE);
         mDesc.setVisibility(View.INVISIBLE);
         mBookCover.setVisibility(View.INVISIBLE);
-        mFragmentMenuItem.setVisible(false);
+        if (mFragmentMenuItem != null)
+            mFragmentMenuItem.setVisible(false);
     }
 
     private Intent createShareIntent(String bookTitle) {

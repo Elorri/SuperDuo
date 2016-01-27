@@ -10,12 +10,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-
-import it.jaschke.alexandria.data.BookContract;
-import it.jaschke.alexandria.data.BookContract.BookEntry;
 import it.jaschke.alexandria.data.BookContract.AuthorEntry;
+import it.jaschke.alexandria.data.BookContract.BookEntry;
 import it.jaschke.alexandria.data.BookContract.CategoryEntry;
-import it.jaschke.alexandria.model.data.BookDbHelper;
 
 /**
  * Created by saj on 24/12/14.

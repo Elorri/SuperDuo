@@ -11,39 +11,11 @@
     <string name="today" translatable="true">jīntiān</string>
     <string name="yesterday" translatable="true">zuótiān</string>
     <string name="tomorrow" translatable="true">míngtiān</string>
-    <!-- string used only for developpement -->
-    <string name="home_team_tool" translatable="false">Stoke City FC</string>
-    <string name="away_team_tool" translatable="false">Norwish City FC</string>
-    <string name="time_tool" translatable="false">20:45</string>
-    <string name="matchday_tool" translatable="false">Matchday : 21</string>
-    <string name="scores_tool" translatable="false">03-janv</string>
-    <!-- Teams -->
-    <string name="team_arsenal_london" translatable="false">Arsenal London FC</string>
-    <string name="team_manshester" translatable="false">Manchester United FC</string>
-    <string name="team_swansea" translatable="false">Swansea City</string>
-    <string name="team_leicester" translatable="false">Leicester City</string>
-    <string name="team_everton" translatable="false">Everton FC</string>
-    <string name="team_west_ham" translatable="false">West Ham United FC</string>
-    <string name="team_tottenham" translatable="false">Tottenham Hotspur FC</string>
-    <string name="team_west_bromwich" translatable="false">West Bromwich Albion</string>
-    <string name="team_sunderland" translatable="false">Sunderland AFC</string>
-    <string name="team_stoke_city" translatable="false">Stoke City FC</string>
-    <!-- League names -->
-    <string name="league_bundesliga1" translatable="false">Bundesliga 1</string>
-    <string name="league_bundesliga2" translatable="false">Bundesliga 2</string>
-    <string name="league_bundesliga3" translatable="false">Bundesliga 3</string>
-    <string name="league_ligue1" translatable="false">Ligue 1</string>
-    <string name="league_ligue2" translatable="false">Ligue 2</string>
-    <string name="league_premier_league" translatable="false">Premier League</string>
-    <string name="league_primera_division" translatable="false">Primera Division</string>
-    <string name="league_segunda_division" translatable="false">Segunda Division</string>
-    <string name="league_serie_a" translatable="false">Serie A</string>
-    <string name="league_primeira_liga" translatable="false">Primeira Liga</string>
-    <string name="league_eredivisie" translatable="false">Eredivisie</string>
-    <string name="league_champions" translatable="false">UEFA Champions League</string>
+
     <string name="league_unknown" translatable="true">liánsài méiyǒu zhǎodào.</string>
+
     <!-- Match day strings -->
-    <string name="match_default">Matchday: <xliff:g id="num">%1$s</xliff:g></string>
+    <string name="match_default" translatable="true">bǐfēn: <xliff:g id="num">%1$s</xliff:g></string>
     <string name="match_champions_gs" translatable="true">Xiǎozǔ sài jiēduàn, bǐsài rì:6</string>
     <string name="match_champions_fkr" translatable="true">Dì yī lún táotàisài</string>
     <string name="match_champions_qf" translatable="true">sì fēn zhī yī juésài</string>
@@ -65,21 +37,6 @@
         zhège yìngyòng chéngxù de zuìchū bǎnběn shì yóu yè hǎi yà·hā lì dé·běn·wǎ lì dé·āi ěr·ài hā mài dé·chuàngjiàn de, zhè shì wǒ zuòle Udacity nàmǐ jí de Android chéngxù xiūgǎi hòu de bǎnběn.\Ñ
     </string>
 
-    <!-- strings used by the app but not displayed as is-->
-    <!-- Key name for status stored in SharedPreferences -->
-    <string name="pref_network_status_key" translatable="false">network_status</string>
-    <string name="pref_football_api_status_key" translatable="false">football_api_status</string>
-    <string name="pref_score_table_status_key" translatable="false">score_table_status</string>
-    <!-- SyncAdapter related -->
-    <!-- that the account is specific to our OpenBeeLabApp-->
-    <string name="sync_account_type" translatable="false">footballscores.barqsoft</string>
-    <!-- Uri authority for our content provider-->
-    <string name="content_authority" translatable="false">barqsoft.footballscores</string>
-    <!-- api key -->
-    <string name="api_key" translatable="false">498ae24a6ec1435db75bbd8ec5ede1ae</string>
-    <!-- dummy data -->
-    <string name="dummy_data" translatable="false">{\"timeFrameStart\":\"2015-06-18\",\"timeFrameEnd\":\"2015-06-19\",\"count\":1,\"fixtures\":[{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}},{\"_links\":{\"self\":{\"href\":\"http://api.football-data.org/alpha/fixtures/000000\"},\"soccerseason\":{\"href\":\"http://api.football-data.org/alpha/soccerseasons/357\"},\"homeTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/275\"},\"awayTeam\":{\"href\":\"http://api.football-data.org/alpha/teams/263\"}},\"mDate\":\"2015-06-19T22:00:00Z\",\"status\":\"FINISHED\",\"matchday\":42,\"homeTeamName\":\"TESTING1\",\"awayTeamName\":\"TESTING2\",\"result\":{\"goalsHomeTeam\":2,\"goalsAwayTeam\":4}}]}</string>
-
     <!-- Empty scores listview -->
     <string name="no_scores_internet_off" translatable="true">Wǎngluò cuòwù. Qǐng jiǎnchá liánjiē.</string>
     <string name="no_scores_serveur_down" translatable="true">Wú fēnshù xìnxī. Fúwùqì wèi fǎnhuí yǒuxiào shùjù.</string>
@@ -90,10 +47,6 @@
     <!-- Talkback content description -->
     <string name="home_team_crest" translatable="true">zhǔduì guān</string>
     <string name="away_team_crest" translatable="true">kèduì guān</string>
-    <!-- Localisation related -->
-    <string name="us_locale" translatable="false">en_US</string>
-    <string name="fr_locale" translatable="false">fr_FR</string>
-    <string name="ch_locale" translatable="false">zh_CN</string>
 </resources>
 
 
