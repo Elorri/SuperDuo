@@ -44,6 +44,8 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, mMainFragment)
                     .commit();
         }
+
+        ViewServer.get(this).addWindow(this);
     }
 
     private void updateWidgets() {
@@ -54,6 +56,18 @@ public class MainActivity extends ActionBarActivity {
         sendBroadcast(dataUpdatedIntent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewServer.get(this).setFocusedWindow(this);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
+    }
 
 
     @Override

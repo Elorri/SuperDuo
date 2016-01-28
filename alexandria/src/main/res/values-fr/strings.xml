@@ -38,7 +38,7 @@
     <string name="no_books_serveur_down" translatable="true">Aucune info disponible sur les livres. Le serveur ne retourne pas de données valides.</string>
     <string name="no_books_wrong_url_app_input" translatable="true">Aucune info disponible sur les livres. Le serveur ne retourne pas de données valides. Cherchez une version plusrécente d\'Alexndria.</string>
     <string name="no_books_table_status_unknown" translatable="true">Nous recherchons le livre...</string>
-    <string name="no_books" translatable="true">Pas de livres trouvé.</string>
+    <string name="no_books" translatable="true">Pas de livre trouvé.</string>
     <string name="no_books_in_your_library" translatable="true">Ajoutez des livres dans votre
         librairie pour commencer</string>
     <string name="add_book_isbn" translatable="true">Ajoutez l\'isbn du livre que vous

@@ -50,14 +50,14 @@ The user can search for book without internet connection and the app does not cr
   - [ ] Not requiered : implement accessibility interfaces for CustomView
  
 ##### 2.3_localisation
-  - [ ] android:layout_gravity="start" + android:layout_gravity="left" because we start under 17 API in activity_main
-  - [ ] allow for localisation in France and US
-  - [ ] add layout mirroring
+  - [x] android:layout_gravity="start" + android:layout_gravity="left" because we start under 17 API in activity_main
+  - [x] allow for localisation in France and US
+  - [x] add layout mirroring
   
 ##### 2.4_performance
   - [ ] Overdraw check
-    - [ ] Debug GPU Overdraw check
-	- [ ] Hierarchy viewer
+    - [ ] Debug GPU Overdraw check 	: All colors <= blue status OK
+	- [ ] Hierarchy viewer			: layout look deep but no drop frame so I will let it like that. 32views in total is less that 70.SearchView seems to be a heavy component.
   - [ ] Leak Memory check  
 	- [ ] TraceView	
 	- [ ] Heap Viewer
@@ -109,16 +109,17 @@ The user can see a message that there is no data shown because no internet conne
   - [ ] implement accessibility interfaces for CustomView
  
 ##### 2.3_localisation
-  - [ ] allow for localisation in France and US and China
+  - [x] allow for localisation in France and US and China
   
 ##### 2.4_performance
   - [ ] Overdraw check
-    - [ ] Debug GPU Overdraw check
-	- [ ] Hierarchy viewer
+    - [ ] Debug GPU Overdraw check		: All colors <= blue status OK
+	- [ ] Hierarchy viewer 				: emptyListView has a red dot for execution is it because visibility=false ?
   - [ ] Leak Memory check  
-	- [ ] TraceView	
-	- [ ] Heap Viewer
-	- [ ] Allocation tracker
+	- [ ] TraceView					-> Tools > Android > Android Device Monitor	> DDMS tab > start method profiling > Sample base profiling
+	- [ ] Heap Viewer				-> Tools > Android > Android Device Monitor > Android Device Monitor > Heap tab > cause GC
+	- [ ] Allocation tracker		-> Tools > Android > Android Device Monitor	> DDMS tab > start allocation tracking > interact with app > stop allocation tracking > ddms371179675432774.alloc
+	- [ ] Android Memory Monitor	-> Tools > Android > Memory Monitor
   - [ ] Battery check
 	- [ ] Battery Historian
 
@@ -128,8 +129,8 @@ The user can see a message that there is no data shown because no internet conne
 | ------------- | :-----------: |:-------------: |
 | 2.0_errors_and_guidance_messages|851   |  29   |
 | 2.1_building_a_total_experience|13871  |34     |
-| 2.2_accessibility|38|0,5|
-| 2.3_localisation|0|0|
+| 2.2_accessibility|38|1|
+| 2.3_localisation|22|8|
 | 2.4_performance|0|0|
 
 
@@ -140,7 +141,7 @@ The user can see a message that there is no data shown because no internet conne
 
 | LOC    | Hours | 
 | :------: | :-----: 
-|13871  |34     | 
+|13871  |43     | 
 
-Last number of LOC :  22804
+Last number of LOC :  22804 22782
 Starting Code number of LOC : 8124
