@@ -19,17 +19,14 @@ import it.jaschke.alexandria.data.BookContract.CategoryEntry;
  */
 public class BookProvider extends ContentProvider {
 
-    private static final int BOOK_ID = 100;
-    private static final int BOOK = 101;
+    private static final int BOOK = 100;
+    private static final int BOOK_ID = 101;
+    private static final int AUTHOR = 200;
+    private static final int AUTHOR_ID = 201;
+    private static final int CATEGORY = 300;
+    private static final int CATEGORY_ID = 301;
 
-    private static final int AUTHOR_ID = 200;
-    private static final int AUTHOR = 201;
 
-    private static final int CATEGORY_ID = 300;
-    private static final int CATEGORY = 301;
-
-    private static final int BOOK_FULL = 500;
-    private static final int BOOK_FULLDETAIL = 501;
 
     private static final UriMatcher uriMatcher = buildUriMatcher();
 
@@ -51,15 +48,12 @@ public class BookProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = BookContract.CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, BookContract.PATH_BOOKS + "/#", BOOK_ID);
+        matcher.addURI(authority, BookContract.PATH_BOOKS + "/*", BOOK_ID);
         matcher.addURI(authority, BookContract.PATH_AUTHORS + "/#", AUTHOR_ID);
         matcher.addURI(authority, BookContract.PATH_CATEGORIES + "/#", CATEGORY_ID);
-        matcher.addURI(authority, BookContract.PATH_FULLBOOK + "/*", BOOK_FULLDETAIL);
-
         matcher.addURI(authority, BookContract.PATH_BOOKS, BOOK);
         matcher.addURI(authority, BookContract.PATH_AUTHORS, AUTHOR);
         matcher.addURI(authority, BookContract.PATH_CATEGORIES, CATEGORY);
-        matcher.addURI(authority, BookContract.PATH_FULLBOOK, BOOK_FULL);
 
         return matcher;
     }
@@ -114,44 +108,9 @@ public class BookProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
+
             case BOOK_ID:
                 Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_ID uri: " + uri);
-                retCursor = bookDbHelper.getReadableDatabase().query(
-                        BookContract.BookEntry.TABLE_NAME,
-                        projection,
-                        BookContract.BookEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
-                break;
-            case AUTHOR_ID:
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR_ID uri: " + uri);
-                retCursor = bookDbHelper.getReadableDatabase().query(
-                        BookContract.AuthorEntry.TABLE_NAME,
-                        projection,
-                        BookContract.AuthorEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
-                break;
-            case CATEGORY_ID:
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "CATEGORY_ID uri: " + uri);
-                retCursor = bookDbHelper.getReadableDatabase().query(
-                        BookContract.CategoryEntry.TABLE_NAME,
-                        projection,
-                        BookContract.CategoryEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
-                break;
-            case BOOK_FULLDETAIL:
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_FULLDETAIL uri: " + uri);
                 String[] bfd_projection = {
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_TITLE,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_SUBTITLE,
@@ -176,28 +135,6 @@ public class BookProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
-            case BOOK_FULL:
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_FULL uri: " + uri);
-                String[] bf_projection = {
-                        BookContract.BookEntry.TABLE_NAME + "." +
-                                BookContract.BookEntry.COLUMN_TITLE,
-                        BookContract.BookEntry.TABLE_NAME + "." +
-                                BookContract.BookEntry.COLUMN_IMAGE_URL, "group_concat(DISTINCT " +
-                        BookContract.AuthorEntry.TABLE_NAME + "." +
-                        BookContract.AuthorEntry.COLUMN_AUTHOR + ") as " +
-                        BookContract.AuthorEntry.COLUMN_AUTHOR, "group_concat(DISTINCT " +
-                        BookContract.CategoryEntry.TABLE_NAME + "." +
-                        BookContract.CategoryEntry.COLUMN_CATEGORY + ") as " +
-                        BookContract.CategoryEntry.COLUMN_CATEGORY
-                };
-                retCursor = bookFull.query(bookDbHelper.getReadableDatabase(),
-                        bf_projection,
-                        null,
-                        selectionArgs,
-                        BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry._ID,
-                        null,
-                        sortOrder);
-                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -213,8 +150,6 @@ public class BookProvider extends ContentProvider {
         final int match = uriMatcher.match(uri);
 
         switch (match) {
-            case BOOK_FULLDETAIL:
-                return BookContract.BookEntry.CONTENT_ITEM_TYPE;
             case BOOK_ID:
                 return BookContract.BookEntry.CONTENT_ITEM_TYPE;
             case AUTHOR_ID:

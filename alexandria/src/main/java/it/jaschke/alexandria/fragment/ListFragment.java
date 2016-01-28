@@ -114,7 +114,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         if (cursor != null) {
             String isbn = cursor.getString(cursor.getColumnIndex(BookContract
                     .BookEntry._ID));
-            Uri uri = BookContract.BookEntry.buildFullBookUri(Long.parseLong(isbn));
+            Uri uri = BookContract.BookEntry.buildBookUri(Long.parseLong(isbn));
             ((Callback) getActivity()).onItemSelected(uri);
         }
     }

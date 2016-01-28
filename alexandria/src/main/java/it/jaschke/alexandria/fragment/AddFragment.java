@@ -250,7 +250,7 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
             isbn = Long.parseLong(Tools.fixIsbn(userInput));
         return new CursorLoader(
                 getActivity(),
-                BookContract.BookEntry.buildFullBookUri(isbn),
+                BookContract.BookEntry.buildBookUri(isbn),
                 null,
                 null,
                 null,

@@ -82,8 +82,6 @@ public class TestProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(BookContract.BookEntry.buildBookUri(id));
         assertEquals(BookContract.BookEntry.CONTENT_ITEM_TYPE, type);
 
-        type = mContext.getContentResolver().getType(BookContract.BookEntry.buildFullBookUri(id));
-        assertEquals(BookContract.BookEntry.CONTENT_ITEM_TYPE, type);
 
         type = mContext.getContentResolver().getType(BookContract.AuthorEntry.buildAuthorUri(id));
         assertEquals(BookContract.AuthorEntry.CONTENT_ITEM_TYPE, type);
@@ -99,8 +97,8 @@ public class TestProvider extends AndroidTestCase {
         insertReadAuthor();
         insertReadCategory();
 
-        readFullBook();
-        readFullList();
+        readBook();
+        readBookList();
     }
 
     public void insertReadBook(){
@@ -192,10 +190,10 @@ public class TestProvider extends AndroidTestCase {
 
     }
 
-    public void readFullBook(){
+    public void readBook(){
 
         Cursor cursor = mContext.getContentResolver().query(
-                BookContract.BookEntry.buildFullBookUri(TestDb.ean),
+                BookContract.BookEntry.buildBookUri(TestDb.ean),
                 null, // projection
                 null, // selection
                 null, // selection args
@@ -205,10 +203,10 @@ public class TestProvider extends AndroidTestCase {
         TestDb.validateCursor(cursor, TestDb.getFullDetailValues());
     }
 
-    public void readFullList(){
+    public void readBookList(){
 
         Cursor cursor = mContext.getContentResolver().query(
-                BookContract.BookEntry.FULL_CONTENT_URI,
+                BookContract.BookEntry.CONTENT_URI,
                 null, // projection
                 null, // selection
                 null, // selection args

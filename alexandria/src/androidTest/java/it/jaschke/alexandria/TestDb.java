@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.jaschke.alexandria.data.BookContract;
-import it.jaschke.alexandria.model.data.BookDbHelper;
+import it.jaschke.alexandria.data.BookDbHelper;
 
 /**
  * Created by saj on 23/12/14.
@@ -134,7 +134,7 @@ public class TestDb extends AndroidTestCase {
         values.put(BookContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
         values.put(BookContract.BookEntry.COLUMN_SUBTITLE, subtitle);
         values.put(BookContract.BookEntry.COLUMN_DESC, desc);
-
+        values.put(BookContract.BookEntry.COLUMN_FAVORITE, BookContract.BookEntry.FAVORITE_OFF_VALUE);
         return values;
     }
 

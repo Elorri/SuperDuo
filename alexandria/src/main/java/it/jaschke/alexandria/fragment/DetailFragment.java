@@ -175,7 +175,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             @Override
             public void onClick(View view) {
                 Intent bookIntent = new Intent(getActivity(), BookService.class);
-                String isbn = BookContract.BookEntry.getIsbnFromFullBookUri(mUri);
+                String isbn = BookContract.BookEntry.getIsbnFromBookUri(mUri);
                 bookIntent.putExtra(BookService.ISBN, isbn);
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
