@@ -56,7 +56,6 @@
                 android:scaleType="center"
                 tools:src="@drawable/leicester_city_fc_hd_logo"/>
     </LinearLayout>
-    <!--TODO look at all textColor -->
     <TextView
         android:id="@+id/widget_empty"
         android:layout_width="match_parent"

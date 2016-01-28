@@ -59,6 +59,7 @@
     <string name="no_camera_permission" translatable="true">zhège yìngyòng chéngxù bùnéng yùnxíng,
         yīnwèi tā bù jùyǒu xiàngjī quánxiàn. Gāi yìngyòng chéngxù xiànzài jiāng tuìchū.
     </string>
+    <string name="capture_tip" translatable="true">Diǎnjī bǔzhuō. Niē/lā shēn fàngdà</string>
 </resources>
 
 

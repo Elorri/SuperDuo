@@ -9,7 +9,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import it.jaschke.alexandria.R;
 
@@ -33,7 +32,6 @@ public class SettingsActivity extends Activity {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             super.onCreate(savedInstanceState);
             // Add 'general' preferences, defined in the XML file
             addPreferencesFromResource(R.xml.preferences);

@@ -249,7 +249,7 @@ public class BookProvider extends ContentProvider {
                 break;
             }
             case AUTHOR: {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "COLUMN_AUTHOR uri: " + uri);
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR uri: " + uri);
                 long _id = db.insert(BookContract.AuthorEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = BookContract.AuthorEntry.buildAuthorUri(_id);
@@ -258,7 +258,7 @@ public class BookProvider extends ContentProvider {
                 break;
             }
             case CATEGORY: {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "COLUMN_CATEGORY uri: " + uri);
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "CATEGORY uri: " + uri);
                 long _id = db.insert(BookContract.CategoryEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = BookContract.CategoryEntry.buildCategoryUri(_id);
@@ -282,6 +282,7 @@ public class BookProvider extends ContentProvider {
         if (null == selection) selection = "1";
         switch (match) {
             case BOOK:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK uri: " + uri);
                 //Need to delete Authors and Categories entry first to avoid foreign key conflict
                 //Need to delete Authors and Categories, because 'on delete cascade does not seems 
                 // to work'
@@ -291,11 +292,13 @@ public class BookProvider extends ContentProvider {
                 rowsDeleted = db.delete(BookEntry.TABLE_NAME, BookEntry.COLUMN_FAVORITE + "=?", new String[]{BookEntry.FAVORITE_OFF_VALUE});
                 break;
             case AUTHOR:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR uri: " + uri);
                 //delete from authors where _id in (select _id from books where favorite=0);
                 rowsDeleted = db.delete(AuthorEntry.TABLE_NAME, AuthorEntry._ID + " in (select " + 
                         BookEntry._ID + " from " + BookEntry.TABLE_NAME + " where " + BookEntry.COLUMN_FAVORITE + "=" + BookEntry.FAVORITE_OFF_VALUE + ")", null);
                 break;
             case CATEGORY:
+                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "CATEGORY uri: " + uri);
                 //delete from categories where _id in (select _id from books where favorite=0);
                 rowsDeleted = db.delete(CategoryEntry.TABLE_NAME, CategoryEntry._ID + " in " +
                         "(select " + BookEntry._ID + " from " + BookEntry.TABLE_NAME + " where " + BookEntry.COLUMN_FAVORITE + "=" + BookEntry.FAVORITE_OFF_VALUE + ")", null);

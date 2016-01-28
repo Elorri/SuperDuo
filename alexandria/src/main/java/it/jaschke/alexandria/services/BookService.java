@@ -91,17 +91,11 @@ public class BookService extends IntentService {
      * parameters.
      */
     private void fetchBook(String isbn) {
-        Log.d("SuperDuo", "current thread : " + thread());
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn" + isbn);
-
-
         // re-init table status
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_STATUS_UNKNOWN");
         Status.setBookTableStatus(getApplicationContext(), Status.TABLE_STATUS_UNKNOWN);
 
 
         if (isbn.length() != 13) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn.length() != 13");
             Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
             return;
         }
@@ -116,7 +110,6 @@ public class BookService extends IntentService {
 
 
         if (bookEntry.getCount() > 0) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookEntry.getCount() > 0");
             bookEntry.close();
 
             //this line will induce a restartLoader in AddFragment
@@ -151,7 +144,6 @@ public class BookService extends IntentService {
                     .build();
 
             URL url = new URL(builtUri.toString());
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "url " + url);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -159,12 +151,9 @@ public class BookService extends IntentService {
             //This is where we get an error if manifest has no internet permission
             urlConnection.connect();
 
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "urlConnection" +
-                    urlConnection);
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "inputStream" + inputStream);
             if (inputStream == null) {
                 return;
             }
@@ -200,17 +189,12 @@ public class BookService extends IntentService {
             final String IMG_URL = "thumbnail";
 
 
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "bookJsonString" +
-                    bookJsonString);
             JSONObject bookJson = new JSONObject(bookJsonString);
             JSONArray bookArray;
             if (bookJson.has(ITEMS)) {
                 bookArray = bookJson.getJSONArray(ITEMS);
             } else {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_SYNC_DONE");
                 Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
-                //TODO : if book not found the db does not change hence the fragment. Add
-                // callback here
                 return;
             }
 
@@ -240,19 +224,13 @@ public class BookService extends IntentService {
             if (bookInfo.has(CATEGORIES)) {
                 writeBackCategories(isbn, bookInfo.getJSONArray(CATEGORIES));
             }
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TABLE_SYNC_DONE");
             Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
 
         } catch (IOException e) {
-            //catch exceptions more precisely
-            Log.e(LOG_TAG, "IOException" + e.getMessage());
-            Log.e("SuperDuo", "IOException" + e.getMessage());
+            Log.d(LOG_TAG, "IOException" + e.getMessage());
             Status.setGoogleBookApiStatus(getApplicationContext(), Status.SERVEUR_DOWN);
-            e.printStackTrace();
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "JSONException" + e.getMessage());
-            Log.e("SuperDuo", "JSONException" + e.getMessage());
-            e.printStackTrace();
+            Log.d(LOG_TAG, "JSONException" + e.getMessage());
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -272,9 +250,7 @@ public class BookService extends IntentService {
 
 
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         if (jsonObject == null) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
             Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
             return;
         }
@@ -285,20 +261,16 @@ public class BookService extends IntentService {
             int errorCode = jsonObject.getInt(ERROR_TAG);
             switch (errorCode) {
                 case HttpURLConnection.HTTP_BAD_REQUEST:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
                     Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
                     break;
                 case HttpURLConnection.HTTP_FORBIDDEN:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_FORBIDDEN");
                     Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
                     break;
                 case HttpURLConnection.HTTP_NOT_FOUND:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_NOT_FOUND");
                     Status.setGoogleBookApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
                     break;
             }
         } else {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "SERVEUR_OK");
             Status.setGoogleBookApiStatus(context, Status.SERVEUR_OK);
         }
     }

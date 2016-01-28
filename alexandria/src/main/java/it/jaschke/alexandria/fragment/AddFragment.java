@@ -70,7 +70,6 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onSaveInstanceState(outState);
         if (mIsbnSearchView != null) {
             outState.putString(ISBN_CONTENT, mIsbnSearchView.getQuery().toString());
@@ -92,7 +91,6 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
 
         view = inflater.inflate(R.layout.fragment_add, container, false);
         mEmptyTextView = (TextView) view.findViewById(R.id.noBookFound);
@@ -114,15 +112,12 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
         mIsbnSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                 if((query.length()==0)||(query.length()>13)){
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                     mIsbnSearchView.clearFocus();}
                 refresh();
                 return true;
@@ -176,10 +171,8 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     private void startListScreen() {
         if(MainActivity.isAddFirstScreen){
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             getActivity().startActivity(new Intent(getActivity(), ListActivity.class));
         }else{
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             getActivity().finish();
         }
     }
@@ -217,12 +210,9 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
         bookIntent.putExtra(BookService.ISBN, isbnValue);
         bookIntent.setAction(BookService.FETCH_BOOK);
         getActivity().startService(bookIntent);
-        //TODO : Does removing this line remove the add book without internet bug ?
-        //AddFragment.this.restartLoader();
     }
 
     private void restartLoader() {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
@@ -238,16 +228,13 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
             return;
         }
         mIsbn = Tools.fixIsbn(isbnUserInput);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:" + mIsbn);
         if (mIsbn.length() < 13) {
             mIsbn = null;
             clearFields();
             mEmptyTextView.setText(R.string.add_book_isbn);
             return;
         }
-        //TODO : 2.1 disallow to enter more than 13 char
         mIsbn = mIsbn.substring(0, 13);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "fixed mIsbn:" + mIsbn);
         //This will restart the loader when table book status will change.  No need to call restartLoader here.
         addBookIntent(mIsbn);
     }
@@ -255,14 +242,12 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         String userInput = mIsbnSearchView.getQuery().toString();
         long isbn;
         if (userInput.equals(""))
             isbn = -1;
         else
             isbn = Long.parseLong(Tools.fixIsbn(userInput));
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isbn:" + isbn);
         return new CursorLoader(
                 getActivity(),
                 BookContract.BookEntry.buildFullBookUri(isbn),
@@ -275,7 +260,6 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "cursor.size:" + data.getCount());
         if (data.getCount() == 0) {
             updateEmptyView(data);
             return;
@@ -286,8 +270,10 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
         //If the book returned has an empty title, subtitle, authors, imageUrl, or category, we
         // have 2 options :
         // - not including it in the db : meaning if the book detail isn't complete we don't want it
-        // - including it in the db with its isbn, and display empty string to the user.
-        // Note : setText(null) does exactly that without crashing.
+        // - including it in the db with its isbn and null entries, and display empty string to the
+        // user.
+        // We will choose the second option
+        // Note : setText(null) will  display empty string without crashing.
         // We only need to make sure we won't access those object (here String) methods.
         String bookTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_TITLE));
         String bookSubTitle = data.getString(data.getColumnIndex(BookContract.BookEntry.COLUMN_SUBTITLE));
@@ -362,7 +348,6 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
     }
 
     private void clearFields() {
@@ -395,26 +380,18 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
     public void onPause() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sp.unregisterOnSharedPreferenceChangeListener(this);
-
-        //TODO : 2.1 see what happen
-//        if (MainActivity.IS_TABLET && view.findViewById(R.id.right_container) == null) {
-//            getActivity().getSupportFragmentManager().popBackStack();
-//        }
         super.onPause();
     }
 
 
     @Override
     public void onStart() {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().initLoader(LOADER_ID, null, this);
         internetReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 boolean isConnected = Tools.isNetworkAvailable(getContext());
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isConnected" + isConnected);
                 if (isConnected) {
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                     Status.setNetworkStatus(context, Status.INTERNET_ON);
                     refresh();
                     return;
@@ -436,10 +413,7 @@ public class AddFragment extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "key" + key);
         if (key.equals(getString(R.string.pref_book_table_status_key))) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-            //updateEmptyView(mCursor);
             restartLoader();
         }
     }

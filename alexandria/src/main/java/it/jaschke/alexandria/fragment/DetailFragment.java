@@ -10,7 +10,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,12 +53,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     public DetailFragment() {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null)
@@ -70,7 +67,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         mToolbarView = (Toolbar) view.findViewById(R.id.toolbar);
 
@@ -79,12 +75,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         else {
             setHasOptionsMenu(true);
         }
-
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
-                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " +
-                mFragmentMenuItem);
-
-
         return view;
     }
 
@@ -93,13 +83,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (getActivity() instanceof DetailActivity)
             inflateActivityMenuItem(menu, inflater);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] +
-                "mActivityMenuItem " + mActivityMenuItem + " mFragmentMenuItem " +
-                mFragmentMenuItem);
     }
 
     private void inflateFragmentMenuItem() {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         Menu menu = mToolbarView.getMenu();
         if (null != menu) menu.clear();
         mToolbarView.inflateMenu(R.menu.fragment_detail);
@@ -108,7 +94,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void inflateActivityMenuItem(Menu menu, MenuInflater inflater) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         inflater.inflate(R.menu.fragment_detail, menu);
         mActivityMenuItem = menu.findItem(R.id.action_share);
     }
@@ -116,14 +101,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         CursorLoader cursorLoader = null;
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -141,9 +124,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor
-            data) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (!data.moveToFirst()) {
             return;
         }
@@ -244,14 +225,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         outState.putParcelable(URI, mUri);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onConfigurationChanged(newConfig);
         if (Tools.isTablet(newConfig) && (Tools.isLandscape(newConfig)))
             getActivity().finish();

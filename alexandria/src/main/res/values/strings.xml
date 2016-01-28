@@ -74,5 +74,6 @@
     <string name="ok" translatable="true">OK</string>
     <string name="low_storage_error" translatable="true">Face detector dependencies cannot be downloaded due to low device storage</string>
     <string name="no_camera_permission" translatable="true">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="capture_tip" translatable="true">Tap to capture. Pinch/Stretch to zoom</string>
 
 </resources>

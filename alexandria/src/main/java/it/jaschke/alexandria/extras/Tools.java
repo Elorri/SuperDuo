@@ -6,17 +6,13 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
-
-import java.util.Locale;
 
 import it.jaschke.alexandria.R;
 
@@ -43,7 +39,6 @@ public class Tools {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isConnected" + isConnected);
         return isConnected;
     }
 
@@ -61,16 +56,6 @@ public class Tools {
     }
 
 
-    /**
-     * Compare the second Uri to the first and return true if equals, false if not
-     *
-     * @param uri1 first uri
-     * @param uri2 second uri to compare to the first
-     * @return true if the 2 uris are equals, false otherwise
-     */
-    public static boolean compareUris(Uri uri1, Uri uri2) {
-        return uri1.toString().equals(uri2.toString());
-    }
 
 
     public static void loadImage(Context context, String imgUrl, String errorMsg, ImageView
@@ -98,56 +83,11 @@ public class Tools {
     }
 
 
-    public static boolean isPortrait(Configuration configuration) {
-        return configuration.orientation == Configuration.ORIENTATION_PORTRAIT;
-    }
 
     public static boolean isLandscape(Configuration configuration) {
         return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
-
-    public static Locale getMostSuitableLocale(Context context) {
-        String usLocale = context.getResources().getString(R.string.us_locale);
-        String frLocale = context.getResources().getString(R.string.fr_locale);
-        String chLocale = context.getResources().getString(R.string.ch_locale);
-
-        String usLocaleLang = usLocale.split("_")[0];
-        String frLocaleLang = frLocale.split("_")[0];
-        String chLocaleLang = chLocale.split("_")[0];
-
-        String usLocaleCountry = usLocale.split("_")[1];
-        String frLocaleCountry = frLocale.split("_")[1];
-        String chLocaleCountry = chLocale.split("_")[1];
-
-        if ((Locale.getDefault().getLanguage().equals(usLocaleLang)) && (Locale.getDefault()
-                .getCountry().equals(usLocaleCountry)))
-            return Locale.getDefault(); //The user Locale is the Locale we want, no further search
-
-        if ((Locale.getDefault().getLanguage().equals(frLocaleLang)) && (Locale.getDefault().getCountry().equals(frLocaleCountry)))
-            return Locale.getDefault(); //The user Locale is the Locale we want, no further search
-
-        if (Locale.getDefault().getLanguage().equals(frLocaleLang)
-                && isLocaleAvailable(frLocaleLang, frLocaleCountry))
-            return new Locale(frLocaleLang, frLocaleCountry);
-
-        if (Locale.getDefault().getLanguage().equals(chLocaleLang)
-                && isLocaleAvailable(chLocaleLang, frLocaleCountry))
-            return new Locale(chLocaleLang, chLocaleCountry);
-
-        //us_US only locale Java guarantees is always available.
-        return new Locale(usLocaleLang, usLocaleCountry);
-    }
-
-    public static boolean isLocaleAvailable(String language, String country) {
-        Locale[] locales = Locale.getAvailableLocales();
-        for (Locale locale : locales) {
-            if ((locale.getLanguage().equals(language))
-                    && (locale.getCountry().equals(country)))
-                return true;
-        }
-        return false;
-    }
 
 
 }

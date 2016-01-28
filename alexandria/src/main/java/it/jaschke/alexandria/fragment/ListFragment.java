@@ -12,7 +12,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,14 +51,12 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
         mBooksAdapter = new BooksAdapter(getActivity(), null, 0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         mSearchView = (SearchView) view.findViewById(R.id.searchView);
@@ -69,14 +66,10 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mBookList.setAdapter(mBooksAdapter);
         mSearchView.setIconified(false);
-        //mSearchView.clearFocus();
 
         if (savedInstanceState != null) {
             mQuery = savedInstanceState.getString(QUERY);
             mSearchView.setQuery(mQuery, true);
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "mQuery " + mQuery);
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2]
-                    + "mQuery " +mQuery+"mSearchView.getQuery()"+mSearchView.getQuery());
         }
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -87,7 +80,6 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
             @Override
             public boolean onQueryTextChange(String query) {
-                //if (query.equals("")) mSearchView.clearFocus();
                 restartLoader();
                 return true;
             }
@@ -134,7 +126,6 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onResume() {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().initLoader(LOADER_ID, null, this);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sp.registerOnSharedPreferenceChangeListener(this);
@@ -157,20 +148,17 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
     private void restartLoader() {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         Uri uri = BookContract.BookEntry.CONTENT_URI;
 
         final String selection = BookContract.BookEntry.COLUMN_TITLE + " LIKE ? OR " + BookContract.BookEntry.COLUMN_SUBTITLE + " LIKE ? ";
         String searchString = mSearchView.getQuery().toString();
 
         if (searchString.length() > 0) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             searchString = "%" + searchString + "%";
             return new CursorLoader(
                     getActivity(),
@@ -181,7 +169,6 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
                     null
             );
         }
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "mUri" + uri);
         return new CursorLoader(
                 getActivity(),
                 uri,
@@ -194,7 +181,6 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "data "+data.getCount());
         mBooksAdapter.swapCursor(data);
         if (mPosition != ListView.INVALID_POSITION) {
             mBookList.smoothScrollToPosition(mPosition);
@@ -216,13 +202,11 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         mBooksAdapter.swapCursor(null);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         outState.putString(QUERY, mSearchView.getQuery().toString());
         if (mPosition != ListView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);

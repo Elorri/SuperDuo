@@ -14,7 +14,6 @@
         android:background="@color/secondary_light"
         tools:text="Holy Bible"/>
 
-<!-- TODO put scroll under title -->
     <ScrollView
         android:layout_below="@id/bookTitle"
         android:layout_width="match_parent"
