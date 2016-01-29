@@ -3,48 +3,81 @@
 This repository contains the app SuperDuo project, which is part of the Android Developer Nanodegree program.
 It is subdivided into 2 apps Alexandria and FootballScores.
 
-## Min Android Api supported
+## Alexandria
 
-Alexandria : 15
-FootballScores : 14
+### Functionality
 
+This app allow to add a book using its isbn number into the user local library.
+The isbn can be typed in or scanned.
+Books of the library can be filtered by typing words.
 
-## Features
+### Accessibility
 
-Alexandria : 
-- Locale support : en_US, fr_FR, zh_CN
+Currently the app support Talkback  for sight-impaired users
 
-FootballScores : 
-- Locale support : en_US, fr_FR, zh_CN
+### Language support
 
-## Libraries used
+Currently the app is supportting the following locales : 
+- english language : en_US
+- french language : fr_FR
+- chinese language : zh_CN
 
-|             <  | Api level     | >=             |
-| ------------- | :-----------: |:-------------: |
-| Zxing|18 |  Google Play Mobile Vision Api   |
-| Setting Holo ActionBar|21 |  Settings Material design ActionBar  |
-| Not supported |15 |  Talback content description for widgets  |
+### Libraries used
 
-
-## Libraries infos
-
-* [Google Play Mobile Vision Api](https://github.com/googlesamples/android-vision/tree/master/visionSamples/barcode-reader)
-* [Zxing](https://github.com/zxing/zxing/wiki/Scanning-Via-Intent)
-* [TextDrawable](https://github.com/amulyakhare/TextDrawable)
+* [Stetho]('com.facebook.stetho:stetho:1.2.0) (for tests)
+* [TextDrawable](https://github.com/amulyakhare/TextDrawable) (for images)
+* [Glide](https://github.com/bumptech/glide) (for images)
+* [Google Play Mobile Vision Api](https://github.com/googlesamples/android-vision/tree/master/visionSamples/barcode-reader) (scan functionality for devices above api 18)
+* [Zxing](https://github.com/zxing/zxing/wiki/Scanning-Via-Intent)  (scan functionality for devices below api 18)
 
 
+### Others
 
-## API key needed
+Minimum Andoid Api requiered : 15
 
+## Football Scores
+
+### Functionality
+
+This app allow to visualize the past, current, and near futures matches, with relevant informations like time, team name, and scores (when known).
+The user also have the choice between 2 types of widgets
+- the next match widget
+- the collection widget that show all the next matches planned for the current day
+
+### Accessibility
+
+Currently the app support Talkback  for sight-impaired users
+
+### Language support
+
+Currently the app is supportting the following locales : 
+- english language : en_US
+- french language : fr_FR
+- chinese language : zh_CN
+
+### Libraries used
+
+* [Stetho]('com.facebook.stetho:stetho:1.2.0) (for tests)
+* [TextDrawable](https://github.com/amulyakhare/TextDrawable) (for images)
+* [Glide](https://github.com/bumptech/glide) (for images)
+
+### Others
+
+Minimum Andoid Api requiered : 14
 This app uses the [The Football data API](http://api.football-data.org/register) that need an API key to retrieve its data. 
-This API key should be pasted in the string.xml file.
+This API key should be pasted in a gradle.properties file as followed
 
+	FootballScoresApiToken="XXXXX"
+
+And the gradle.properties file should be added to the /SuperDuo directory 
+	
 ## Apk
 The apk realease can be found under the respected app directories.
 
 ## Roadmap
-[https://gist.github.com/Elorri/baab9e004b1d504926b1]
-(../2.0_errors_and_guidance_messages/Superduo_Roadmap.md)
+This is the ToDo list I have followed in order to achieve this.
+
+(../master/Superduo_Roadmap.md)
 	
 ## License
 	

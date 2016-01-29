@@ -55,9 +55,9 @@ The user can search for book without internet connection and the app does not cr
   - [x] add layout mirroring
   
 ##### 2.4_performance
-  - [ ] Overdraw check
-    - [ ] Debug GPU Overdraw check 	: All colors <= blue status OK
-	- [ ] Hierarchy viewer			: layout look deep but no drop frame so I will let it like that. 32views in total is less that 70.SearchView seems to be a heavy component.
+  - [x] Overdraw check
+    - [x] Debug GPU Overdraw check 	: All colors <= blue status OK
+	- [x] Hierarchy viewer			: layout look deep but no drop frame so I will let it like that. 32views in total is less that 70.SearchView seems to be a heavy component.
   - [ ] Leak Memory check  
 	- [ ] TraceView	
 	- [ ] Heap Viewer
@@ -112,14 +112,14 @@ The user can see a message that there is no data shown because no internet conne
   - [x] allow for localisation in France and US and China
   
 ##### 2.4_performance
-  - [ ] Overdraw check
-    - [ ] Debug GPU Overdraw check		: All colors <= blue status OK
-	- [ ] Hierarchy viewer 				: emptyListView has a red dot for execution is it because visibility=false ?
+  - [x] Overdraw check
+    - [x] Debug GPU Overdraw check		: All colors <= blue status OK
+	- [x] Hierarchy viewer 				: emptyListView has a red dot for execution is it because visibility=false ?
   - [ ] Leak Memory check  
-	- [ ] TraceView					-> Tools > Android > Android Device Monitor	> DDMS tab > start method profiling > Sample base profiling
-	- [ ] Heap Viewer				-> Tools > Android > Android Device Monitor > Android Device Monitor > Heap tab > cause GC
-	- [ ] Allocation tracker		-> Tools > Android > Android Device Monitor	> DDMS tab > start allocation tracking > interact with app > stop allocation tracking > ddms371179675432774.alloc
-	- [ ] Android Memory Monitor	-> Tools > Android > Memory Monitor
+	- [ ] TraceView					
+	- [ ] Heap Viewer				
+	- [ ] Allocation tracker		
+	- [ ] Android Memory Monitor	
   - [ ] Battery check
 	- [ ] Battery Historian
 
@@ -129,9 +129,9 @@ The user can see a message that there is no data shown because no internet conne
 | ------------- | :-----------: |:-------------: |
 | 2.0_errors_and_guidance_messages|851   |  29   |
 | 2.1_building_a_total_experience|13871  |34     |
-| 2.2_accessibility|38|1|
+| 2.2_accessibility|38|2|
 | 2.3_localisation|22|8|
-| 2.4_performance|0|0|
+| 2.4_performance|-205|8|
 
 
 
@@ -141,7 +141,6 @@ The user can see a message that there is no data shown because no internet conne
 
 | LOC    | Hours | 
 | :------: | :-----: 
-|13871  |43     | 
+|14557  |43     | 
 
-Last number of LOC :  22804 22782
 Starting Code number of LOC : 8124
