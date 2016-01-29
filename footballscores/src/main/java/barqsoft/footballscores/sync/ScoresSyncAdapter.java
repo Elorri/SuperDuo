@@ -51,6 +51,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Vector;
 
+import barqsoft.footballscores.BuildConfig;
 import barqsoft.footballscores.R;
 import barqsoft.footballscores.Status;
 import barqsoft.footballscores.Utilities;
@@ -166,8 +167,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             URL fetch = new URL(uri.toString());
             UrlConnection = (HttpURLConnection) fetch.openConnection();
             UrlConnection.setRequestMethod("GET");
-            UrlConnection.addRequestProperty("X-Auth-Token",
-                    getContext().getString(R.string.api_key));
+            UrlConnection.addRequestProperty("X-Auth-Token", BuildConfig.FOOTTBALL_SCORES_API_TOKEN);
             UrlConnection.connect();
 
             InputStream inputStream = UrlConnection.getInputStream();
