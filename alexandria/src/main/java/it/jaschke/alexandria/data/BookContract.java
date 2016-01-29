@@ -63,8 +63,13 @@ public class BookContract {
 
         public static final String COLUMN_AUTHOR = "author";
 
+
         public static Uri buildAuthorUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static String getAuthorIdFromAuthorUri(Uri uri) {
+            return uri.getPathSegments().get(1);
         }
     }
 

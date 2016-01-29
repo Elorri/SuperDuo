@@ -81,8 +81,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (getActivity() instanceof DetailActivity)
+        if (getActivity() instanceof DetailActivity){
             inflateActivityMenuItem(menu, inflater);
+        }
     }
 
     private void inflateFragmentMenuItem() {

@@ -48,7 +48,8 @@ public class TestDb extends AndroidTestCase {
                 BookContract.BookEntry.COLUMN_TITLE,
                 BookContract.BookEntry.COLUMN_IMAGE_URL,
                 BookContract.BookEntry.COLUMN_SUBTITLE,
-                BookContract.BookEntry.COLUMN_DESC
+                BookContract.BookEntry.COLUMN_DESC,
+                BookContract.BookEntry.COLUMN_FAVORITE
         };
 
         // A cursor is your primary interface to the query results.
@@ -135,6 +136,18 @@ public class TestDb extends AndroidTestCase {
         values.put(BookContract.BookEntry.COLUMN_SUBTITLE, subtitle);
         values.put(BookContract.BookEntry.COLUMN_DESC, desc);
         values.put(BookContract.BookEntry.COLUMN_FAVORITE, BookContract.BookEntry.FAVORITE_OFF_VALUE);
+        return values;
+    }
+
+    public static ContentValues getBookValuesFavorites() {
+
+        final ContentValues values = new ContentValues();
+        values.put(BookContract.BookEntry._ID, ean);
+        values.put(BookContract.BookEntry.COLUMN_TITLE, title);
+        values.put(BookContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
+        values.put(BookContract.BookEntry.COLUMN_SUBTITLE, subtitle);
+        values.put(BookContract.BookEntry.COLUMN_DESC, desc);
+        values.put(BookContract.BookEntry.COLUMN_FAVORITE, BookContract.BookEntry.FAVORITE_ON_VALUE);
         return values;
     }
 

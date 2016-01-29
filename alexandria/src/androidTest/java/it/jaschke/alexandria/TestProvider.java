@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import it.jaschke.alexandria.data.BookContract;
 
@@ -102,7 +103,7 @@ public class TestProvider extends AndroidTestCase {
     }
 
     public void insertReadBook(){
-        ContentValues bookValues = TestDb.getBookValues();
+        ContentValues bookValues = TestDb.getBookValuesFavorites();
 
         Uri bookUri = mContext.getContentResolver().insert(BookContract.BookEntry.CONTENT_URI, bookValues);
         long bookRowId = ContentUris.parseId(bookUri);
@@ -118,25 +119,18 @@ public class TestProvider extends AndroidTestCase {
 
         TestDb.validateCursor(cursor, bookValues);
 
-        cursor = mContext.getContentResolver().query(
-                BookContract.BookEntry.buildBookUri(bookRowId),
-                null, // leaving "columns" null just returns all the columns.
-                null, // cols for "where" clause
-                null, // values for "where" clause
-                null  // sort order
-        );
-
-        TestDb.validateCursor(cursor, bookValues);
 
     }
 
     public void insertReadAuthor(){
         ContentValues authorValues = TestDb.getAuthorValues();
 
-        Uri authorUri = mContext.getContentResolver().insert(BookContract.AuthorEntry.CONTENT_URI, authorValues);
+        Uri authorUri = mContext.getContentResolver().insert(BookContract.AuthorEntry.CONTENT_URI,
+                authorValues);
+        Log.e("SuperDuo", "_id : " + authorUri.toString());
         long authorRowId = ContentUris.parseId(authorUri);
         assertTrue(authorRowId != -1);
-        assertEquals(authorRowId,TestDb.ean);
+        assertEquals(TestDb.ean,authorRowId);
 
         Cursor cursor = mContext.getContentResolver().query(
                 BookContract.AuthorEntry.CONTENT_URI,

@@ -34,13 +34,13 @@ public class BookDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_AUTHOR_TABLE = "CREATE TABLE " + BookContract.AuthorEntry.TABLE_NAME + " (" +
                 BookContract.AuthorEntry._ID + " INTEGER," +
-                BookContract.AuthorEntry.COLUMN_AUTHOR + " TEXT," +
+                BookContract.AuthorEntry.COLUMN_AUTHOR + " TEXT, " +
                 " FOREIGN KEY (" + BookContract.AuthorEntry._ID + ") REFERENCES " +
                 BookContract.BookEntry.TABLE_NAME + " (" + BookContract.BookEntry._ID + "))";
 
         final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + BookContract.CategoryEntry.TABLE_NAME + " (" +
-                BookContract.CategoryEntry._ID + " INTEGER," +
-                BookContract.CategoryEntry.COLUMN_CATEGORY + " TEXT," +
+                BookContract.CategoryEntry._ID + " INTEGER ," +
+                BookContract.CategoryEntry.COLUMN_CATEGORY + " TEXT, " +
                 " FOREIGN KEY (" + BookContract.CategoryEntry._ID + ") REFERENCES " +
                 BookContract.BookEntry.TABLE_NAME + " (" + BookContract.BookEntry._ID + "))";
 

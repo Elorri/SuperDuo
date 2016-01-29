@@ -287,22 +287,23 @@ public class BookService extends IntentService {
     }
 
     private void writeBackAuthors(String isbn, JSONArray jsonArray) throws JSONException {
-        ContentValues values = new ContentValues();
+        ContentValues values ;
         for (int i = 0; i < jsonArray.length(); i++) {
+            values = new ContentValues();
             values.put(BookContract.AuthorEntry._ID, isbn);
             values.put(BookContract.AuthorEntry.COLUMN_AUTHOR, jsonArray.getString(i));
             getContentResolver().insert(BookContract.AuthorEntry.CONTENT_URI, values);
-            values = new ContentValues();
         }
     }
 
     private void writeBackCategories(String isbn, JSONArray jsonArray) throws JSONException {
-        ContentValues values = new ContentValues();
+        ContentValues values ;
         for (int i = 0; i < jsonArray.length(); i++) {
-            values.put(BookContract.CategoryEntry._ID, isbn);
-            values.put(BookContract.CategoryEntry.COLUMN_CATEGORY, jsonArray.getString(i));
-            getContentResolver().insert(BookContract.CategoryEntry.CONTENT_URI, values);
             values = new ContentValues();
+            values.put(BookContract.CategoryEntry._ID, isbn);
+           values.put(BookContract.CategoryEntry.COLUMN_CATEGORY, jsonArray.getString(i));
+            getContentResolver().insert(BookContract.CategoryEntry.CONTENT_URI, values);
+
         }
     }
 
