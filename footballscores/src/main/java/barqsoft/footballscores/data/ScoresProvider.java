@@ -19,10 +19,13 @@ public class ScoresProvider extends ContentProvider {
     private ScoresDBHelper mOpenHelper;
 
     public static final int MATCHES = 100;
-    public static final int MATCHES_BY_DATE = 103;
+    public static final int MATCHES_BY_DATE = 101;
+    public static final int NEXT_MATCHES_BY_DATE = 102;
 
     private static final String SCORES_BY_DATE = ScoresContract.ScoreEntry.DATE_TIME_COL
-            +" between ? and ?";
+            + " between ? and ?";
+    private static final String PAST_MATCHES = ScoresContract.ScoreEntry.DATE_TIME_COL
+            + " < ?";
 
 
     public static UriMatcher buildUriMatcher() {
@@ -32,6 +35,8 @@ public class ScoresProvider extends ContentProvider {
         matcher.addURI(authority, ScoresContract.PATH_MATCHES, MATCHES);
         matcher.addURI(authority, ScoresContract.PATH_MATCHES + "/" + ScoresContract.PATH_DATE +
                 "/#", MATCHES_BY_DATE);
+        matcher.addURI(authority, ScoresContract.PATH_NEXT_MATCHES + "/" + ScoresContract.PATH_DATE +
+                "/#", NEXT_MATCHES_BY_DATE);
         return matcher;
     }
 
@@ -55,6 +60,8 @@ public class ScoresProvider extends ContentProvider {
                 return ScoresContract.ScoreEntry.CONTENT_TYPE;
             case MATCHES_BY_DATE:
                 return ScoresContract.ScoreEntry.CONTENT_TYPE;
+            case NEXT_MATCHES_BY_DATE:
+                return ScoresContract.ScoreEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri :" + uri);
         }
@@ -62,28 +69,44 @@ public class ScoresProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "" + uri.toString());
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             case MATCHES:
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "MATCHES " + uri
+                        .toString());
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         ScoresContract.ScoreEntry.TABLE_NAME,
                         projection, null, null, null, null, sortOrder);
                 break;
             case MATCHES_BY_DATE:
-                String dateTime=ScoresContract.ScoreEntry.getDateFromScoresByDateUri(uri);
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "MATCHES_BY_DATE " + uri
+                        .toString());
+                String dateTime = ScoresContract.ScoreEntry.getDateFromMatchesByDateUri(uri);
 
                 //Convert this instant into a range representing a day
-                long dateStart=Utilities.setZero(Long.valueOf(dateTime));
-                long dateEnd=Utilities.addDay(1,dateStart);
-
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "dateStart " + dateStart);
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "dateEnd " + dateEnd);
+                long dateStart = Utilities.setZero(Long.valueOf(dateTime));
+                long dateEnd = Utilities.addDay(1, dateStart);
 
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         ScoresContract.ScoreEntry.TABLE_NAME,
                         projection, SCORES_BY_DATE, new String[]{String.valueOf(dateStart),
                                 String.valueOf(dateEnd)},
+                        null, null,
+                        sortOrder);
+                break;
+            case NEXT_MATCHES_BY_DATE:
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "MATCHES_BY_DATE " + uri
+                        .toString());
+                String nextDateTime = ScoresContract.ScoreEntry.getDateFromNextMatchesByDateUri(uri);
+
+                //Convert this instant into a range representing a day
+                long nextDateStart = Utilities.setZero(Long.valueOf(nextDateTime));
+                long nextDateEnd = Utilities.addDay(1, nextDateStart);
+
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        ScoresContract.ScoreEntry.TABLE_NAME,
+                        projection, SCORES_BY_DATE, new String[]{String.valueOf(nextDateTime),
+                                String.valueOf(nextDateEnd)},
                         null, null,
                         sortOrder);
                 break;
@@ -96,7 +119,6 @@ public class ScoresProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-
         return null;
     }
 
@@ -105,6 +127,8 @@ public class ScoresProvider extends ContentProvider {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         switch (sUriMatcher.match(uri)) {
             case MATCHES:
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "MATCHES " + uri
+                        .toString());
                 db.beginTransaction();
                 int returncount = 0;
                 try {
@@ -126,9 +150,32 @@ public class ScoresProvider extends ContentProvider {
         }
     }
 
+
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        return db.delete(ScoresContract.ScoreEntry.TABLE_NAME, selection, selectionArgs);
+        final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
+        // this makes delete all rows return the number of rows deleted but there is no null where clause here
+        if (null == selection) selection = "1";
+        switch (match) {
+            case MATCHES_BY_DATE:
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "MATCHES_BY_DATE " + uri);
+                String now = ScoresContract.ScoreEntry.getDateFromMatchesByDateUri(uri);
+
+                //Convert this instant into a range representing a day
+                long todayMorning = Utilities.setZero(Long.valueOf(now));
+                long twoDaysAgo = Utilities.addDay(-2, todayMorning);
+                rowsDeleted = db.delete(ScoresContract.ScoreEntry.TABLE_NAME, PAST_MATCHES, new String[]{String.valueOf(twoDaysAgo)});
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        // Because a null deletes all rows
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
+
     }
 }

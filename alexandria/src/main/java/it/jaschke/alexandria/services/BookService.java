@@ -125,6 +125,8 @@ public class BookService extends IntentService {
         Context context = getApplicationContext();
         if (!Tools.isNetworkAvailable(context)) {
             Status.setNetworkStatus(context, Status.INTERNET_OFF);
+            //this line will induce a restartLoader in AddFragment
+            Status.setBookTableStatus(getApplicationContext(), Status.TABLE_SYNC_DONE);
             return;
         }
         Status.setNetworkStatus(context, Status.INTERNET_ON);

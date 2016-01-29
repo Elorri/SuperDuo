@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import barqsoft.footballscores.MainActivity;
@@ -22,7 +21,6 @@ import barqsoft.footballscores.sync.ScoresSyncAdapter;
  */
 public class WidgetListProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list);
@@ -52,7 +50,6 @@ public class WidgetListProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         super.onReceive(context, intent);
         if (ScoresSyncAdapter.ACTION_DATA_UPDATED.equals(intent.getAction())) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

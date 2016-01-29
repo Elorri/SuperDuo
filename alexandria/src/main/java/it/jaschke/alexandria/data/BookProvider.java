@@ -110,12 +110,13 @@ public class BookProvider extends ContentProvider {
                 break;
 
             case BOOK_ID:
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK_ID uri: " + uri);
                 String[] bfd_projection = {
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_TITLE,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_SUBTITLE,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_IMAGE_URL,
                         BookContract.BookEntry.TABLE_NAME + "." + BookContract.BookEntry.COLUMN_DESC,
-                        "group_concat_(DISTINCT "
+                        "group_concat(DISTINCT "
                                 + BookContract.AuthorEntry.TABLE_NAME + "."
                                 + BookContract.AuthorEntry.COLUMN_AUTHOR + ") as "
                                 + BookContract.AuthorEntry.COLUMN_AUTHOR,
@@ -134,6 +135,14 @@ public class BookProvider extends ContentProvider {
                                 + BookContract.BookEntry._ID,
                         null,
                         sortOrder);
+                break;
+            case AUTHOR_ID:
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR_ID uri: " + uri);
+                retCursor = bookDbHelper.getReadableDatabase().query(AuthorEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CATEGORY_ID:
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "CATEGORY_ID uri: " + uri);
+                retCursor = bookDbHelper.getReadableDatabase().query(CategoryEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -176,7 +185,6 @@ public class BookProvider extends ContentProvider {
             case BOOK: {
                 Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK uri: " + uri);
                 long _id = db.insert(BookContract.BookEntry.TABLE_NAME, null, values);
-                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK _id: " + _id);
                 if (_id > 0) {
                     returnUri = BookContract.BookEntry.buildBookUri(_id);
                 } else {
@@ -186,18 +194,18 @@ public class BookProvider extends ContentProvider {
             }
             case AUTHOR: {
                 Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR uri: " + uri);
-                long _id = db.insert(BookContract.AuthorEntry.TABLE_NAME, null, values);
-                Log.e("SuperDuo",""+_id);
+                db.insert(BookContract.AuthorEntry.TABLE_NAME, null, values);
+                long _id=values.getAsLong(AuthorEntry._ID);
                 if (_id > 0) {
                     returnUri = BookContract.AuthorEntry.buildAuthorUri(_id);
-                    Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR _id: " + _id);
                 }
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
             case CATEGORY: {
-                long _id = db.insert(BookContract.CategoryEntry.TABLE_NAME, null, values);
+                db.insert(BookContract.CategoryEntry.TABLE_NAME, null, values);
+                long _id=values.getAsLong(CategoryEntry._ID);
                 if (_id > 0)
                     returnUri = BookContract.CategoryEntry.buildCategoryUri(_id);
                 else

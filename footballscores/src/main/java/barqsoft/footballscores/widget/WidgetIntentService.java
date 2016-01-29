@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import barqsoft.footballscores.MainActivity;
@@ -30,7 +29,6 @@ public class WidgetIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         // Retrieve all of the Today widget ids: these are the widgets we need to update
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
@@ -40,7 +38,7 @@ public class WidgetIntentService extends IntentService {
         // Get now's data from the ContentProvider
         long now = System.currentTimeMillis();
         Cursor cursor = getContentResolver().query(
-                ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(now)),
+                ScoresContract.ScoreEntry.buildNextMatchesByDateUri(String.valueOf(now)),
                 ScoresFragment.MATCHES_COLUMNS,
                 null,
                 null,

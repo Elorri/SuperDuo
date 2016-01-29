@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,25 +60,20 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.fragment_scores, container, false);
         mScoreList = (ListView) view.findViewById(R.id.scores_list);
         mAdapter = new ScoresAdapter(getActivity(), null, 0);
         mScoreList.setAdapter(mAdapter);
         mAdapter.selectedMatchId = MainActivity.selectedMatchId;
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "before setOnItemClickListener");
         mScoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "onItemClick ");
                 ScoresAdapter.ViewHolder selected = (ScoresAdapter.ViewHolder) view.getTag();
                 mAdapter.selectedMatchId = selected.matchId;
                 MainActivity.selectedMatchId = (int) selected.matchId;
                 mAdapter.notifyDataSetChanged();
             }
         });
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "after " +
-                "setOnItemClickListener");
         return view;
     }
 
@@ -93,9 +87,8 @@ public class ScoresFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "date:" + mTimeDate);
         return new CursorLoader(getActivity(),
-                ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(mTimeDate)),
+                ScoresContract.ScoreEntry.buildMatchesByDateUri(String.valueOf(mTimeDate)),
                 MATCHES_COLUMNS,
                 null,
                 null,

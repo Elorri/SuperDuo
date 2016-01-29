@@ -181,13 +181,5 @@ public class TestDb extends AndroidTestCase {
         return values;
     }
 
-    public static ContentValues getFullListValues() {
 
-        final ContentValues values= new ContentValues();
-        values.put(BookContract.BookEntry.COLUMN_TITLE, title);
-        values.put(BookContract.BookEntry.COLUMN_IMAGE_URL, imgUrl);
-        values.put(BookContract.AuthorEntry.COLUMN_AUTHOR, author);
-        values.put(BookContract.CategoryEntry.COLUMN_CATEGORY, category);
-        return values;
-    }
 }

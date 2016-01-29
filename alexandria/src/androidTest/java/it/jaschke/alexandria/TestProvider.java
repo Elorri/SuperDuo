@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import it.jaschke.alexandria.data.BookContract;
 
@@ -99,7 +98,6 @@ public class TestProvider extends AndroidTestCase {
         insertReadCategory();
 
         readBook();
-        readBookList();
     }
 
     public void insertReadBook(){
@@ -127,7 +125,6 @@ public class TestProvider extends AndroidTestCase {
 
         Uri authorUri = mContext.getContentResolver().insert(BookContract.AuthorEntry.CONTENT_URI,
                 authorValues);
-        Log.e("SuperDuo", "_id : " + authorUri.toString());
         long authorRowId = ContentUris.parseId(authorUri);
         assertTrue(authorRowId != -1);
         assertEquals(TestDb.ean,authorRowId);
@@ -197,18 +194,7 @@ public class TestProvider extends AndroidTestCase {
         TestDb.validateCursor(cursor, TestDb.getFullDetailValues());
     }
 
-    public void readBookList(){
 
-        Cursor cursor = mContext.getContentResolver().query(
-                BookContract.BookEntry.CONTENT_URI,
-                null, // projection
-                null, // selection
-                null, // selection args
-                null  // sort order
-        );
-
-        TestDb.validateCursor(cursor, TestDb.getFullListValues());
-    }
 
 
 }

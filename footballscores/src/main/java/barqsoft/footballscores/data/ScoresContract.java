@@ -14,6 +14,7 @@ public class ScoresContract {
 
     public static Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_MATCHES = "matches";
+    public static final String PATH_NEXT_MATCHES = "next_matches";
     public static final String PATH_DATE = "date";
 
 
@@ -42,7 +43,7 @@ public class ScoresContract {
 
 
         //will match MATCHES_BY_DATE
-        public static Uri buildScoreByDate(String dateTime) {
+        public static Uri buildMatchesByDateUri(String dateTime) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(PATH_MATCHES)
                     .appendPath(PATH_DATE)
@@ -50,7 +51,19 @@ public class ScoresContract {
                     .build();
         }
 
-        public static String getDateFromScoresByDateUri(Uri uri) {
+        //will match NEXT_MATCHES_BY_DATE
+        public static Uri buildNextMatchesByDateUri(String dateTime) {
+            return BASE_CONTENT_URI.buildUpon()
+                    .appendPath(PATH_NEXT_MATCHES)
+                    .appendPath(PATH_DATE)
+                    .appendPath(dateTime)
+                    .build();
+        }
+
+        public static String getDateFromMatchesByDateUri(Uri uri) {
+            return uri.getPathSegments().get(2);
+        }
+        public static String getDateFromNextMatchesByDateUri(Uri uri) {
             return uri.getPathSegments().get(2);
         }
     }

@@ -38,7 +38,6 @@ public class MainFragment extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         PageAdapter pageAdapter = new PageAdapter(getChildFragmentManager());
         mViewPager.setAdapter(pageAdapter);
-        //TODO : 2.1 use preferences
         mViewPager.setCurrentItem(MainActivity.currentItem);
 
 
@@ -80,7 +79,6 @@ public class MainFragment extends Fragment {
         public String getDayName(Context context, long dateInMillis) {
             // If the date is today, return the localized version of "Today" instead of the actual
             // day name.
-
             Time t = new Time();
             t.setToNow();
             int julianDay = Time.getJulianDay(dateInMillis, t.gmtoff);

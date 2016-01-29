@@ -12,7 +12,6 @@ import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -55,24 +54,19 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public ScoresSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         syncDb();
     }
 
 
     public void syncDb() {
-        Log.e("SuperDuo", "current thread : " + thread());
-
         Context context = getContext();
         boolean isInternetOn = Utilities.isNetworkAvailable(context);
         if (!isInternetOn) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "isInternetOn" + isInternetOn);
             Status.setNetworkStatus(context, Status.INTERNET_OFF);
             return;
         }
@@ -101,10 +95,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
      * @throws JSONException
      */
     void setServeurStatus(Context context, JSONObject jsonObject) throws JSONException {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-        Log.e("SuperDuo", "setServeurStatus");
         if (jsonObject == null) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonObject is null");
             Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
             return;
         }
@@ -116,24 +107,19 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             int errorCode = jsonObject.getInt(ERROR_TAG);
             switch (errorCode) {
                 case HttpURLConnection.HTTP_BAD_REQUEST:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_BAD_REQUEST");
                     Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
                     return;
                 case HttpURLConnection.HTTP_FORBIDDEN:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_FORBIDDEN");
                     Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
                     return;
                 case HttpURLConnection.HTTP_NOT_FOUND:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "HTTP_NOT_FOUND");
                     Status.setFootballApiStatus(context, Status.SERVEUR_WRONG_URL_APP_INPUT);
                     return;
                 case TOO_MANY_REQUEST:
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "TOO_MANY_REQUEST");
                     Status.setFootballApiStatus(context, Status.SERVEUR_DOWN);
                     return;
             }
         } else {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "SERVEUR_OK");
             Status.setFootballApiStatus(context, Status.SERVEUR_OK);
         }
     }
@@ -148,9 +134,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         Uri uri = Uri.parse(BASE_URL).buildUpon().
                 appendQueryParameter(QUERY_TIME_FRAME, timeFrame)
                 .build();
-        //TODO : 2.4 replace Log.v par Log.d
-        //Log.v(LOG_TAG, "The url we are looking at is: "+uri.toString());
-        Log.e("SuperDuo", "The url we are looking at is: " + uri.toString());
 
         HttpURLConnection UrlConnection = null;
         BufferedReader reader = null;
@@ -184,7 +167,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                 return;
             }
             jsonData = buffer.toString();
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "jsonData: \n" + jsonData);
 
             setServeurStatus(getContext(), new JSONObject(jsonData));
             if (!(Status.getFootballApiStatus(getContext()) == Status.SERVEUR_OK))
@@ -227,7 +209,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void processJSONdata(String JSONdata, Context mContext, boolean isReal) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
 
 
         // This set of league codes is for the 2015/2016 season. In fall of 2016, they will need to
@@ -309,15 +290,9 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                         // and matchId should be unique in db, concatenating i value
                         // will solve the pb
                         matchId = matchId + Integer.toString(i);
-                        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                     }
 
-                    // TODO delete all match > j-2 ou -3?
-                    //TODO 2.4 make sure you get time and datefrom timestamp
                     timestamp = matchData.getString(MATCH_DATE); //get timestamp ex:2016-01-13T19:45:00Z
-                    Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "timestamp from" +
-                            " serveur: " + timestamp);
-
 
                     long dateTime = Utilities.getLongDate(timestamp);
 
@@ -332,12 +307,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                     awayGoals = matchData.getJSONObject(RESULT).getString(AWAY_GOALS);
                     matchDay = matchData.getString(MATCH_DAY);
 
-                    Log.e("SupperDuo", "" + dateTime);
-                    Log.e("SupperDuo", "" + home);
-                    Log.e("SupperDuo", "" + away);
-                    Log.e("SupperDuo", "" + homeGoals);
-                    Log.e("SupperDuo", "" + awayGoals);
-                    Log.e("SupperDuo", "" + matchDay);
 
                     ContentValues match_values = new ContentValues();
                     match_values.put(ScoresContract.ScoreEntry.MATCH_ID, matchId);
@@ -354,32 +323,26 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             int insertedData = 0;
             ContentValues[] insertData = new ContentValues[values.size()];
             values.toArray(insertData);
+            // TODO delete all match > j-2 ou -3?
+            long now = System.currentTimeMillis();
+            mContext.getContentResolver().delete(ScoresContract.ScoreEntry
+                    .buildMatchesByDateUri(String.valueOf(now)),null, null);
+
             insertedData = mContext.getContentResolver().bulkInsert(
                     ScoresContract.ScoreEntry.CONTENT_URI, insertData);
-            Log.v(LOG_TAG, "Succesfully Inserted : " + insertedData);
+            Log.d(LOG_TAG, "Succesfully Inserted : " + insertedData);
         } catch (ParseException e) {
-            //TODO should be log.d
             Log.e(LOG_TAG, e.getMessage());
-            e.printStackTrace();
         }catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage());
-            e.printStackTrace();
-            Log.e(LOG_TAG, e.getStackTrace().toString());
-
         }
 
     }
 
 
-    public static String thread() {
-        if (Looper.getMainLooper().getThread() == Thread.currentThread())
-            return "ThreadUI";
-        else return "Background";
-    }
 
 
     public static void initializeSyncAdapter(Context context) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         getSyncAccount(context);
     }
 
@@ -392,7 +355,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
      * @return a fake account.
      */
     public static Account getSyncAccount(Context context) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         // Get an instance of the Android account manager
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
@@ -401,18 +363,13 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         Account newAccount = new Account(
                 context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
 
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "(null == accountManager" +
-                ".getPassword(newAccount))" + (null == accountManager.getPassword(newAccount)));
         // If the password doesn't exist, the account doesn't exist
         if (null == accountManager.getPassword(newAccount)) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
-
         /*
          * Add the account and account type, no password or user data
          * If successful, return the Account object, otherwise report an error.
          */
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                 return null;
             }
              /*
@@ -428,7 +385,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private static void onAccountCreated(Account newAccount, Context context) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         /*
          * Since we've created an account
          */
@@ -449,11 +405,9 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
      * Helper method to schedule the sync adapter periodic execution
      */
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
         if (Utilities.isDeviceReadyForFlexTimeSync()) {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             // we can enable inexact timers in our periodic sync
             SyncRequest request = new SyncRequest.Builder().
                     syncPeriodic(syncInterval, flexTime).
@@ -461,7 +415,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                     setExtras(new Bundle()).build();
             ContentResolver.requestSync(request);
         } else {
-            Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
             ContentResolver.addPeriodicSync(account,
                     authority, new Bundle(), syncInterval);
         }
@@ -473,7 +426,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param context The context used to access the account service
      */
     public static void syncImmediately(Context context) {
-        Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);

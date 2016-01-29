@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -35,7 +34,6 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
 
             @Override
             public void onDataSetChanged() {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                 if (data != null) {
                     data.close();
                 }
@@ -46,7 +44,7 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
                 final long identityToken = Binder.clearCallingIdentity();
                 long now=System.currentTimeMillis();
                 data = getContentResolver().query(
-                        ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(now)),
+                        ScoresContract.ScoreEntry.buildNextMatchesByDateUri(String.valueOf(now)),
                         ScoresFragment.MATCHES_COLUMNS,
                         null,
                         null,
@@ -69,7 +67,6 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
 
             @Override
             public RemoteViews getViewAt(int position) {
-                Log.e("SuperDuo", Thread.currentThread().getStackTrace()[2] + "");
                 if (position == AdapterView.INVALID_POSITION ||
                         data == null || !data.moveToPosition(position)) {
                     return null;
@@ -103,7 +100,7 @@ public class WidgetListRemoteViewsService extends RemoteViewsService {
 
                 // Create an Intent to launch DetailActivity
                 final Intent fillInIntent = new Intent();
-                Uri detailUri = ScoresContract.ScoreEntry.buildScoreByDate(String.valueOf(System
+                Uri detailUri = ScoresContract.ScoreEntry.buildMatchesByDateUri(String.valueOf(System
                         .currentTimeMillis()));
                 fillInIntent.setData(detailUri);
                 views.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
