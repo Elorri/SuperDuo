@@ -174,8 +174,9 @@ public class BookProvider extends ContentProvider {
         Uri returnUri;
         switch (match) {
             case BOOK: {
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK uri: " + uri);
                 long _id = db.insert(BookContract.BookEntry.TABLE_NAME, null, values);
-                Log.e("SuperDuo","BOOK"+_id);
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "BOOK _id: " + _id);
                 if (_id > 0) {
                     returnUri = BookContract.BookEntry.buildBookUri(_id);
                 } else {
@@ -184,11 +185,12 @@ public class BookProvider extends ContentProvider {
                 break;
             }
             case AUTHOR: {
+                Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR uri: " + uri);
                 long _id = db.insert(BookContract.AuthorEntry.TABLE_NAME, null, values);
                 Log.e("SuperDuo",""+_id);
                 if (_id > 0) {
                     returnUri = BookContract.AuthorEntry.buildAuthorUri(_id);
-                    Log.e("SuperDuo",""+returnUri);
+                    Log.d("SuperDuo", Thread.currentThread().getStackTrace()[2] + "AUTHOR _id: " + _id);
                 }
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);

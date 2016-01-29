@@ -68,9 +68,6 @@ public class BookContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static String getAuthorIdFromAuthorUri(Uri uri) {
-            return uri.getPathSegments().get(1);
-        }
     }
 
     public static final class CategoryEntry implements BaseColumns {
