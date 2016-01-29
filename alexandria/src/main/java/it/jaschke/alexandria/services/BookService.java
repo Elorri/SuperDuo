@@ -1,3 +1,26 @@
+/**
+ * The MIT License (MIT)
+
+ Copyright (c) 2016 ETCHEMENDY ELORRI
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
 package it.jaschke.alexandria.services;
 
 import android.app.IntentService;
@@ -6,7 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Looper;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -20,9 +42,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import it.jaschke.alexandria.data.BookContract;
 import it.jaschke.alexandria.extras.Status;
 import it.jaschke.alexandria.extras.Tools;
-import it.jaschke.alexandria.data.BookContract;
 
 // I made the decision to keep the IntentService class and not changing using a SyncAdapter. With
 // a SyncAdapter we could have offer the user a selection of most read book and let him choose
@@ -31,9 +53,12 @@ import it.jaschke.alexandria.data.BookContract;
 // (especially if the user search more than one book), seems the best option to me.
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
+ * This service does all the 'long' tasks of the app.
+ * 1- look for a book through the internet
+ * 2- add a book to the database
+ * 3- delete a book
+ * All of that in a separate thread from the main UI thread.
+ * Created by Elorri on 23/01/2016.
  */
 public class BookService extends IntentService {
 
@@ -71,14 +96,12 @@ public class BookService extends IntentService {
      * parameters.
      */
     private void deleteBook(String isbn) {
-        Log.d("SuperDuo", "current thread : " + thread());
         if (isbn != null) {
             getContentResolver().delete(BookContract.BookEntry.buildBookUri(Long.parseLong(isbn)), null, null);
         }
     }
 
     private void saveAsFavorite(String isbn) {
-        Log.d("SuperDuo", "current thread : " + thread());
         if (isbn != null) {
             getContentResolver().update(BookContract.BookEntry.buildBookUri(Long.parseLong(isbn)), null,
                     null, null);
@@ -309,9 +332,4 @@ public class BookService extends IntentService {
         }
     }
 
-    public static String thread() {
-        if (Looper.getMainLooper().getThread() == Thread.currentThread())
-            return "ThreadUI";
-        else return "Background";
-    }
 }

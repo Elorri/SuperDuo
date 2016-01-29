@@ -38,7 +38,12 @@ import it.jaschke.alexandria.zxing.FragmentIntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentIntegrator;
 import it.jaschke.alexandria.zxing.IntentResult;
 
-
+/**
+ * This fragment will display data for the 'Add a book' screen of the app, allowing the user to
+ * add book by isbn code or scan and also giving him messages feedback to guide him. The book
+ * will be search on the internet by starting the BookService class
+ * Created by Elorri on 23/01/2016.
+ */
 public class AddFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int RC_BARCODE_CAPTURE = 0;

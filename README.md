@@ -50,7 +50,7 @@ The apk realease can be found under the respected app directories.
 	
 		The MIT License (MIT)
 
-	Copyright (c) 2015 ETCHEMENDY ELORRI
+	Copyright (c) 2016 ETCHEMENDY ELORRI
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal

@@ -1,3 +1,26 @@
+/**
+ * The MIT License (MIT)
+
+ Copyright (c) 2016 ETCHEMENDY ELORRI
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
 package barqsoft.footballscores.sync;
 
 import android.accounts.Account;
@@ -35,15 +58,14 @@ import barqsoft.footballscores.data.ScoresContract;
 
 
 /**
+ * This class contain the list of tasks to be done when a sync is done (update matches data).
  * Created by Elorri on 01/12/2015.
  */
 public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
-    // Interval at which to sync with the openbeelab server, in seconds.
-    // 60 seconds (1 minute) * 180 = 3 hours
+    // Interval at which to sync with the server, in seconds.
     // 60 seconds (1 minute) * 720 = 12 hours
-    //public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_INTERVAL = 60 * 720;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private String LOG_TAG = ScoresSyncAdapter.class.getSimpleName();
@@ -323,7 +345,6 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             int insertedData = 0;
             ContentValues[] insertData = new ContentValues[values.size()];
             values.toArray(insertData);
-            // TODO delete all match > j-2 ou -3?
             long now = System.currentTimeMillis();
             mContext.getContentResolver().delete(ScoresContract.ScoreEntry
                     .buildMatchesByDateUri(String.valueOf(now)),null, null);

@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 	The MIT License (MIT)
+
+Copyright (c) 2015 ETCHEMENDY ELORRI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <!-- the app name -->
     <string name="app_name" translatable="true">Football Scores</string>
@@ -25,7 +47,6 @@
     <string name="match_champions_sf" translatable="true">Demi-finale</string>
     <string name="match_champiions_f" translatable="true">Finales</string>
 
-    <!-- TODO make sure widget show prochain match -->
     <!-- Widget related -->
     <string name="title_widget_next_match" translatable="true">Prochain match</string>
     <string name="empty_widget_list" translatable="true">Pas de matchs aujourd\'hui</string>
