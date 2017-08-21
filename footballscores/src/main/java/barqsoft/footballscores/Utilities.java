@@ -1,25 +1,25 @@
 /**
  * The MIT License (MIT)
-
- Copyright (c) 2016 ETCHEMENDY ELORRI
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
+ * <p/>
+ * Copyright (c) 2016 ETCHEMENDY ELORRI
+ * <p/>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * <p/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * <p/>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package barqsoft.footballscores;
 
@@ -69,6 +69,22 @@ public class Utilities {
     public static final int EREDIVISIE = 404;
     public static final int CHAMPIONS = 405;
 
+    public static final int BSA = 444;
+    public static final int PL = 445;
+    public static final int ELC = 446;
+    public static final int EL1 = 447;
+    public static final int EL2 = 448;
+    public static final int DED = 449;
+    public static final int FL1 = 450;
+    public static final int FL2 = 451;
+    public static final int BL1 = 452;
+    public static final int BL2 = 453;
+    public static final int PD = 455;
+    public static final int SA = 456;
+    public static final int PPL = 457;
+    public static final int DFB = 458;
+    public static final int SB = 459;
+
     /**
      * Gets the name of the league corresponding to its number
      *
@@ -78,30 +94,51 @@ public class Utilities {
      */
     public static String getLeague(Context c, int league_num) {
         switch (league_num) {
+            case BL1:
             case BUNDESLIGA1:
                 return c.getString(R.string.league_bundesliga1);
+            case BL2:
             case BUNDESLIGA2:
                 return c.getString(R.string.league_bundesliga2);
             case BUNDESLIGA3:
                 return c.getString(R.string.league_bundesliga3);
+            case FL1:
             case LIGUE1:
                 return c.getString(R.string.league_ligue1);
+            case FL2:
             case LIGUE2:
                 return c.getString(R.string.league_ligue2);
+            case PL:
             case PREMIER_LEAGUE:
                 return c.getString(R.string.league_premier_league);
+            case PD:
             case PRIMERA_DIVISION:
                 return c.getString(R.string.league_primera_division);
             case SEGUNDA_DIVISION:
                 return c.getString(R.string.league_segunda_division);
+            case SA:
             case SERIE_A:
                 return c.getString(R.string.league_serie_a);
+            case PPL:
             case PRIMERA_LIGA:
                 return c.getString(R.string.league_primeira_liga);
+            case DED:
             case EREDIVISIE:
                 return c.getString(R.string.league_eredivisie);
             case CHAMPIONS:
                 return c.getString(R.string.league_champions);
+            case BSA:
+                return c.getString(R.string.league_campeonato_brasileiro_da_serie_a);
+            case ELC:
+                return c.getString(R.string.league_championship);
+            case EL1:
+                return c.getString(R.string.league_ligue_one);
+            case EL2:
+                return c.getString(R.string.league_ligue_two);
+            case DFB:
+                return c.getString(R.string.league_dfb_pokal);
+            case SB:
+                return c.getString(R.string.league_serieB);
             default:
                 return c.getString(R.string.league_unknown);
         }
@@ -330,11 +367,13 @@ public class Utilities {
         String frLocaleCountry = frLocale.split("_")[1];
         String chLocaleCountry = chLocale.split("_")[1];
 
-        if ((Locale.getDefault().getLanguage().equals(usLocaleLang)) && (Locale.getDefault()
+        if ((Locale.getDefault().getLanguage().equals(usLocaleLang))
+                && (Locale.getDefault()
                 .getCountry().equals(usLocaleCountry)))
             return Locale.getDefault(); //The user Locale is the Locale we want, no further search
 
-        if ((Locale.getDefault().getLanguage().equals(frLocaleLang)) && (Locale.getDefault().getCountry().equals(frLocaleCountry)))
+        if ((Locale.getDefault().getLanguage().equals(frLocaleLang))
+                && (Locale.getDefault().getCountry().equals(frLocaleCountry)))
             return Locale.getDefault(); //The user Locale is the Locale we want, no further search
 
         if (Locale.getDefault().getLanguage().equals(frLocaleLang)

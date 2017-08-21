@@ -72,7 +72,14 @@ SOFTWARE.
     <string name="league_primeira_liga" translatable="false">Primeira Liga</string>
     <string name="league_eredivisie" translatable="false">Eredivisie</string>
     <string name="league_champions" translatable="false">UEFA Champions League</string>
-    
+
+    <string name="league_campeonato_brasileiro_da_serie_a" translatable="false">Campeonato Brasileiro da Série A</string>
+    <string name="league_championship" translatable="false">Championship</string>
+    <string name="league_ligue_one" translatable="false">Ligue One</string>
+    <string name="league_ligue_two" translatable="false">Ligue Two</string>
+    <string name="league_dfb_pokal" translatable="false">DFB-Pokal</string>
+    <string name="league_serieB" translatable="false">Ligue Two</string>
+
     <string name="league_unknown" translatable="true">League not found.</string>
 
     <!-- Match day strings -->
@@ -143,6 +150,9 @@ SOFTWARE.
     <string name="us_locale" translatable="false">en_US</string>
     <string name="fr_locale" translatable="false">fr_FR</string>
     <string name="ch_locale" translatable="false">zh_CN</string>
+	
+	<!-- API key -->
+	<string name="api_key">498ae24a6ec1435db75bbd8ec5ede1ae</string>
 
 
 

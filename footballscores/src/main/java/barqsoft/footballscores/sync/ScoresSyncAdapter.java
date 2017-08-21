@@ -1,25 +1,25 @@
 /**
  * The MIT License (MIT)
-
- Copyright (c) 2016 ETCHEMENDY ELORRI
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
+ * <p/>
+ * Copyright (c) 2016 ETCHEMENDY ELORRI
+ * <p/>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * <p/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * <p/>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package barqsoft.footballscores.sync;
 
@@ -51,7 +51,6 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Vector;
 
-import barqsoft.footballscores.BuildConfig;
 import barqsoft.footballscores.R;
 import barqsoft.footballscores.Status;
 import barqsoft.footballscores.Utilities;
@@ -167,7 +166,7 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             URL fetch = new URL(uri.toString());
             UrlConnection = (HttpURLConnection) fetch.openConnection();
             UrlConnection.setRequestMethod("GET");
-            UrlConnection.addRequestProperty("X-Auth-Token", BuildConfig.FOOTTBALL_SCORES_API_TOKEN);
+            UrlConnection.addRequestProperty("X-Auth-Token", getContext().getString(R.string.api_key));
             UrlConnection.connect();
 
             InputStream inputStream = UrlConnection.getInputStream();
@@ -249,6 +248,22 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
         final String BUNDESLIGA3 = "403";
         final String EREDIVISIE = "404";
 
+        final String BSA = "444";
+        final String PL = "445";
+        final String ELC = "446";
+        final String EL1 = "447";
+        final String EL2 = "448";
+        final String DED = "449";
+        final String FL1 = "450";
+        final String FL2 = "451";
+        final String BL1 = "452";
+        final String BL2 = "453";
+        final String PD = "455";
+        final String SA = "456";
+        final String PPL = "457";
+        final String DFB = "458";
+        final String SB = "459";
+
 
         final String SEASON_LINK = "http://api.football-data.org/alpha/soccerseasons/";
         final String MATCH_LINK = "http://api.football-data.org/alpha/fixtures/";
@@ -302,7 +317,22 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
                         league.equals(BUNDESLIGA1) ||
                         league.equals(BUNDESLIGA2) ||
                         league.equals(EREDIVISIE) ||
-                        league.equals(PRIMERA_DIVISION)) {
+                        league.equals(PRIMERA_DIVISION) ||
+                        league.equals(BSA) ||
+                        league.equals(PL) ||
+                        league.equals(ELC) ||
+                        league.equals(EL1) ||
+                        league.equals(EL2) ||
+                        league.equals(DED) ||
+                        league.equals(FL1) ||
+                        league.equals(FL2) ||
+                        league.equals(BL1) ||
+                        league.equals(BL2) ||
+                        league.equals(PD) ||
+                        league.equals(SA) ||
+                        league.equals(PPL) ||
+                        league.equals(DFB) ||
+                        league.equals(SB)) {
                     //Exple : http://api.football-data.org/alpha/fixtures/146892 -> 146892
                     matchId = matchData.getJSONObject(LINKS).getJSONObject(SELF).getString("href");
                     matchId = matchId.replace(MATCH_LINK, "");
@@ -347,20 +377,18 @@ public class ScoresSyncAdapter extends AbstractThreadedSyncAdapter {
             values.toArray(insertData);
             long now = System.currentTimeMillis();
             mContext.getContentResolver().delete(ScoresContract.ScoreEntry
-                    .buildMatchesByDateUri(String.valueOf(now)),null, null);
+                    .buildMatchesByDateUri(String.valueOf(now)), null, null);
 
             insertedData = mContext.getContentResolver().bulkInsert(
                     ScoresContract.ScoreEntry.CONTENT_URI, insertData);
             Log.d(LOG_TAG, "Succesfully Inserted : " + insertedData);
         } catch (ParseException e) {
             Log.e(LOG_TAG, e.getMessage());
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage());
         }
 
     }
-
-
 
 
     public static void initializeSyncAdapter(Context context) {
